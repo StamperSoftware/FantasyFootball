@@ -6,3 +6,9 @@ riderModule.iml
 /.idea
 client/.editorconfig
 /client/.vscode
+API/appsettings.Development.json
+API/appsettings.json
+API/Properties/launchSettings.json
+client/src/environments/environment.ts
+/client/src/environments
+/client/ssl

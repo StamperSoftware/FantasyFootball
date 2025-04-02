@@ -1,1 +1,77 @@
-/* You can add global styles to this file, and also import other style files */
+@import 'bootstrap/scss/bootstrap';
+:root{
+  color-scheme:dark;
+  --primary-color:#C2983D; /*mustard*/
+  --primary-color-rgb:194,152,61; /*mustard*/
+  --faded-primary-rgb:194,152,61,.5;
+  --secondary-color:#C2CCC5; /*putty*/
+  --secondary-color-rgb:194,204,197; /*putty*/
+
+  --primary-background:#252423; /*charcoal*/
+  --primary-background-rgb:37,36,37; /*charcoal*/
+
+  --secondary-background:#303D38; /*forest*/
+  --secondary-background-rgb:48,61,56; /*forest*/
+
+  --active: #928a74; /*mushroom*/
+  --active-rgb:147,138,116; /*mushroom*/
+
+  --bs-primary: var(--primary-color);
+  --bs-primary-rgb:  var(--primary-color-rgb);
+
+  --bs-secondary: var(--secondary-color);
+  --bs-secondary-rgb: var(--secondary-color-rgb);
+
+  --bs-primary-text-emphasis: var(--primary-color);
+  --bs-secondary-text-emphasis: var(--secondary-color);
+
+  --bs-primary-bg-subtle: var(--primary-color);
+  --bs-secondary-bg-subtle: var(--secondary-color);
+
+  --bs-primary-border-subtle: var(--primary-color);
+  --bs-secondary-border-subtle: var(--secondary-color);
+
+  --bs-body-color: var(--primary-color);
+  --bs-body-color-rgb: var(--primary-color-rgb);
+
+  --bs-body-bg: var(--primary-background);
+  --bs-body-bg-rgb: var(--primary-background-rgb);
+
+  --bs-emphasis-color: var(--primary-color);
+  --bs-emphasis-color-rgb: var(--primary-color-rgb);
+
+  --bs-secondary-color: var(--secondary-color);
+  --bs-secondary-color-rgb: var(--secondary-color-rgb);
+
+  --bs-link-color: var(--primary-color);
+  --bs-link-color-rgb: var(--primary-color-rgb);
+  --bs-link-decoration: none;
+  --bs-link-hover-color: var(--active);
+  --bs-link-hover-color-rgb: var(--active-rgb);
+}
+
+.dropdown-menu {
+  --bs-dropdown-link-active-bg:var(--active);
+  --bs-dropdown-link-active-color:var(--secondary-background);
+
+  --bs-dropdown-link-hover-bg:var(--active);
+  --bs-dropdown-link-hover-color:var(--secondary-background);
+}
+
+#root {
+  display:grid;
+  grid-template-rows:1fr 8fr 1fr;
+  height:100%;
+}
+
+html {
+  height : 100%;
+}
+
+a {
+  text-decoration: none;
+}
+
+body {
+  height: 100%;
+}
