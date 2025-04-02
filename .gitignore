@@ -12,3 +12,4 @@ API/Properties/launchSettings.json
 client/src/environments/environment.ts
 /client/src/environments
 /client/ssl
+docker-compose.yml

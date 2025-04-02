@@ -10,8 +10,8 @@ import { HomeService } from "../../core/services/home.service";
 })
 export class HomeComponent implements OnInit {
   ngOnInit(): void {
-    this.homeService.isConnected().subscribe(response => this.isConnected = response);
+    this.homeService.isConnected().subscribe(response => this.isConnected = response.connected);
   }
-  isConnected?:any;
+  isConnected:boolean = false;
   homeService = inject(HomeService);
 }

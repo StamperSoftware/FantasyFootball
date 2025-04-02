@@ -1,0 +1,20 @@
+<div>
+    <fa-icon class="btn" (click)="createLeague()" [icon]="faAdd"></fa-icon>
+</div>
+
+@if (hasErrors) {
+    <p>There are errors, please refresh the page to try again</p>
+} @else if (leagues !== undefined) {
+    
+    @if(leagues.length){
+        
+        @for(league of leagues; track league.id){
+            <div class="card" [routerLink]="league.id">
+                <p>{{league.name}}</p>
+            </div>
+        }
+    } @else if (leagues ){
+        <p>There are no Leagues yet.</p>
+    }
+}
+

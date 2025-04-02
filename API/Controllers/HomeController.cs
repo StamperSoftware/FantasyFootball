@@ -7,6 +7,6 @@ public class HomeController : BaseApiController
     [HttpGet]
     public ActionResult IsConnected()
     {
-        return Ok(new{connected = true});
+        return Ok(new{connected=true});
     }
 }

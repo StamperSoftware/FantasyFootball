@@ -10,6 +10,6 @@ export class HomeService {
   private baseUrl = environment.apiUrl;
   
   isConnected(){
-    return this.http.get(`${this.baseUrl}/home`);
+    return this.http.get<{ connected:boolean }>(`${this.baseUrl}/home`);
   }
 }
