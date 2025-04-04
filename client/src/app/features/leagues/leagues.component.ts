@@ -4,6 +4,8 @@ import { League } from "../../models";
 import { FaIconComponent } from "@fortawesome/angular-fontawesome";
 import { faAdd } from "@fortawesome/free-solid-svg-icons";
 import { RouterLink } from "@angular/router";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { CreateLeagueComponent } from "./create/create.component";
 
 @Component({
   selector: 'app-leagues',
@@ -19,6 +21,8 @@ export class LeaguesComponent implements OnInit{
   
     protected readonly faAdd = faAdd;
     private leagueService = inject(LeagueService);
+    private modalService = inject(NgbModal);
+     
     leagues?:League[];
     hasErrors:boolean = false;
     
@@ -26,10 +30,11 @@ export class LeaguesComponent implements OnInit{
       this.getLeagues();
     }
 
-    createLeague() {
-      this.leagueService.createLeague({Name:"newLeague"}).subscribe({
-        next: () => this.getLeagues(),
-      })
+    openCreateLeagueModal() {
+        this.modalService.open(CreateLeagueComponent).result.then(
+            (newLeague) => this.getLeagues(),
+            () => {},
+        );
     }
     
     getLeagues(){

@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace FantasyFootball.Context.Migrations
+namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
     public partial class Init : Migration

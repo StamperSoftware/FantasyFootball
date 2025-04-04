@@ -13,3 +13,4 @@ client/src/environments/environment.ts
 /client/src/environments
 /client/ssl
 docker-compose.yml
+API/.env

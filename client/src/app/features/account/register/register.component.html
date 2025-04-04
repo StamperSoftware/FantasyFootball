@@ -1,0 +1,23 @@
+<form (ngSubmit)="handleRegister()">
+    <div>
+        <input id="first-name" [(ngModel)]="firstName" name="first-name"/>
+        <label for="first-name">First Name</label>
+    </div>
+    <div>
+        <input id="last-name" [(ngModel)]="lastName" name="last-name"/>
+        <label for="last-name">Last Name</label>
+    </div>
+    <div>
+        <input id="email" [(ngModel)]="email" name="email"/>
+        <label for="email">Email</label>
+    </div>
+    <div>
+        <input id="username" [(ngModel)]="userName" name="username"/>
+        <label for="username">UserName</label>
+    </div>
+    <div>
+        <input id="password" type="password" [(ngModel)]="password" name="password"/>
+        <label for="password">Password</label>
+    </div>
+    <button type="submit" class="btn btn-outline-primary">Create</button>
+</form>

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace FantasyFootball.Context.Migrations
+namespace Infrastructure.Migrations
 {
     [DbContext(typeof(FantasyFootballContext))]
     [Migration("20250402155117_Init")]

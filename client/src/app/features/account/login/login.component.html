@@ -1,0 +1,18 @@
+<form (ngSubmit)="handleLogin()">
+    <div>
+        <input id="email" [(ngModel)]="email" name="email"/>
+        <label for="email">Email</label>
+    </div>
+    <div>
+        <input id="password" type="password" [(ngModel)]="password" name="password"/>
+        <label for="password">Password</label>
+    </div>
+    
+    @if (hasErrors) {
+        <div>
+            <p class="text-danger">There was an issue logging in. Please try again later</p>    
+        </div>
+    }
+        
+    <button type="submit" class="btn btn-outline-primary">Login</button>
+</form>

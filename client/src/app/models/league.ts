@@ -4,5 +4,5 @@
 }
 
 export type CreateLeagueDto = {
-    Name : string
+    name : string
 }
