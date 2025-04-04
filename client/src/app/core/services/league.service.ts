@@ -1,8 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { environment } from "../../../environments/environment";
-import { League, Pagination } from "../../models";
-import { CreateLeagueDto } from "../../models/league";
+import { AddPlayerToLeagueDto, League, Pagination, CreateLeagueDto } from "../../models";
 
 @Injectable({
   providedIn: 'root'
@@ -23,5 +22,9 @@ export class LeagueService {
   
   getLeague(id:number) {
     return this.http.get<League>(`${this.leagueUrl}/${id}`);
+  }
+  
+  addPlayer(leagueId:number, playerId:number){
+    return this.http.post(`${this.leagueUrl}/${leagueId}/players/${playerId}`, {});
   }
 }

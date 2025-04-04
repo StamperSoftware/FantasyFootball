@@ -22,21 +22,6 @@ namespace Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("AppUserLeague", b =>
-                {
-                    b.Property<int>("LeaguesId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("PlayersId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("LeaguesId", "PlayersId");
-
-                    b.HasIndex("PlayersId");
-
-                    b.ToTable("AppUserLeague");
-                });
-
             modelBuilder.Entity("Core.Entities.AppUser", b =>
                 {
                     b.Property<string>("Id")
@@ -55,14 +40,6 @@ namespace Infrastructure.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -125,6 +102,56 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Leagues");
+                });
+
+            modelBuilder.Entity("Core.Entities.Player", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Players");
+                });
+
+            modelBuilder.Entity("Core.Entities.UserTeam", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("LeagueId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PlayerId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LeagueId");
+
+                    b.HasIndex("PlayerId");
+
+                    b.ToTable("UserTeams");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -260,19 +287,32 @@ namespace Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("AppUserLeague", b =>
+            modelBuilder.Entity("Core.Entities.Player", b =>
                 {
-                    b.HasOne("Core.Entities.League", null)
+                    b.HasOne("Core.Entities.AppUser", "User")
                         .WithMany()
-                        .HasForeignKey("LeaguesId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Core.Entities.AppUser", null)
-                        .WithMany()
-                        .HasForeignKey("PlayersId")
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Core.Entities.UserTeam", b =>
+                {
+                    b.HasOne("Core.Entities.League", null)
+                        .WithMany("Teams")
+                        .HasForeignKey("LeagueId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Core.Entities.Player", "Player")
+                        .WithMany()
+                        .HasForeignKey("PlayerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Player");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -324,6 +364,11 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Core.Entities.League", b =>
+                {
+                    b.Navigation("Teams");
                 });
 #pragma warning restore 612, 618
         }

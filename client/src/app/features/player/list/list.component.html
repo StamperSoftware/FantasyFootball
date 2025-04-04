@@ -1,0 +1,11 @@
+@if (hasErrors){
+    <p class="text-danger">There were errors</p>
+} @else if (players) {
+    @if (players.length) {
+        @for(player of players; track player.id) {
+            <p>{{player.firstName}}</p>
+        }
+    } @else {
+        <p>There are no players</p>
+    }
+}

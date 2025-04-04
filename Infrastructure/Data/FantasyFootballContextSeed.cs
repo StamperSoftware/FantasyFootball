@@ -28,8 +28,6 @@ public class FantasyFootballContextSeed
     {
         var user = new AppUser
         {
-            FirstName = Environment.GetEnvironmentVariable("SITE_ADMIN_FIRST_NAME") ?? "admin",
-            LastName = Environment.GetEnvironmentVariable("SITE_ADMIN_LAST_NAME") ?? "admin",
             Email = Environment.GetEnvironmentVariable("SITE_ADMIN_EMAIL"),
             UserName = Environment.GetEnvironmentVariable("SITE_ADMIN_USERNAME")
         };

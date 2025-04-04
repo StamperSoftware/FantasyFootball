@@ -2,6 +2,7 @@ using API.Helpers;
 using Core.Entities;
 using Core.Interfaces;
 using Infrastructure.Data;
+using Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,14 +12,15 @@ var root = Directory.GetCurrentDirectory();
 var dotenv = Path.Combine(root, ".env");
 DotEnv.Load(dotenv);
 
-builder.Configuration.AddEnvironmentVariables().Build();
+builder.Configuration.AddEnvironmentVariables();
 
 builder.Services.AddOpenApi();
 builder.Services.AddCors();
 builder.Services.AddControllers();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddAuthorization();
-
+builder.Services.AddScoped<ILeagueService, LeagueService>();
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddDbContext<FantasyFootballContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddIdentityApiEndpoints<AppUser>()
     .AddRoles<IdentityRole>()

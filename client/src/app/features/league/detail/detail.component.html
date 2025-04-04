@@ -1,0 +1,10 @@
+@if(league != undefined){
+    <p>{{league.name}}</p>
+    <button class="btn" (click)="addPlayer()">Add Player To League</button>
+    <h3>Players</h3>
+    <ul>
+        @for(team of league.teams; track team.id){
+            <p routerLink="team/{{team.id}}">{{team.player.lastName}}; {{team.player.firstName}}</p>
+        }
+    </ul>
+}

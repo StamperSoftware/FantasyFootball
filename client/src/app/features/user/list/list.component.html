@@ -1,0 +1,14 @@
+@if (hasErrors) {
+    <p class="text-danger">There are errors</p>
+} 
+@else if (users) {
+  @if (users.length) {
+      <ul>
+          @for (user of users; track user.id) {
+              <li>{{user.userName}}</li>
+          }
+      </ul>
+  } @else {
+      <p>There are no users</p>
+  }  
+}

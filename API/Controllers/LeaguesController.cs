@@ -1,11 +1,12 @@
-﻿using Core.Entities;
+﻿using API.DTOs;
+using Core.Entities;
 using Core.Interfaces;
 using Core.Specifications;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
-public class LeaguesController(IGenericRepository<League> repo) : BaseApiController
+public class LeaguesController(IGenericRepository<League> repo, ILeagueService service) : BaseApiController
 {
     [HttpGet]
     public async Task<ActionResult<IReadOnlyList<League?>>> GetLeagues([FromQuery] LeagueSpecParams specParams)
@@ -15,11 +16,16 @@ public class LeaguesController(IGenericRepository<League> repo) : BaseApiControl
     }
 
     [HttpGet("{id:int}")]
-    public async Task<ActionResult<League>> GetLeague(int id)
+    public async Task<ActionResult<LeagueDto>> GetLeague(int id)
     {
-        var league = await repo.GetByIdAsync(id);
+        var league = await service.GetLeagueWithTeamsAsync(id);
         if (league is null) return BadRequest($"could not find league with id:{id}");
-        return Ok(league);
+        return Ok(new LeagueDto
+        {
+            Id = league.Id,
+            Name = league.Name,
+            Teams = league.Teams
+        });
     }
     
     [HttpPost]
@@ -31,5 +37,20 @@ public class LeaguesController(IGenericRepository<League> repo) : BaseApiControl
             return CreatedAtAction("GetLeague", new { id = league.Id }, league);
         }
         return BadRequest("Issue creating league");
+    }
+
+    [HttpPost("{leagueId:int}/players/{playerId:int}")]
+    public async Task<ActionResult> AddPlayerToLeague(int playerId, int leagueId)
+    {
+        try
+        {
+            await service.AddTeamToLeagueAsync(playerId, leagueId);
+        }
+        catch (Exception ex)
+        {
+            return BadRequest($"Could not add player, {ex.Message}");
+        }
+
+        return Ok();
     }
 }

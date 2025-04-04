@@ -8,22 +8,33 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
-public class AccountsController(SignInManager<AppUser> signInManager) : BaseApiController
+public class AccountsController(SignInManager<AppUser> signInManager, IGenericRepository<Player> playerRepo) : BaseApiController
 {
     [HttpPost("register")]
     public async Task<ActionResult> CreateUser(RegisterDto registerDto)
     {
         var user = new AppUser
         {
-            FirstName = registerDto.FirstName,
-            LastName = registerDto.LastName,
             Email = registerDto.Email,
             UserName = registerDto.UserName
         };
 
         var result = await signInManager.UserManager.CreateAsync(user, registerDto.Password);
 
-        if (result.Succeeded) return Ok();
+        if (result.Succeeded)
+        {
+            Player newPlayer = new()
+            {
+                FirstName = registerDto.FirstName,
+                LastName = registerDto.LastName,
+                User = user,
+                UserId = user.Id
+            };
+            playerRepo.Add(newPlayer);
+            
+            if (!await playerRepo.SaveAllAsync()) return BadRequest("App User was created but could not create Player");
+            return Ok();
+        }
 
         foreach (var error in result.Errors)
         {
@@ -49,8 +60,6 @@ public class AccountsController(SignInManager<AppUser> signInManager) : BaseApiC
 
         return Ok(new AppUserDto
         {
-            FirstName = user.FirstName,
-            LastName = user.LastName,
             Email = user.Email ?? "",
             UserName = user.UserName ?? "",
         });

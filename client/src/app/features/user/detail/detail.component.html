@@ -1,0 +1,5 @@
+@if(hasErrors) {
+    <h1 class="text-danger">There are errors, please try again later</h1>
+} @else if (user) {
+    <h1>{{user.userName}}</h1>
+}
