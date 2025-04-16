@@ -4,6 +4,6 @@ namespace Core.Interfaces;
 
 public interface ILeagueService
 {
-    public Task AddTeamToLeagueAsync(int playerId, int leagueId);
+    public Task AddPlayerToLeagueAsync(int playerId, int leagueId);
     public Task<League?> GetLeagueWithTeamsAsync(int id);
 }

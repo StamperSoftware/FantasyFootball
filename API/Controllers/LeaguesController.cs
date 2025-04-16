@@ -19,13 +19,9 @@ public class LeaguesController(IGenericRepository<League> repo, ILeagueService s
     public async Task<ActionResult<LeagueDto>> GetLeague(int id)
     {
         var league = await service.GetLeagueWithTeamsAsync(id);
+        
         if (league is null) return BadRequest($"could not find league with id:{id}");
-        return Ok(new LeagueDto
-        {
-            Id = league.Id,
-            Name = league.Name,
-            Teams = league.Teams
-        });
+        return Ok(new LeagueDto(league));
     }
     
     [HttpPost]
@@ -44,7 +40,7 @@ public class LeaguesController(IGenericRepository<League> repo, ILeagueService s
     {
         try
         {
-            await service.AddTeamToLeagueAsync(playerId, leagueId);
+            await service.AddPlayerToLeagueAsync(playerId, leagueId);
         }
         catch (Exception ex)
         {

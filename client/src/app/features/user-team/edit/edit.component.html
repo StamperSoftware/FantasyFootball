@@ -1,0 +1,8 @@
+<form (ngSubmit)="handleEdit()">    
+    <div>
+        <input id="name" [(ngModel)]="data.name" name="name"/>
+        <label for="name">Name</label>
+    </div>
+    
+    <button class="btn" type="submit">Update Team</button>
+</form>

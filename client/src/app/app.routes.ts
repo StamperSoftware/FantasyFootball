@@ -6,6 +6,8 @@ import { UserDetailComponent } from "./features/user/detail/detail.component";
 import { PlayerListComponent } from "./features/player/list/list.component";
 import { PlayerDetailComponent } from "./features/player/detail/detail.component";
 import { LeagueListComponent } from "./features/league/list/list.component";
+import { UserTeamListComponent } from "./features/user-team/list/list.component";
+import { UserTeamDetailComponent } from "./features/user-team/detail/detail.component";
 
 export const routes: Routes = [
     {path:"", component:HomeComponent},
@@ -15,4 +17,6 @@ export const routes: Routes = [
     {path:"users/:id", component:UserDetailComponent},
     {path:"players", component:PlayerListComponent},
     {path:"players/:id", component:PlayerDetailComponent},
+    {path:"user-teams", component:UserTeamListComponent},
+    {path:"user-teams/:id", component:UserTeamDetailComponent},
 ];

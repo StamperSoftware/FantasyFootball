@@ -6,4 +6,11 @@ namespace Core.Entities;
 
 public class AppUser : IdentityUser
 {
+    public AppUser(){}
+    
+    public AppUser(string email, string userName)
+    {
+        Email = email;
+        UserName = userName;
+    }
 }

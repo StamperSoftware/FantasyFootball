@@ -13,23 +13,14 @@ public class AccountsController(SignInManager<AppUser> signInManager, IGenericRe
     [HttpPost("register")]
     public async Task<ActionResult> CreateUser(RegisterDto registerDto)
     {
-        var user = new AppUser
-        {
-            Email = registerDto.Email,
-            UserName = registerDto.UserName
-        };
+        
+        AppUser user = new(registerDto.Email, registerDto.UserName);
 
         var result = await signInManager.UserManager.CreateAsync(user, registerDto.Password);
 
         if (result.Succeeded)
         {
-            Player newPlayer = new()
-            {
-                FirstName = registerDto.FirstName,
-                LastName = registerDto.LastName,
-                User = user,
-                UserId = user.Id
-            };
+            Player newPlayer = new(registerDto.FirstName, registerDto.LastName, user);
             playerRepo.Add(newPlayer);
             
             if (!await playerRepo.SaveAllAsync()) return BadRequest("App User was created but could not create Player");
@@ -58,11 +49,7 @@ public class AccountsController(SignInManager<AppUser> signInManager, IGenericRe
         if (User.Identity?.IsAuthenticated == false) return NoContent();
         var user = await signInManager.UserManager.GetUserByEmail(User);
 
-        return Ok(new AppUserDto
-        {
-            Email = user.Email ?? "",
-            UserName = user.UserName ?? "",
-        });
+        return Ok(new AppUserDto(user));
     }
 
     [HttpGet("auth-status")]

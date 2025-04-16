@@ -1,0 +1,9 @@
+@if (team) {
+    <div>
+        @if (team.name) {
+            <h2>{{team.name}}</h2>
+        }
+        <h4>{{team.player.firstName}} {{team.player.lastName}}</h4>
+        <fa-icon [icon]="faEdit" class="btn" (click)="openEditModal()" ></fa-icon>       
+    </div>
+}

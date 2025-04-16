@@ -19,9 +19,13 @@ builder.Services.AddCors();
 builder.Services.AddControllers();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddAuthorization();
+
 builder.Services.AddScoped<ILeagueService, LeagueService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserTeamService, UserTeamService>();
+
 builder.Services.AddDbContext<FantasyFootballContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 builder.Services.AddIdentityApiEndpoints<AppUser>()
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<FantasyFootballContext>();

@@ -142,6 +142,9 @@ namespace Infrastructure.Migrations
                     b.Property<int>("LeagueId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("PlayerId")
                         .HasColumnType("int");
 
@@ -307,7 +310,7 @@ namespace Infrastructure.Migrations
                         .IsRequired();
 
                     b.HasOne("Core.Entities.Player", "Player")
-                        .WithMany()
+                        .WithMany("Teams")
                         .HasForeignKey("PlayerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -367,6 +370,11 @@ namespace Infrastructure.Migrations
                 });
 
             modelBuilder.Entity("Core.Entities.League", b =>
+                {
+                    b.Navigation("Teams");
+                });
+
+            modelBuilder.Entity("Core.Entities.Player", b =>
                 {
                     b.Navigation("Teams");
                 });

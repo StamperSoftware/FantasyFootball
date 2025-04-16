@@ -2,5 +2,6 @@
 
 export type UserTeam = {
     player : Player
-    id:number    
+    id:number
+    name?:string
 }

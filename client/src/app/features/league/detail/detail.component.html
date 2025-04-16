@@ -4,7 +4,7 @@
     <h3>Players</h3>
     <ul>
         @for(team of league.teams; track team.id){
-            <p routerLink="team/{{team.id}}">{{team.player.lastName}}; {{team.player.firstName}}</p>
+            <p routerLink="/user-teams/{{team.id}}">{{team.name}} {{team.player.lastName}}; {{team.player.firstName}}</p>
         }
     </ul>
 }
