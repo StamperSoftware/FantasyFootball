@@ -59,12 +59,12 @@ public static class SpecificationEvaluator<T> where T : BaseEntity
 
         if (spec.IsDistinct)
         {
-            selectQuery = selectQuery.Distinct();
+            selectQuery = selectQuery?.Distinct();
         }
 
         if (spec.IsPagingEnabled)
         {
-            selectQuery = selectQuery.Skip(spec.Skip).Take(spec.Take);
+            selectQuery = selectQuery?.Skip(spec.Skip).Take(spec.Take);
         }
         
         return selectQuery ?? query.Cast<TResult>();

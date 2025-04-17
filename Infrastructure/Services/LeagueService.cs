@@ -32,6 +32,7 @@ public class LeagueService(FantasyFootballContext db, IGenericRepository<Player>
         return await db.Leagues
             .Include(l => l.Teams)
                 .ThenInclude(l => l.Player)
+                    .ThenInclude(p => p.User)
             .FirstOrDefaultAsync(l => l.Id == id);
     }
 }
