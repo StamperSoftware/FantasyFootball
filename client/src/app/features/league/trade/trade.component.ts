@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from "@angular/router";
-import { Athlete, League, UserTeam } from "../../../models";
+import { Athlete, League, Position, UserTeam } from "../../../models";
 import { LeagueService } from "../../../core/services/league.service";
 import { UserTeamService } from "../../../core/services/user-team.service";
 
@@ -16,26 +16,18 @@ export class TradeComponent implements OnInit{
     this.getLeague();
   }
   
+  protected readonly Position = Position;
+  
   private route = inject(ActivatedRoute);
   private leagueService = inject(LeagueService);
   private userTeamService = inject(UserTeamService);
   
-  teamOneId? :number;
-  teamTwoId? :number;
-
-  teamOneSelectOptions? :UserTeam[];
-  teamTwoSelectOptions? :UserTeam[];
-  
-  teamOne? : UserTeam;
-  teamTwo? : UserTeam;
-  
-  teamOneOffer : Set<Athlete> = new Set();
-  teamTwoOffer : Set<Athlete> = new Set();
-  
-  hasErrors = false;
-  
   leagueId = this.route.snapshot.paramMap.get("league-id");
   league? : League;
+  sendingTeam? : TradeTeam;
+  receivingTeam? : TradeTeam;
+  options? :UserTeam[];
+  hasErrors = false;
   
   getLeague() {
     
@@ -44,67 +36,72 @@ export class TradeComponent implements OnInit{
     this.leagueService.getLeague(+this.leagueId).subscribe({
       next: league => {
         this.league = league;
-        this.updateTeams();
+        const sendingId = this.sendingTeam?.id ?? this.league?.teams[0]?.id;
+        const receivingId = this.receivingTeam?.id ?? this.league?.teams[1]?.id;
+        
+        this.sendingTeam = {
+          id : sendingId,
+          team : this.league?.teams.find(t => t.id == sendingId)!,
+          offer : new Set<Athlete>(),
+        }
+        
+        this.receivingTeam = {
+          id: receivingId,
+          team : this.league?.teams.find(t => t.id == receivingId)!,
+          offer: new Set<Athlete>(),
+        }
+        
+        this.updateSelectOptions();
       },
       error : err => this.hasErrors = true,
     })  
   }
   
-  updateTeams() {
-      this.teamOneId = this.teamOneId ?? this.league?.teams[0]?.id;
-      this.teamTwoId = this.teamTwoId ?? this.league?.teams[1]?.id;
-      
-      this.teamOne = this.league?.teams.find(t => t.id == this.teamOneId);
-      this.teamTwo = this.league?.teams.find(t => t.id == this.teamTwoId);
-      
-      this.teamOneSelectOptions = this.league?.teams.filter(t => t.id != this.teamTwoId && t.id != this.teamOneId);
-      this.teamTwoSelectOptions = this.league?.teams.filter(t => t.id != this.teamOneId && t.id != this.teamTwoId);
-      
-      this.teamOneOffer.clear();
-      this.teamTwoOffer.clear();
+  updateSelectOptions() {
+    this.options = this.league?.teams.filter(t => t.id != this.receivingTeam?.id && t.id != this.sendingTeam?.id);
   }
   
-  updateTeamOne(e:any){
-    this.teamOneId = e.target.value;
-    this.updateTeams();
-  }
-  updateTeamTwo(e:any){
-    this.teamTwoId = e.target.value;
-    this.updateTeams();
+  updateTeam(e:any, team?:TradeTeam) {
+    
+    if (!team) return;
+    
+    const id = e.target.value;
+    
+    team.id = id;
+    team.offer = new Set<Athlete>();
+    team.team = this.league?.teams.find(t => t.id == id)!;
+    
+    this.updateSelectOptions();
   }
   
-  addToTeamOneOffer(id:number){
-    const athlete = this.teamOne?.athletes.find(a => a.id == id);
-
-    if(!athlete) return;
-
-    if (this.teamOneOffer.has(athlete)) {
-        this.teamOneOffer.delete(athlete);
-      } else {
-        this.teamOneOffer.add(athlete);
-      }
-  }
-  addToTeamTwoOffer(id:number){
-    const athlete = this.teamTwo?.athletes.find(a => a.id == id);
+  updateOffer(id:number, team?:Set<Athlete>){
     
-    if(!athlete) return;
+    if (!this.sendingTeam?.team || !this.receivingTeam?.team) return;
+    if (!team) return;
     
-    if (this.teamTwoOffer.has(athlete)) {
-      this.teamTwoOffer.delete(athlete);
+    const athlete = [...this.sendingTeam?.team?.athletes, ...this.receivingTeam?.team?.athletes].find(a => a.id == id);
+    if (!athlete) return;
+    
+    if (team.has(athlete)) {
+      team.delete(athlete);
     } else {
-      this.teamTwoOffer.add(athlete);
+      team.add(athlete);
     }
   }
   
   submitTrade() {
     
-    if (!this.teamOneId || !this.teamTwoId) return;
-    if (!this.teamOneOffer.size || !this.teamTwoOffer.size) return;
-    
-    this.userTeamService.tradeAthletes(this.teamOneId, this.teamTwoId, Array.from(this.teamOneOffer).map(t => t.id), Array.from(this.teamTwoOffer).map(t => t.id)).subscribe({
-      next: ()=> this.getLeague(),
+    if (!this.sendingTeam?.id || !this.sendingTeam?.offer.size) return;
+    if (!this.receivingTeam?.id || !this.receivingTeam.offer.size) return;
+    this.userTeamService.tradeAthletes(this.sendingTeam.id, this.receivingTeam.id, Array.from(this.sendingTeam.offer).map(t => t.id), Array.from(this.receivingTeam.offer).map(t => t.id)).subscribe({
+      next: () => this.getLeague(),
       error: err => this.hasErrors = true,
     })
   }
-  
+
+}
+type TradeTeam = {
+  id : number,
+  team : UserTeam,
+  offer : Set<Athlete>
 }
