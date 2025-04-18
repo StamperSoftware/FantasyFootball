@@ -1,10 +1,11 @@
 @if(league != undefined){
     <h2>{{league.name}}</h2>
-    <fa-icon class="btn" (click)="addPlayer()" [icon]="faAdd"></fa-icon>
+    <fa-icon class="btn" title="Add Player" (click)="addPlayer()" [icon]="faAdd"></fa-icon>
+    <fa-icon class="btn" title="Trade Athletes" routerLink="trade" [icon]="faShuffle"></fa-icon>
     <h4>Players</h4>
     <ul>
         @for(team of league.teams; track team.id){
-            <p routerLink="/user-teams/{{team.id}}">{{team.name}} {{team.player.lastName}}; {{team.player.firstName}}</p>
+            <p routerLink="user-teams/{{team.id}}">{{team.name}} {{team.player.lastName}}; {{team.player.firstName}}</p>
         }
     </ul>
 }

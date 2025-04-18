@@ -61,7 +61,8 @@ export class UserTeamDetailComponent implements OnInit {
     }
     
     addAthleteToTeam(athleteId:number){
-        if(this.teamId == null) return;
+        if (this.teamId == null) return;
+        
         this.teamService.addAthleteToTeam(athleteId, +this.teamId).subscribe({
             next: () => this.getTeam(),
             error : () => this.hasErrors = true,

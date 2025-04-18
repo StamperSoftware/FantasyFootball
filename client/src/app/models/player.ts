@@ -2,7 +2,7 @@
 
 export type Player = {
     userId : string
-    user : AppUser
+    appUser : AppUser
     id : number
     firstName : string
     lastName : string

@@ -18,7 +18,7 @@ public class LeaguesController(IGenericRepository<League> repo, ILeagueService s
     [HttpGet("{id:int}")]
     public async Task<ActionResult<LeagueDto>> GetLeague(int id)
     {
-        var league = await service.GetLeagueWithTeamsAsync(id);
+        var league = await service.GetLeagueWithFullDetailsAsync(id);
         
         if (league is null) return BadRequest($"could not find league with id:{id}");
         return Ok(new LeagueDto(league));

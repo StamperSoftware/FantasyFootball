@@ -5,7 +5,7 @@ import { ActivatedRoute, RouterLink } from "@angular/router";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { PlayerListComponent } from "../../player/list/list.component";
 import { SelectPlayerComponent } from "../../player/select-player/select-player.component";
-import { faAdd } from "@fortawesome/free-solid-svg-icons";
+import { faAdd, faShuffle } from "@fortawesome/free-solid-svg-icons";
 import { FaIconComponent } from "@fortawesome/angular-fontawesome";
 
 @Component({
@@ -46,4 +46,5 @@ export class LeagueDetailComponent implements OnInit {
   }
 
     protected readonly faAdd = faAdd;
+  protected readonly faShuffle = faShuffle;
 }

@@ -3,7 +3,7 @@
         @if (team.name) {
             <h2>{{team.name}}</h2>
         }
-        <h4 routerLink="/players/{{team.player.id}}">{{team.player.firstName}} {{team.player.lastName}}</h4>
+        <h4 routerLink="/players/{{team.player.id}}">{{team.player.appUser.userName}}</h4>
         <fa-icon [icon]="faEdit" class="btn" (click)="openEditModal()"></fa-icon>
         <fa-icon [icon]="faPlus" class="btn" (click)="openAddAthleteModal()"></fa-icon>
         <section>

@@ -12,7 +12,7 @@ public class LeagueService(FantasyFootballContext db, IGenericRepository<Player>
         var player = await playerRepo.GetByIdAsync(playerId);
         if (player == null) throw new Exception("Could not find player");
 
-        var league = await GetLeagueWithTeamsAsync(leagueId);
+        var league = await GetLeagueWithFullDetailsAsync(leagueId);
         if (league == null) throw new Exception("Could not find league");
         
         if (league.Teams.Count >= MAX_TEAMS_IN_LEAGUE) throw new Exception("League is full.");
@@ -27,12 +27,15 @@ public class LeagueService(FantasyFootballContext db, IGenericRepository<Player>
         await db.SaveChangesAsync();
     }
 
-    public async Task<League?> GetLeagueWithTeamsAsync(int id)
+    public async Task<League?> GetLeagueWithFullDetailsAsync(int id)
     {
         return await db.Leagues
             .Include(l => l.Teams)
-                .ThenInclude(l => l.Player)
+                .ThenInclude(t => t.Player)
                     .ThenInclude(p => p.User)
+                .Include(l => l.Teams)
+                    .ThenInclude(t => t.Athletes)
+                        .ThenInclude(a => a.Team)
             .FirstOrDefaultAsync(l => l.Id == id);
     }
 }
