@@ -8,8 +8,15 @@ public class FantasyFootballContext(DbContextOptions<FantasyFootballContext> opt
     : IdentityDbContext<AppUser>(options)
 {
     public DbSet<League> Leagues { get; set; }
+    
     public new DbSet<AppUser> Users { get; set; }
+    
     public DbSet<Player> Players { get; set; }
+    
     public DbSet<UserTeam> UserTeams { get; set; }
-
+    
+    public DbSet<Team> Teams { get; set; }
+    
+    public DbSet<Athlete> Athletes { get; set; }
+ 
 }

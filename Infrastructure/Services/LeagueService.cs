@@ -18,7 +18,7 @@ public class LeagueService(FantasyFootballContext db, IGenericRepository<Player>
         if (league.Teams.Count >= MAX_TEAMS_IN_LEAGUE) throw new Exception("League is full.");
         if (league.Teams.Any(t => t.PlayerId == playerId)) throw new Exception("Player is in league already.");
 
-        var userTeam = new UserTeam { LeagueId = leagueId, PlayerId = playerId, Player = player};
+        var userTeam = new UserTeam { LeagueId = leagueId, PlayerId = playerId, Player = player, Name = $"(NEW) Team #{league.Teams.Count + 1}"};
         userTeamRepo.Add(userTeam);
         if (!await userTeamRepo.SaveAllAsync()) throw new Exception("Could not create team."); 
         

@@ -1,0 +1,130 @@
+[
+  {
+    "Location":"Arizona",
+    "Name":"Cardinals"
+  },
+  {
+    "Location":"Atlanta",
+    "Name":"Falcons"
+  },
+  {
+    "Location":"Baltimore",
+    "Name":"Ravens"
+  },
+  {
+    "Location":"Buffalo",
+    "Name":"Bills"
+  },
+  {
+    "Location":"Carolina",
+    "Name":"Panthers"
+  },
+  {
+    "Location":"Chicago",
+    "Name":"Bears"
+  },
+  {
+    "Location":"Cincinnati",
+    "Name":"Bengals"
+  },
+  {
+    "Location":"Cleveland",
+    "Name":"Browns"
+  },
+  {
+    "Location":"Dallas",
+    "Name":"Cowboys"
+  },
+  {
+    "Location":"Denver",
+    "Name":"Broncos"
+  },
+  {
+    "Location":"Detroit",
+    "Name":"Lions"
+  },
+  {
+    "Location":"Green Bay",
+    "Name":"Packers"
+  },
+  {
+    "Location":"Houston",
+    "Name":"Texans"
+  },
+  {
+    "Location":"Indianapolis",
+    "Name":"Colts"
+  },
+  {
+    "Location":"Jacksonville",
+    "Name":"Jaguars"
+  },
+  {
+    "Location":"Kansas City",
+    "Name":"Chiefs"
+  },
+  {
+    "Location":"Las Vegas",
+    "Name":"Raiders"
+  },
+  {
+    "Location":"Los Angeles",
+    "Name":"Chargers"
+  },
+  {
+    "Location":"Los Angeles",
+    "Name":"Rams"
+  },
+  {
+    "Location":"Miami",
+    "Name":"Dolphins"
+  },
+  {
+    "Location":"Minnesota",
+    "Name":"Vikings"
+  },
+  {
+    "Location":"New England",
+    "Name":"Patriots"
+  },
+  {
+    "Location":"New Orleans",
+    "Name":"Saints"
+  },
+  {
+    "Location":"New York",
+    "Name":"Giants"
+  },
+  {
+    "Location":"New York",
+    "Name":"Jets"
+  },
+  {
+    "Location":"Philadelphia",
+    "Name":"Eagles"
+  },
+  {
+    "Location":"Pittsburgh",
+    "Name":"Steelers"
+  },
+  {
+    "Location":"San Fransisco",
+    "Name":"49ers"
+  },
+  {
+    "Location":"Seattle",
+    "Name":"Seahawks"
+  },
+  {
+    "Location":"Tampa Bay",
+    "Name":"Buccaneers"
+  },
+  {
+    "Location":"Tennessee",
+    "Name":"Titans"
+  },
+  {
+    "Location":"Washington",
+    "Name":"Commanders"
+  }
+]

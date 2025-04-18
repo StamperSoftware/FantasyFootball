@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers;
 
 [Route("api/user-teams")]
-public class UserTeamsController(IGenericRepository<UserTeam> repo, IUserTeamService userService) : BaseApiController
+public class UserTeamsController(IGenericRepository<UserTeam> repo, IUserTeamService userTeamService) : BaseApiController
 {
     [HttpGet]
     public async Task<ActionResult<IReadOnlyList<UserTeamDto>>> GetTeams()
@@ -17,7 +17,7 @@ public class UserTeamsController(IGenericRepository<UserTeam> repo, IUserTeamSer
     [HttpGet("{teamId:int}")]
     public async Task<ActionResult<UserTeamDto>> GetTeam(int teamId)
     {
-        var team = await userService.GetUserTeamWithPlayer(teamId);
+        var team = await userTeamService.GetUserTeamFullDetail(teamId);
         if (team == null) return BadRequest("Could not find team");
         return Ok(new UserTeamDto(team));
     }
@@ -34,5 +34,11 @@ public class UserTeamsController(IGenericRepository<UserTeam> repo, IUserTeamSer
             return Ok();
         }
         return BadRequest("Could not update team name.");
+    }
+
+    [HttpPut("{teamId:int}/athletes/{athleteId:int}")]
+    public async Task AddAthleteToTeam([FromRoute]int teamId, [FromRoute]int athleteId)
+    {
+        await userTeamService.AddAthleteToTeam(teamId, athleteId);
     }
 }

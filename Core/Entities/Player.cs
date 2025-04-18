@@ -10,7 +10,7 @@ public class Player : BaseEntity
     [Required] public required string LastName { get; set; }
     public required AppUser User { get; set; }
     public required string UserId { get; set; }
-    public List<UserTeam> Teams { get; set; } = [];
+    public IList<UserTeam> Teams { get; set; } = [];
     
     public Player() {}
     

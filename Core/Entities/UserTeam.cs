@@ -7,5 +7,6 @@ public class UserTeam : BaseEntity
     public required Player Player { get; set; } = null!;
     public string? Name { get; set; }
 
-        
+    public IList<Athlete> Athletes { get; set; } = [];
+
 }

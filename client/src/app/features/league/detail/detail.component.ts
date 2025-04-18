@@ -5,12 +5,15 @@ import { ActivatedRoute, RouterLink } from "@angular/router";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { PlayerListComponent } from "../../player/list/list.component";
 import { SelectPlayerComponent } from "../../player/select-player/select-player.component";
+import { faAdd } from "@fortawesome/free-solid-svg-icons";
+import { FaIconComponent } from "@fortawesome/angular-fontawesome";
 
 @Component({
   selector: 'app-league-detail',
   standalone: true,
   imports: [
-    RouterLink
+    RouterLink,
+    FaIconComponent
   ],
   templateUrl: './detail.component.html',
   styleUrl: './detail.component.scss'
@@ -41,4 +44,6 @@ export class LeagueDetailComponent implements OnInit {
     
     this.modalService.open(SelectPlayerComponent).result.then(addPlayer,() => {});
   }
+
+    protected readonly faAdd = faAdd;
 }

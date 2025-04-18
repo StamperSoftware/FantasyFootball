@@ -13,7 +13,7 @@ export class PlayerService {
     private playerUrl = `${this.baseUrl}/players`;
     
     getPlayer(id:number) {
-        return this.http.get<Player>(`${this.playerUrl}/id`);
+        return this.http.get<Player>(`${this.playerUrl}/${id}`);
     }
     
     getPlayers(){

@@ -1,0 +1,9 @@
+@if(hasErrors){
+    <p>There were errors, please try again later</p>
+} @else {
+    <div>
+        @for(athlete of athletes;track athlete.id){
+            <p (click)="selectAthlete(athlete.id)">{{athlete.firstName}} {{athlete.lastName}}</p>
+        }
+    </div>
+}

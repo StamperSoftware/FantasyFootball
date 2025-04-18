@@ -1,17 +1,20 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { UserTeamService } from "../../../core/services/user-team.service";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, RouterLink } from "@angular/router";
 import { UserTeam } from "../../../models";
 import { FaIconComponent } from "@fortawesome/angular-fontawesome";
-import { faEdit } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { EditUserTeamComponent } from "../edit/edit.component";
+import { AthleteListComponent } from "../../athlete/list/list.component";
+import { SelectAthleteListComponent } from "../../athlete/select-list/select-list.component";
 
 @Component({
   selector: 'app-user-team-detail',
   standalone: true,
     imports: [
-        FaIconComponent
+        FaIconComponent,
+        RouterLink
     ],
   templateUrl: './detail.component.html',
   styleUrl: './detail.component.scss'
@@ -25,6 +28,9 @@ export class UserTeamDetailComponent implements OnInit {
     private teamService = inject(UserTeamService);
     private activatedRoute = inject(ActivatedRoute);
     private modalService = inject(NgbModal);
+    
+    protected readonly faEdit = faEdit;
+    protected readonly faPlus = faPlus;
     
     team?:UserTeam;
     hasErrors = false;
@@ -47,8 +53,19 @@ export class UserTeamDetailComponent implements OnInit {
         const modal = this.modalService.open(EditUserTeamComponent);
         modal.componentInstance.data = {name:this.team?.name, id :this.teamId};
         modal.result.then(()=>this.getTeam());
-        
     }
 
-    protected readonly faEdit = faEdit;
+    openAddAthleteModal() {
+        const modal = this.modalService.open(SelectAthleteListComponent);
+        modal.result.then((id:number) => this.addAthleteToTeam(id));
+    }
+    
+    addAthleteToTeam(athleteId:number){
+        if(this.teamId == null) return;
+        this.teamService.addAthleteToTeam(athleteId, +this.teamId).subscribe({
+            next: () => this.getTeam(),
+            error : () => this.hasErrors = true,
+        });
+    }
+    
 }

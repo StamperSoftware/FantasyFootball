@@ -23,4 +23,8 @@ export class UserTeamService {
     return this.http.put(this.teamUrl, {name, id});
   }
   
+  addAthleteToTeam(athleteId:number, teamId:number){
+    return this.http.put(`${this.teamUrl}/${teamId}/athletes/${athleteId}`, {})
+  }
+  
 }

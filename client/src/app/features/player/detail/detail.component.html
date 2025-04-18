@@ -1,1 +1,7 @@
-<p>detail works!</p>
+@if(!hasErrors) {
+    @if(player != null){
+        <div>
+            <h2>{{player.firstName}} {{player.lastName}}</h2>
+        </div>      
+    }
+ }

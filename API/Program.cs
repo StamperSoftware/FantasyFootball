@@ -23,6 +23,7 @@ builder.Services.AddAuthorization();
 builder.Services.AddScoped<ILeagueService, LeagueService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserTeamService, UserTeamService>();
+builder.Services.AddScoped<IAthleteService, AthleteService>();
 
 builder.Services.AddDbContext<FantasyFootballContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 

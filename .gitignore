@@ -15,5 +15,3 @@ client/src/environments/environment.ts
 docker-compose.yml
 API/.env
 /Infrastructure/Migrations
-/Infrastructure/Migrations
-Infrastructure/Migrations/FantasyFootballContextModelSnapshot.cs

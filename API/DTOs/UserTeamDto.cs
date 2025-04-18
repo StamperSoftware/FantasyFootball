@@ -5,10 +5,14 @@ namespace API.DTOs;
 public class UserTeamDto
 {
     public int Id { get; set; }
+    
     public int LeagueId { get; set; }
+    
     public PlayerDto Player { get; set; }
     
     public string? Name { get; set; }
+
+    public IList<AthleteDto> Athletes { get; set; }
 
     public UserTeamDto(UserTeam team)
     {
@@ -16,6 +20,7 @@ public class UserTeamDto
         LeagueId = team.LeagueId;
         Player = new PlayerDto(team.Player);
         Name = team.Name;
+        Athletes = team.Athletes.Select(a => new AthleteDto(a)).ToList();
     }
     
 }

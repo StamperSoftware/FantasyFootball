@@ -1,0 +1,14 @@
+@if(!hasErrors) {
+    @if(athletes.length){
+        <ul>
+            @for(athlete of athletes; track athlete.id){
+                <li>{{athlete.lastName}}; {{athlete.firstName}} {{Position[athlete.position]}} {{athlete.team.name}}</li>
+            }
+        </ul>
+        
+    }
+} @else {
+    <div>
+        <p>There were errors, please try again later</p>
+    </div>
+}
