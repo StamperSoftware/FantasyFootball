@@ -27,6 +27,11 @@ export class UserTeamService {
     return this.http.put(`${this.teamUrl}/${teamId}/athletes/${athleteId}`, {})
   }
   
+  dropAthlete(athleteId:number, teamId:number){
+    return this.http.delete(`${this.teamUrl}/${teamId}/athletes/${athleteId}`);
+  }
+  
+  
   tradeAthletes(teamOneId:number, teamTwoId:number, teamOneAthleteIds:number[], teamTwoAthleteIds:number[]){
     return this.http.put(`${this.teamUrl}/trade-athletes`, {teamOneId, teamTwoId, teamOneAthleteIds, teamTwoAthleteIds})
   }

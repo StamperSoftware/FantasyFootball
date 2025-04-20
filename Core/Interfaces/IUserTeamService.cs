@@ -9,4 +9,5 @@ public interface IUserTeamService
     public Task AddAthletesToTeamAsync(int teamId, IList<int> athleteId);
     public Task AddAthletesToTeamsAsync(IDictionary<int, IList<int>> teamAthleteDictionary);
     public Task TradeAthletes(int teamOneId, int teamTwoId, IList<int> teamOneAthleteIds, IList<int> teamTwoAthleteIds);
+    public Task DropAthleteFromTeamAsync(int teamId, int athleteId);
 }

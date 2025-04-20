@@ -3,7 +3,7 @@ import { UserTeamService } from "../../../core/services/user-team.service";
 import { ActivatedRoute, RouterLink } from "@angular/router";
 import { Athlete, Position, UserTeam } from "../../../models";
 import { FaIconComponent } from "@fortawesome/angular-fontawesome";
-import { faCircleLeft, faEdit, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faChevronDown, faCircleLeft, faEdit, faPlus, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { EditUserTeamComponent } from "../edit/edit.component";
 import { AthleteListComponent } from "../../athlete/list/list.component";
@@ -69,7 +69,24 @@ export class UserTeamDetailComponent implements OnInit {
             error : () => this.hasErrors = true,
         });
     }
+    
+    dropAthlete(athleteId:number) {
+        if (!this.teamId) return;
 
+        this.teamService.dropAthlete(athleteId, +this.teamId).subscribe({
+            next: () => this.getTeam(),
+            error : () => this.hasErrors = true,
+        });
+    }
+
+    openDescription(athleteId:number) {
+        
+    }
+    
+    
+    
     protected readonly faCircleLeft = faCircleLeft;
     protected readonly Position = Position;
+    protected readonly faChevronDown = faChevronDown;
+    protected readonly faTrashCan = faTrashCan;
 }

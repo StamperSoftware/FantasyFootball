@@ -47,4 +47,12 @@ public class UserTeamsController(IGenericRepository<UserTeam> repo, IUserTeamSer
     {
         await userTeamService.TradeAthletes(request.TeamOneId, request.TeamTwoId, request.TeamOneAthleteIds, request.TeamTwoAthleteIds);
     }
+
+    [HttpDelete("{teamId:int}/athletes/{athleteId:int}")]
+    public async Task DropAthleteFromTeam(int teamId, int athleteId)
+    {
+        await userTeamService.DropAthleteFromTeamAsync(teamId, athleteId);
+    }
+    
+    
 }

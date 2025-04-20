@@ -13,15 +13,29 @@
         
         <section>
             <div>
-                <div class="d-flex align-items-center">
-                    <h4>Team:</h4>
-                    <fa-icon [icon]="faPlus" class="btn" (click)="openAddAthleteModal()"/>
-                </div>
-                <ul>
-                    @for(athlete of team.athletes; track athlete.id){
-                        <p>({{Position[athlete.position]}}) {{athlete.firstName}} {{athlete.lastName}}</p>
-                    }
-                </ul>
+                <table class="table table-striped table-hover w-25">
+                    <thead>
+                        <tr>
+                            <th>Position</th>
+                            <th>Name</th>
+                            <th><fa-icon [icon]="faPlus" class="btn" (click)="openAddAthleteModal()"/></th>
+                        </tr>
+                    </thead>
+                    
+                    <tbody>
+                        @for (athlete of team.athletes; track athlete.id) {
+                            <tr>
+                                <td>{{Position[athlete.position]}}</td>
+                                <td>{{athlete.firstName}} {{athlete.lastName}}</td>
+                                <td>
+                                    <div class="float-end d-flex gap-2">
+                                        <fa-icon (click)="dropAthlete(athlete.id)" [icon]="faTrashCan"/> 
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
             </div>
         </section>
     }

@@ -112,4 +112,18 @@ public class UserTeamService(FantasyFootballContext db) : IUserTeamService
         await db.SaveChangesAsync();
     }
 
+    
+    public async Task DropAthleteFromTeamAsync(int teamId, int athleteId)
+    {
+        var athlete = await db.Athletes.FindAsync(athleteId);
+        if (athlete == null) throw new Exception("Could not get athlete");
+        
+        var team = await db.UserTeams.Include(t => t.Athletes).FirstOrDefaultAsync(t => t.Id == teamId);
+        if (team == null) throw new Exception("Could not get team");
+
+        if (!team.Athletes.Contains(athlete)) throw new Exception("Athlete was not on team");
+        team.Athletes.Remove(athlete);
+        await db.SaveChangesAsync();
+    }
+    
 }
