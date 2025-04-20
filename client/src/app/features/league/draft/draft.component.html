@@ -1,0 +1,18 @@
+@if (league && athletes) {
+    <div>
+        <h2>Draft for {{league.name}}</h2>
+        <fa-icon class="btn" title="Add Player" (click)="openSelectAthlete()" [icon]="faAdd"/>
+        <button class="btn" (click)="simulateDraft()">Simulate Draft</button>
+        <button class="btn" (click)="submitDraft()">Submit Draft</button>
+        <button class="btn" (click)="restartDraft()">Restart Draft</button>
+    </div>
+    <div id="draft-board" [ngStyle]="{'grid-template-columns':'repeat('+league.teams.length+', 1fr)'}">
+        @for (slot of draftOrder; track slot.position) {
+            <div class="draft-slot {{currentPick == $index && 'active'}}" [ngStyle]="{order:slot.position}">
+                @if (slot.athlete) {
+                    <p>{{ slot.athlete.firstName }} {{slot.athlete.lastName}} ({{Position[slot.athlete.position]}}) </p>
+                }
+            </div>
+        }
+    </div>
+}

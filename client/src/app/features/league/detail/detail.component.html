@@ -2,6 +2,8 @@
     <h2>{{league.name}}</h2>
     <fa-icon class="btn" title="Add Player" (click)="addPlayer()" [icon]="faAdd"></fa-icon>
     <fa-icon class="btn" title="Trade Athletes" routerLink="trade" [icon]="faShuffle"></fa-icon>
+    <fa-icon class="btn" title="Start League" (click)="startLeague()" [icon]="faPlay"></fa-icon>
+    <fa-icon class="btn" title="Join Draft" routerLink="draft" [state]="{league}" [icon]="faRightToBracket"></fa-icon>
     <h4>Players</h4>
     <ul>
         @for(team of league.teams; track team.id){

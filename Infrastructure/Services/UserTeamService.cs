@@ -7,6 +7,36 @@ namespace Infrastructure.Services;
 
 public class UserTeamService(FantasyFootballContext db) : IUserTeamService
 {
+
+    private async Task addAthleteToTeamAsync(UserTeam team, int athleteId)
+    {
+        
+        var athlete = await db.Athletes.FindAsync(athleteId);
+        if (athlete == null) throw new Exception("Could not get athlete");
+        
+        team.Athletes.Add(athlete);
+    }
+
+    private async Task<UserTeam> getTeamAsync(int teamId)
+    {
+        
+        var team = await db.UserTeams.FindAsync(teamId);
+        if (team == null) throw new Exception("Could not get team");
+        return team;
+    }
+
+    private async Task<bool> checkIfPlayerIsAvailable(UserTeam team, IList<int> athleteIds)
+    {
+        //TODO replace with available players check 
+        var league = await db.Leagues.Include(l => l.Teams)
+            .ThenInclude(t => t.Athletes)
+            .FirstOrDefaultAsync(l => l.Id == team.LeagueId);
+            
+        if (league == null) throw new Exception("Could not get league");
+
+        return !league.Teams.Any(t => t.Athletes.Any(a => athleteIds.Contains(a.Id)));
+    }
+
     public async Task<UserTeam?> GetUserTeamFullDetail(int id)
     {
         return await db.UserTeams
@@ -17,28 +47,44 @@ public class UserTeamService(FantasyFootballContext db) : IUserTeamService
             .FirstOrDefaultAsync(t => t.Id == id);
     }
 
-    public async Task AddAthleteToTeam(int teamId, int athleteId)
+    public async Task AddAthleteToTeamAsync(int teamId, int athleteId)
     {
-        var team = await db.UserTeams.FindAsync(teamId);
-        if (team == null) throw new Exception("Could not get team");
-
-        var league = await db.Leagues.Include(l => l.Teams)
-            .ThenInclude(t => t.Athletes)
-            .FirstOrDefaultAsync(l => l.Id == team.LeagueId);
-            
-        if (league == null) throw new Exception("Could not get league");
-
-        if (league.Teams.Any(t => t.Athletes.Any(a => a.Id == athleteId)))
-            throw new Exception("Athlete is already on team");
+        var team = await getTeamAsync(teamId);
+        if (!await checkIfPlayerIsAvailable(team, [athleteId])) throw new Exception("Athlete is already on team");
         
-        var athlete = await db.Athletes.FindAsync(athleteId);
-        if (athlete == null) throw new Exception("Could not get athlete");
-        
-        team.Athletes.Add(athlete);
+        await addAthleteToTeamAsync(team, athleteId);
+        await db.SaveChangesAsync();
+    }
+    
+    public async Task AddAthletesToTeamAsync(int teamId, IList<int> athleteIds)
+    {
+        var team = await getTeamAsync(teamId);
+        if (!await checkIfPlayerIsAvailable(team, athleteIds)) throw new Exception("Athlete is already on team");
+
+        foreach (var athleteId in athleteIds)
+        {
+            await addAthleteToTeamAsync(team, athleteId);
+        }
 
         await db.SaveChangesAsync();
     }
 
+    public async Task AddAthletesToTeamsAsync(IDictionary<int, IList<int>> teamAthletesDictionary)
+    {
+        foreach (var (teamId, athleteIds) in teamAthletesDictionary)
+        {
+            var team = await getTeamAsync(teamId);
+            if (!await checkIfPlayerIsAvailable(team, athleteIds)) throw new Exception("Athlete is already on team");
+            
+            foreach (var athleteId in athleteIds)
+            {
+                await addAthleteToTeamAsync(team, athleteId);
+            }
+        }
+
+        await db.SaveChangesAsync();
+    }
+    
     public async Task TradeAthletes(int teamOneId, int teamTwoId, IList<int> teamOneAthleteIds,
         IList<int> teamTwoAthleteIds)
     {
@@ -65,4 +111,5 @@ public class UserTeamService(FantasyFootballContext db) : IUserTeamService
 
         await db.SaveChangesAsync();
     }
+
 }

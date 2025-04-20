@@ -49,4 +49,17 @@ public class LeaguesController(IGenericRepository<League> repo, ILeagueService s
 
         return Ok();
     }
+
+    [HttpPost("draft")]
+    public async Task SubmitDraft(SubmitDraftRequest request)
+    {
+        Dictionary<int, IList<int>> teamAthleteDictionary = [];
+        
+        foreach (var team in request.Results)
+        {
+            teamAthleteDictionary.Add(team.TeamId, team.Athletes);
+        }
+        
+        await service.SubmitDraft(teamAthleteDictionary);
+    }
 }

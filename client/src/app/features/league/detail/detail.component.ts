@@ -1,11 +1,10 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { LeagueService } from "../../../core/services/league.service";
 import { League } from "../../../models";
-import { ActivatedRoute, RouterLink } from "@angular/router";
+import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { PlayerListComponent } from "../../player/list/list.component";
 import { SelectPlayerComponent } from "../../player/select-player/select-player.component";
-import { faAdd, faShuffle } from "@fortawesome/free-solid-svg-icons";
+import { faAdd, faPlay, faRightToBracket, faShuffle } from "@fortawesome/free-solid-svg-icons";
 import { FaIconComponent } from "@fortawesome/angular-fontawesome";
 
 @Component({
@@ -27,6 +26,7 @@ export class LeagueDetailComponent implements OnInit {
   private route:ActivatedRoute = inject(ActivatedRoute);
   private modalService = inject(NgbModal);
   private id :number = +this.route.snapshot.paramMap.get("id")!;
+  private router = inject(Router);
   league?:League; 
   
   getLeague() {
@@ -44,7 +44,12 @@ export class LeagueDetailComponent implements OnInit {
     
     this.modalService.open(SelectPlayerComponent).result.then(addPlayer,() => {});
   }
-
-    protected readonly faAdd = faAdd;
+  startLeague(){
+    
+  }
+  
+  protected readonly faAdd = faAdd;
   protected readonly faShuffle = faShuffle;
+  protected readonly faPlay = faPlay;
+  protected readonly faRightToBracket = faRightToBracket;
 }

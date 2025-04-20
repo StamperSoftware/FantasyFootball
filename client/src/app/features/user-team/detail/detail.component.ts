@@ -1,9 +1,9 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { UserTeamService } from "../../../core/services/user-team.service";
 import { ActivatedRoute, RouterLink } from "@angular/router";
-import { UserTeam } from "../../../models";
+import { Athlete, UserTeam } from "../../../models";
 import { FaIconComponent } from "@fortawesome/angular-fontawesome";
-import { faEdit, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faCircleLeft, faEdit, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { EditUserTeamComponent } from "../edit/edit.component";
 import { AthleteListComponent } from "../../athlete/list/list.component";
@@ -36,7 +36,8 @@ export class UserTeamDetailComponent implements OnInit {
     hasErrors = false;
     
     teamId = this.activatedRoute.snapshot.paramMap.get("id");
-  
+    leagueId = this.activatedRoute.snapshot.paramMap.get("league-id");
+    
     getTeam(){
       if(!this.teamId) {
         this.hasErrors = true;
@@ -57,7 +58,7 @@ export class UserTeamDetailComponent implements OnInit {
 
     openAddAthleteModal() {
         const modal = this.modalService.open(SelectAthleteListComponent);
-        modal.result.then((id:number) => this.addAthleteToTeam(id));
+        modal.result.then((athlete:Athlete) => this.addAthleteToTeam(athlete.id));
     }
     
     addAthleteToTeam(athleteId:number){
@@ -68,5 +69,6 @@ export class UserTeamDetailComponent implements OnInit {
             error : () => this.hasErrors = true,
         });
     }
-    
+
+    protected readonly faCircleLeft = faCircleLeft;
 }

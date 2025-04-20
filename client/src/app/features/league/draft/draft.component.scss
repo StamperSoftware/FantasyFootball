@@ -1,0 +1,17 @@
+#draft-board {
+  display: grid;
+}
+
+.draft-slot {
+  border: solid 1px rgba(255,255,255,.5);
+  height: 75px;
+  border-collapse: collapse;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  
+  &.active {
+    border-color:red;
+  }
+}

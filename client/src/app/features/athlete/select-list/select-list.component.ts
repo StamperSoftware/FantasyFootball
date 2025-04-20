@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { AthleteService } from "../../../core/services/athlete.service";
 import { Athlete } from "../../../models";
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
@@ -20,8 +20,14 @@ export class SelectAthleteListComponent implements OnInit{
   
   athletes:Athlete[] = [];
   hasErrors = false;
-  
+  @Input() data? : {athletes?:Athlete[]};
   getAthletes() {
+    
+    if (this.data?.athletes) {
+      this.athletes = this.data.athletes;
+      return;
+    }
+    
     this.athleteService.getAthletes().subscribe({
       next: athletes => this.athletes = athletes,
       error : err => this.hasErrors = true,
@@ -29,6 +35,6 @@ export class SelectAthleteListComponent implements OnInit{
   }
   
   selectAthlete(id:number) {
-    this.activeModal.close(id);
+    this.activeModal.close(this.athletes.find(a => a.id == id));
   }
 }

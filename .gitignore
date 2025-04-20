@@ -15,3 +15,4 @@ client/src/environments/environment.ts
 docker-compose.yml
 API/.env
 /Infrastructure/Migrations
+*.user

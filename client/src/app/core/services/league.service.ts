@@ -27,4 +27,10 @@ export class LeagueService {
   addPlayer(leagueId:number, playerId:number){
     return this.http.post(`${this.leagueUrl}/${leagueId}/players/${playerId}`, {});
   }
+  
+  submitDraft(results:Map<number,number[]>) {
+    let request:any= [];
+    results.forEach((athletes:number[],teamId:number)=> request.push({teamId, athletes}));
+    return this.http.post(`${this.leagueUrl}/draft`, {results:request})
+  }
 }

@@ -4,9 +4,9 @@ using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Services;
-public class LeagueService(FantasyFootballContext db, IGenericRepository<Player> playerRepo, IGenericRepository<UserTeam> userTeamRepo) : ILeagueService
+public class LeagueService(FantasyFootballContext db, IGenericRepository<Player> playerRepo, IGenericRepository<UserTeam> userTeamRepo, IUserTeamService userTeamService) : ILeagueService
 {
-    const int MAX_TEAMS_IN_LEAGUE = 3;
+    const int MAX_TEAMS_IN_LEAGUE = 10;
     public async Task AddPlayerToLeagueAsync(int playerId, int leagueId)
     {
         var player = await playerRepo.GetByIdAsync(playerId);
@@ -27,6 +27,11 @@ public class LeagueService(FantasyFootballContext db, IGenericRepository<Player>
         await db.SaveChangesAsync();
     }
 
+    public async Task SubmitDraft(IDictionary<int, IList<int>> request)
+    {
+        await userTeamService.AddAthletesToTeamsAsync(request);
+    }
+
     public async Task<League?> GetLeagueWithFullDetailsAsync(int id)
     {
         return await db.Leagues
@@ -39,3 +44,4 @@ public class LeagueService(FantasyFootballContext db, IGenericRepository<Player>
             .FirstOrDefaultAsync(l => l.Id == id);
     }
 }
+

@@ -11,12 +11,14 @@ import { UserTeamDetailComponent } from "./features/user-team/detail/detail.comp
 import { AthleteListComponent } from "./features/athlete/list/list.component";
 import { AthleteDetailComponent } from "./features/athlete/detail/detail.component";
 import { TradeComponent } from "./features/league/trade/trade.component";
+import { DraftComponent } from "./features/league/draft/draft.component";
 
 export const routes: Routes = [
     {path:"", component:HomeComponent},
     {path:"leagues", component:LeagueListComponent},
     {path:"leagues/:id", component:LeagueDetailComponent},
     {path:"leagues/:league-id/trade", pathMatch:"full", component:TradeComponent},
+    {path:"leagues/:league-id/draft", pathMatch:"full", component:DraftComponent},
     {path:"leagues/:league-id/user-teams", pathMatch:"full", component:UserTeamListComponent},
     {path:"leagues/:league-id/user-teams/:id", pathMatch:"full", component:UserTeamDetailComponent},
     {path:"users", component:UserListComponent},

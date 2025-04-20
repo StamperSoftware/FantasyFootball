@@ -39,7 +39,7 @@ public class UserTeamsController(IGenericRepository<UserTeam> repo, IUserTeamSer
     [HttpPut("{teamId:int}/athletes/{athleteId:int}")]
     public async Task AddAthleteToTeam([FromRoute]int teamId, [FromRoute]int athleteId)
     {
-        await userTeamService.AddAthleteToTeam(teamId, athleteId);
+        await userTeamService.AddAthleteToTeamAsync(teamId, athleteId);
     }
     
     [HttpPut("trade-athletes")]
