@@ -1,14 +1,28 @@
-@if(!hasErrors) {
-    @if(athletes.length){
-        <ul>
-            @for(athlete of athletes; track athlete.id){
-                <li>{{athlete.lastName}}; {{athlete.firstName}} {{Position[athlete.position]}} {{athlete.team.name}}</li>
-            }
-        </ul>
-        
+<main>
+    @if (!hasErrors) {
+        @if (athletes.length){
+            <table class="w-50">
+                <thead>
+                    <tr>
+                        <th>Position</th>
+                        <th>Team</th>
+                        <th>Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (athlete of athletes; track athlete.id) {
+                        <tr>
+                            <td>{{Position[athlete.position]}}</td>
+                            <td>{{athlete.team.name}}</td>
+                            <td>{{athlete.firstName}} {{athlete.lastName}}</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    } @else {
+        <div>
+            <p>There were errors, please try again later</p>
+        </div>
     }
-} @else {
-    <div>
-        <p>There were errors, please try again later</p>
-    </div>
-}
+</main>

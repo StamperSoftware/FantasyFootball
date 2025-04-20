@@ -42,7 +42,7 @@ public class UserTeamService(FantasyFootballContext db) : IUserTeamService
         return await db.UserTeams
             .Include(t => t.Player)
                 .ThenInclude(p => p.User)
-            .Include(t => t.Athletes)
+            .Include(t => t.Athletes.OrderBy(a => a.Position))
                 .ThenInclude(a => a.Team)
             .FirstOrDefaultAsync(t => t.Id == id);
     }

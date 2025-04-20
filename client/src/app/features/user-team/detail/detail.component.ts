@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { UserTeamService } from "../../../core/services/user-team.service";
 import { ActivatedRoute, RouterLink } from "@angular/router";
-import { Athlete, UserTeam } from "../../../models";
+import { Athlete, Position, UserTeam } from "../../../models";
 import { FaIconComponent } from "@fortawesome/angular-fontawesome";
 import { faCircleLeft, faEdit, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
@@ -71,4 +71,5 @@ export class UserTeamDetailComponent implements OnInit {
     }
 
     protected readonly faCircleLeft = faCircleLeft;
+    protected readonly Position = Position;
 }

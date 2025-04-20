@@ -35,11 +35,11 @@ public class LeagueService(FantasyFootballContext db, IGenericRepository<Player>
     public async Task<League?> GetLeagueWithFullDetailsAsync(int id)
     {
         return await db.Leagues
-            .Include(l => l.Teams)
+            .Include(l => l.Teams.OrderBy(t => id))
                 .ThenInclude(t => t.Player)
                     .ThenInclude(p => p.User)
                 .Include(l => l.Teams)
-                    .ThenInclude(t => t.Athletes)
+                    .ThenInclude(t => t.Athletes.OrderBy(a => a.Position))
                         .ThenInclude(a => a.Team)
             .FirstOrDefaultAsync(l => l.Id == id);
     }

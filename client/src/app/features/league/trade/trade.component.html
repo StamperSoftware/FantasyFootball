@@ -5,7 +5,7 @@
             <div id="trade-container">
                 <section class="d-flex flex-column gap-3">
                     @if(league.teams.length > 2){
-                        <select (change)="updateTeam($event, sendingTeam)" [value]="sendingTeam?.id">
+                        <select class="w-50 form-select" (change)="updateTeam($event, sendingTeam)" [value]="sendingTeam?.id">
                             <option class="d-none" value="{{sendingTeam?.team?.id}}">{{sendingTeam?.team?.name}}</option>
                             @for (team of options; track team.id) {
                                 <option value="{{team.id}}">{{team.name}}</option>
@@ -24,7 +24,7 @@
                 
                 <section class="d-flex flex-column gap-3">
                     @if(league.teams.length > 2){
-                        <select (change)="updateTeam($event, receivingTeam)" [value]="receivingTeam?.id">
+                        <select class="w-50 form-select" (change)="updateTeam($event, receivingTeam)" [value]="receivingTeam?.id">
                             <option class="d-none" value="{{receivingTeam?.team?.id}}">{{receivingTeam?.team?.name}}</option>
                             @for (team of options; track team.id) {
                                 <option value="{{team.id}}">{{team.name}}</option>

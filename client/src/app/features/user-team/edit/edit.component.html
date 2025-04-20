@@ -1,8 +1,10 @@
-<form (ngSubmit)="handleEdit()">    
-    <div>
-        <input id="name" [(ngModel)]="data.name" name="name"/>
-        <label for="name">Name</label>
+<form class="pt-4" (ngSubmit)="handleEdit()">
+
+    <div class="d-flex flex-column align-items-center">
+        <div class="w-50 form-floating">
+            <input class="form-control" id="name" placeholder="Name" [(ngModel)]="data.name" name="name"/>
+            <label class="form-label" for="name">Name</label>
+        </div>
     </div>
-    
     <button class="btn" type="submit">Update Team</button>
 </form>

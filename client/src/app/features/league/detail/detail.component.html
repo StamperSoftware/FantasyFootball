@@ -1,13 +1,47 @@
-@if(league != undefined){
-    <h2>{{league.name}}</h2>
-    <fa-icon class="btn" title="Add Player" (click)="addPlayer()" [icon]="faAdd"></fa-icon>
-    <fa-icon class="btn" title="Trade Athletes" routerLink="trade" [icon]="faShuffle"></fa-icon>
-    <fa-icon class="btn" title="Start League" (click)="startLeague()" [icon]="faPlay"></fa-icon>
-    <fa-icon class="btn" title="Join Draft" routerLink="draft" [state]="{league}" [icon]="faRightToBracket"></fa-icon>
-    <h4>Players</h4>
-    <ul>
-        @for(team of league.teams; track team.id){
-            <p routerLink="user-teams/{{team.id}}">{{team.name}} {{team.player.lastName}}; {{team.player.firstName}}</p>
-        }
-    </ul>
+@if (league) {
+    <main>
+        <section class="d-flex justify-content-between align-items-center">
+            <h1>{{league.name}}</h1>
+            <div>
+                <fa-icon class="btn" title="Trade Athletes" routerLink="trade" [icon]="faShuffle"></fa-icon>
+                <fa-icon class="btn" title="Start League" (click)="startLeague()" [icon]="faPlay"></fa-icon>
+                <fa-icon class="btn" title="Join Draft" routerLink="draft" [state]="{league}" [icon]="faRightToBracket"></fa-icon>
+                <fa-icon class="btn" title="Create Schedule" (click)="createSchedule()" [icon]="faCalendarAlt"/>
+            </div>
+        </section>
+        
+        <section id="roster-section">
+            <div>
+                <div class="d-flex align-items-center">
+                    <h4>Teams</h4>
+                    <fa-icon class="btn" title="Add Team" (click)="addTeam()" [icon]="faAdd"/>
+                </div>
+                <div>
+                    <ul>
+                        @for (team of league.teams; track team.id) {
+                            <li class="clickable" routerLink="user-teams/{{team.id}}">{{team.name}}</li>
+                        }
+                    </ul>
+                </div>
+            </div>
+            <div class="d-flex flex-column gap-3">
+                <div class="d-flex gap-5">
+                    <h4>Roster</h4>
+                    <select class="form-select w-50" (change)="handleUpdateTeams($event)" [value]="currentTeam?.id">
+                        <option class="d-none" value="{{currentTeam?.id}}">{{currentTeam?.name}}</option>
+                        @for (team of league.teams; track team.id) {
+                            <option value="{{team.id}}">{{team.name}}</option>
+                        }
+                    </select>
+                </div>
+                <div>
+                    <ul>
+                        @for (athlete of currentTeam?.athletes; track athlete.id) {
+                            <li>{{athlete.firstName}} {{athlete.lastName}}</li>    
+                        }
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
 }

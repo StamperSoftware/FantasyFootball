@@ -1,7 +1,10 @@
-<form (ngSubmit)="createLeague()">
-    <div>
-        <input id="name" [(ngModel)]="name" name="name"/>
-        <label for="name">Name</label>
+<form class="pt-4" (ngSubmit)="createLeague()">
+    <div class="d-flex flex-column align-items-center">
+        
+        <div class="w-50 form-floating">
+            <input class="form-control" id="name" placeholder="Name" [(ngModel)]="name" name="name"/>
+            <label class="form-label" for="name">Name</label>
+        </div>
     </div>
-    <button type="submit" class="btn btn-outline-primary">Create</button>
+    <button type="submit" class="btn">Create</button>
 </form>

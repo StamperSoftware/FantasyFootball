@@ -4,6 +4,7 @@
   --primary-color:#C2983D; /*mustard*/
   --primary-color-rgb:194,152,61; /*mustard*/
   --faded-primary-rgb:194,152,61,.5;
+  
   --secondary-color:#C2CCC5; /*putty*/
   --secondary-color-rgb:194,204,197; /*putty*/
 
@@ -46,16 +47,18 @@
   --bs-link-color: var(--primary-color);
   --bs-link-color-rgb: var(--primary-color-rgb);
   --bs-link-decoration: none;
+  
   --bs-link-hover-color: var(--active);
   --bs-link-hover-color-rgb: var(--active-rgb);
+  
+  --bs-border-color: rgba(var(--secondary-color-rgb),.5);  
 }
 
 .dropdown-menu {
   --bs-dropdown-link-active-bg:var(--active);
   --bs-dropdown-link-active-color:var(--secondary-background);
 
-  --bs-dropdown-link-hover-bg:var(--active);
-  --bs-dropdown-link-hover-color:var(--secondary-background);
+  --bs-dropdown-link-hover-bg:unset;
 }
 
 #root {
@@ -74,4 +77,28 @@ a {
 
 body {
   height: 100%;
+}
+
+.modal{
+  --bs-modal-margin:5em;
+}
+
+.modal-content {
+  max-height:80vh;
+  & > * {
+    overflow-y:auto;
+    max-height:100%;
+  }
+}
+
+.clickable {
+  cursor : pointer;
+}
+
+select {
+  cursor: pointer;
+}
+
+input[type="checkbox"] {
+  cursor:pointer;
 }

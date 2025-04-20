@@ -1,23 +1,28 @@
-@if (team) {
-    <div>
-        <div>
-            <h2>
+<main>
+    @if (team) {
+        <section class="d-flex justify-content-between">
+            <div class="d-flex align-items-center">
                 <fa-icon class="btn" [icon]="faCircleLeft" routerLink="/leagues/{{leagueId}}" />
-                {{team.name}}
-            </h2>
-        </div>
-        <h4 routerLink="/players/{{team.player.id}}">{{team.player.appUser.userName}}</h4>
-        <fa-icon [icon]="faEdit" class="btn" (click)="openEditModal()"/>
-        <fa-icon [icon]="faPlus" class="btn" (click)="openAddAthleteModal()"/>
+                <h2>{{team.name}}</h2>
+            </div>
+            <div>
+                <button class="btn" routerLink="/players/{{team.player.id}}">{{team.player.appUser.userName}}</button>
+                <fa-icon [icon]="faEdit" class="btn" (click)="openEditModal()"/>
+            </div>
+        </section>
+        
         <section>
             <div>
-                <h5>Team:</h5>
+                <div class="d-flex align-items-center">
+                    <h4>Team:</h4>
+                    <fa-icon [icon]="faPlus" class="btn" (click)="openAddAthleteModal()"/>
+                </div>
                 <ul>
                     @for(athlete of team.athletes; track athlete.id){
-                        <p>{{athlete.firstName}} {{athlete.lastName}}</p>
+                        <p>({{Position[athlete.position]}}) {{athlete.firstName}} {{athlete.lastName}}</p>
                     }
                 </ul>
             </div>
         </section>
-    </div>
-}
+    }
+</main>
