@@ -1,6 +1,6 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { AthleteService } from "../../../core/services/athlete.service";
-import { Athlete } from "../../../models";
+import { Athlete, Position } from "../../../models";
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
@@ -37,4 +37,6 @@ export class SelectAthleteListComponent implements OnInit{
   selectAthlete(id:number) {
     this.activeModal.close(this.athletes.find(a => a.id == id));
   }
+
+    protected readonly Position = Position;
 }

@@ -106,3 +106,8 @@ input[type="checkbox"] {
 .ng-fa-icon {
   cursor:pointer;
 }
+
+.btn {
+  --bs-btn-padding-x: .5rem;
+  --bs-btn-padding-y: .25rem;
+}

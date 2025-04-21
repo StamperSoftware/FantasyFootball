@@ -18,10 +18,10 @@ export class LoginComponent {
     private activeModal = inject(NgbActiveModal);
   
     hasErrors = false;
-    email = "";
+    username = "";
     password = "";
     
     handleLogin(){
-      this.accountService.login({email:this.email, password:this.password}, () => this.activeModal.close(), () => this.hasErrors = true);
+      this.accountService.login({email:this.username, password:this.password}, () => this.activeModal.close(), () => this.hasErrors = true);
     }
 }

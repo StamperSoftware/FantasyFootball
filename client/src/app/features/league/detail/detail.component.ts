@@ -1,6 +1,6 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { LeagueService } from "../../../core/services/league.service";
-import { Athlete, League, UserTeam } from "../../../models";
+import { Athlete, League, Position, UserTeam } from "../../../models";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { SelectPlayerComponent } from "../../player/select-player/select-player.component";
@@ -70,4 +70,5 @@ export class LeagueDetailComponent implements OnInit {
   protected readonly faPlay = faPlay;
   protected readonly faRightToBracket = faRightToBracket;
   protected readonly faCalendarAlt = faCalendarAlt;
+    protected readonly Position = Position;
 }

@@ -1,23 +1,29 @@
-<form (ngSubmit)="handleRegister()">
-    <div>
-        <input id="first-name" [(ngModel)]="firstName" name="first-name"/>
-        <label for="first-name">First Name</label>
-    </div>
-    <div>
-        <input id="last-name" [(ngModel)]="lastName" name="last-name"/>
-        <label for="last-name">Last Name</label>
-    </div>
-    <div>
-        <input id="email" [(ngModel)]="email" name="email"/>
-        <label for="email">Email</label>
-    </div>
-    <div>
-        <input id="username" [(ngModel)]="userName" name="username"/>
-        <label for="username">UserName</label>
-    </div>
-    <div>
-        <input id="password" type="password" [(ngModel)]="password" name="password"/>
-        <label for="password">Password</label>
-    </div>
-    <button type="submit" class="btn btn-outline-primary">Register</button>
-</form>
+<div class="p-3 pt-4">
+    <form (ngSubmit)="handleRegister()">
+            
+        <div class="d-flex flex-column align-items-center gap-3">
+            <div class="form-floating">
+                <input class="form-control" id="first-name" [(ngModel)]="firstName" name="first-name" placeholder="First Name"/>
+                <label class="form-label" for="first-name">First Name</label>
+            </div>
+            <div class="form-floating">
+                <input class="form-control" id="last-name" [(ngModel)]="lastName" name="last-name" placeholder="Last Name"/>
+                <label class="form-label" for="last-name">Last Name</label>
+            </div>
+            <div class="form-floating">
+                <input class="form-control" id="email" [(ngModel)]="email" name="email" placeholder="Email"/>
+                <label class="form-label" for="email">Email</label>
+            </div>
+            <div class="form-floating">
+                <input class="form-control" id="username" [(ngModel)]="userName" name="username" placeholder="Username"/>
+                <label class="form-label" for="username">Username</label>
+            </div>
+            <div class="form-floating">
+                <input class="form-control" id="password" type="password" [(ngModel)]="password" name="password" placeholder="Password"/>
+                <label class="form-label" for="password">Password</label>
+            </div>
+        </div>
+        
+        <button type="submit" class="btn">Register</button>
+    </form>
+</div>

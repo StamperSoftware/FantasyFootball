@@ -11,36 +11,58 @@
         </section>
         
         <section id="roster-section">
-            <div>
-                <div class="d-flex align-items-center">
-                    <h4>Teams</h4>
-                    <fa-icon class="btn" title="Add Team" (click)="addTeam()" [icon]="faAdd"/>
-                </div>
-                <div>
-                    <ul>
+            <div class="w-50">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Team</th>
+                            <th>Owner</th>
+                            <th>
+                                <div class="float-end">
+                                    <fa-icon class="btn" title="Add Team" (click)="addTeam()" [icon]="faAdd"/>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>                    
                         @for (team of league.teams; track team.id) {
-                            <li class="clickable" routerLink="user-teams/{{team.id}}">{{team.name}}</li>
+                            <tr>
+                                <td class="clickable" routerLink="user-teams/{{team.id}}">{{team.name}}</td>
+                                <td class="clickable" routerLink="/players/{{team.player.id}}">{{team.player.appUser.userName}}</td>
+                                <td></td>
+                            </tr>
                         }
-                    </ul>
-                </div>
+                    </tbody>
+                </table>
             </div>
-            <div class="d-flex flex-column gap-3">
-                <div class="d-flex gap-5">
-                    <h4>Roster</h4>
-                    <select class="form-select w-50" (change)="handleUpdateTeams($event)" [value]="currentTeam?.id">
-                        <option class="d-none" value="{{currentTeam?.id}}">{{currentTeam?.name}}</option>
-                        @for (team of league.teams; track team.id) {
-                            <option value="{{team.id}}">{{team.name}}</option>
-                        }
-                    </select>
-                </div>
-                <div>
-                    <ul>
+            
+            <div class="d-flex flex-column gap-3 w-75">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Position</th>
+                            <th>Name</th>
+                            <th>
+                                <select class="form-select float-end" (change)="handleUpdateTeams($event)" [value]="currentTeam?.id">
+                                    <option class="d-none" value="{{currentTeam?.id}}">{{currentTeam?.name}}</option>
+                                    @for (team of league.teams; track team.id) {
+                                        <option value="{{team.id}}">{{team.name}}</option>
+                                    }
+                                </select> 
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
                         @for (athlete of currentTeam?.athletes; track athlete.id) {
-                            <li>{{athlete.firstName}} {{athlete.lastName}}</li>    
+                            <tr>
+                                <td>{{Position[athlete.position]}}</td>    
+                                <td>{{athlete.firstName}} {{athlete.lastName}}</td>    
+                                <td></td>
+                            </tr>
                         }
-                    </ul>
-                </div>
+                    </tbody>
+                    
+                </table>
             </div>
         </section>
     </main>

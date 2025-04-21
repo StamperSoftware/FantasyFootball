@@ -1,11 +1,5 @@
-#trade-dashboard {
-  display: grid;
-  grid-template-rows:auto 1fr auto;
-  gap:2em;
-}
-
 #trade-container {
-  display : grid;
-  grid-template-columns: 4fr 4fr 1fr;
+  display : flex;
+  grid-template-columns: 4fr auto 4fr;
   gap:4em;
 }

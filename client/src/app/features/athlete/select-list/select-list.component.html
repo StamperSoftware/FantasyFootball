@@ -1,9 +1,22 @@
 @if(hasErrors){
     <p>There were errors, please try again later</p>
 } @else {
-    <div>
-        @for(athlete of athletes;track athlete.id){
-            <p (click)="selectAthlete(athlete.id)">{{athlete.firstName}} {{athlete.lastName}}</p>
-        }
-    </div>
+    
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <td>Position</td>
+                <td>Name</td>
+            </tr>
+        </thead>
+        <tbody>
+            @for (athlete of athletes;track athlete.id) {
+                <tr class="clickable" (click)="selectAthlete(athlete.id)">
+                    <td>{{ Position[athlete.position] }}</td>
+                    <td>{{ athlete.firstName }} {{athlete.lastName}}</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    
 }

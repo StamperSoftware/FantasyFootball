@@ -1,20 +1,33 @@
-<div>
-    <fa-icon class="btn" (click)="openCreateLeagueModal()" [icon]="faAdd"></fa-icon>
-</div>
-
-@if (hasErrors) {
-    <p>There are errors, please refresh the page to try again</p>
-} @else if (leagues !== undefined) {
-
-    @if(leagues.length){
-
-        @for(league of leagues; track league.id){
-            <div class="card" [routerLink]="league.id">
-                <p>{{league.name}}</p>
-            </div>
-        }
-    } @else if (leagues ){
-        <p>There are no Leagues yet.</p>
+<main class="d-flex flex-column align-items-center justify-content-center">
+    @if (leagues !== undefined) {
+        <table class="table table-striped table-hover w-50">
+            <thead>
+                <tr>
+                    <th>Leagues</th>
+                    <th>
+                        <div class="float-end">
+                            <fa-icon class="btn" (click)="openCreateLeagueModal()" [icon]="faAdd"/>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (hasErrors) {
+                    <tr><td>There are errors, please refresh the page to try again</td></tr>
+                }
+                @else if (leagues.length) {
+                    @for(league of leagues; track league.id){
+                        <tr [routerLink]="league.id">
+                            <td>{{league.name}}</td>
+                            <td></td>
+                        </tr>
+                    }
+                } @else if (leagues){
+                    <tr>
+                        <td>There are no Leagues yet.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     }
-}
-
+</main>

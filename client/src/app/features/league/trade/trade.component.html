@@ -1,55 +1,87 @@
 @if (league) {
-    
-    <div id="trade-dashboard" class="pt-2">
-        @if (league.teams.length >= 2) {
-            <div id="trade-container">
-                <section class="d-flex flex-column gap-3">
-                    @if(league.teams.length > 2){
-                        <select class="w-50 form-select" (change)="updateTeam($event, sendingTeam)" [value]="sendingTeam?.id">
-                            <option class="d-none" value="{{sendingTeam?.team?.id}}">{{sendingTeam?.team?.name}}</option>
-                            @for (team of options; track team.id) {
-                                <option value="{{team.id}}">{{team.name}}</option>
+    @if (league.teams.length >= 2) {
+        <div id="trade-container">
+            
+            <section class="d-flex flex-column gap-3 w-75">
+                <div>
+                    <table class="table table-striped table-hover">
+                        <thead>
+                        <tr>
+                            <th>Position</th>
+                            <th>Name</th>
+                            <th>
+                                @if (league.teams.length > 2){
+                                    <select class="form-select" (change)="updateTeam($event, sendingTeam)" [value]="sendingTeam?.id">
+                                        <option class="d-none" value="{{sendingTeam?.team?.id}}">{{sendingTeam?.team?.name}}</option>
+                                        @for (team of options; track team.id) {
+                                            <option value="{{team.id}}">{{team.name}}</option>
+                                        }
+                                    </select>
+                                }
+                            </th>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+                            @for (athlete of sendingTeam?.team?.athletes; track athlete.id) {
+                                <tr>
+                                    <td>{{Position[athlete.position]}}</td>
+                                    <td>{{athlete.firstName}} {{athlete.lastName}}</td>
+                                    <td>
+                                        <input class="form-check-input float-end" id="receiving-team-{{athlete.id}}" type="checkbox" (change)="updateOffer(athlete.id, sendingTeam?.offer)">
+                                    </td>
+                                </tr>
                             }
-                        </select>
-                    }   
-                    <div>
-                        @for (athlete of sendingTeam?.team?.athletes; track athlete.id){
-                            <div class="d-flex gap-2">
-                                <input class="form-check-input" id="sending-team-{{athlete.id}}" type="checkbox" (change)="updateOffer(athlete.id, sendingTeam?.offer)">
-                                <label class="form-check-label" for="sending-team-{{athlete.id}}">{{Position[athlete.position]}} - {{athlete.firstName}} {{athlete.lastName}}</label>
-                            </div>
-                        }
-                    </div>
-                </section>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+
+            <section class="align-self-center flex-shrink-0">
+                <button class="btn" [disabled]="!receivingTeam?.offer?.size || !sendingTeam?.offer?.size" (click)="submitTrade()">Submit Trade</button>
+            </section>
+            
+            
+            <section class="d-flex flex-column gap-3 w-75">
                 
-                <section class="d-flex flex-column gap-3">
-                    @if(league.teams.length > 2){
-                        <select class="w-50 form-select" (change)="updateTeam($event, receivingTeam)" [value]="receivingTeam?.id">
-                            <option class="d-none" value="{{receivingTeam?.team?.id}}">{{receivingTeam?.team?.name}}</option>
-                            @for (team of options; track team.id) {
-                                <option value="{{team.id}}">{{team.name}}</option>
+                <div>
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>Position</th>
+                                <th>Name</th>
+                                <th>
+                                    @if (league.teams.length > 2){
+                                        <select class="form-select" (change)="updateTeam($event, receivingTeam)" [value]="receivingTeam?.id">
+                                            <option class="d-none" value="{{receivingTeam?.team?.id}}">{{receivingTeam?.team?.name}}</option>
+                                            @for (team of options; track team.id) {
+                                                <option value="{{team.id}}">{{team.name}}</option>
+                                            }
+                                        </select>
+                                    }
+                                </th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (athlete of receivingTeam?.team?.athletes; track athlete.id) {
+                                <tr>
+                                    <td>{{Position[athlete.position]}}</td>
+                                    <td>{{athlete.firstName}} {{athlete.lastName}}</td>
+                                    <td>
+                                        <input class="form-check-input float-end" id="receiving-team-{{athlete.id}}" type="checkbox" (change)="updateOffer(athlete.id, receivingTeam?.offer)">
+                                    </td>
+                                </tr>
                             }
-                        </select>
-                    }
-                    
-                    <div>
-                        @for (athlete of receivingTeam?.team?.athletes; track athlete.id){
-                            <div class="d-flex gap-2">
-                                <input class="form-check-input" id="receiving-team-{{athlete.id}}" type="checkbox" (change)="updateOffer(athlete.id, receivingTeam?.offer)">
-                                <label class="form-check-label" for="receiving-team-{{athlete.id}}">{{Position[athlete.position]}} - {{athlete.firstName}} {{athlete.lastName}}</label>
-                            </div>
-                        }
-                    </div>
-                </section>
-                
-                <section>
-                    <button class="btn" (click)="submitTrade()" >Submit Trade</button>
-                </section>
-            </div>
-        } @else {
-            <h4>There are not enough teams in this league for a trade</h4>
-        }
-    </div>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+    } @else {
+        <h4>There are not enough teams in this league for a trade</h4>
+    }
 }
 
 
