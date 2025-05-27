@@ -8,4 +8,6 @@ export { Role } from "./role";
 export { UserTeam } from "./user-team";
 export { Athlete } from "./athlete";
 export { Team } from "./team";
-export { Position, getPositionName } from "./position"
+export { Position, getPositionName } from "./position";
+export { Game } from "./game"; 
+export { Schedule } from "./schedule"; 

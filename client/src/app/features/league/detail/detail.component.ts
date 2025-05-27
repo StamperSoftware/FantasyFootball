@@ -53,12 +53,16 @@ export class LeagueDetailComponent implements OnInit {
     
     this.modalService.open(SelectPlayerComponent).result.then(addPlayer,() => {});
   }
-  startLeague(){
+  
+  startLeague() {
     
   }
   
   createSchedule(){
-    
+    if (!this.league) return;
+    this.leagueService.createSchedule(this.league?.id).subscribe({
+      next:() => this.getLeague()
+    });
   }
   
   handleUpdateTeams(e:any) {
@@ -70,5 +74,5 @@ export class LeagueDetailComponent implements OnInit {
   protected readonly faPlay = faPlay;
   protected readonly faRightToBracket = faRightToBracket;
   protected readonly faCalendarAlt = faCalendarAlt;
-    protected readonly Position = Position;
+  protected readonly Position = Position;
 }

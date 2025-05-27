@@ -17,7 +17,7 @@ public class UserTeamsController(IGenericRepository<UserTeam> repo, IUserTeamSer
     [HttpGet("{teamId:int}")]
     public async Task<ActionResult<UserTeamDto>> GetTeam(int teamId)
     {
-        var team = await userTeamService.GetUserTeamFullDetail(teamId);
+        var team = await userTeamService.GetUserTeamFullDetailAsync(teamId);
         if (team == null) return BadRequest("Could not find team");
         return Ok(new UserTeamDto(team));
     }
@@ -35,17 +35,11 @@ public class UserTeamsController(IGenericRepository<UserTeam> repo, IUserTeamSer
         }
         return BadRequest("Could not update team name.");
     }
-
-    [HttpPut("{teamId:int}/athletes/{athleteId:int}")]
-    public async Task AddAthleteToTeam([FromRoute]int teamId, [FromRoute]int athleteId)
-    {
-        await userTeamService.AddAthleteToTeamAsync(teamId, athleteId);
-    }
     
     [HttpPut("trade-athletes")]
     public async Task TradeAthletes(TradeAthleteRequest request)
     {
-        await userTeamService.TradeAthletes(request.TeamOneId, request.TeamTwoId, request.TeamOneAthleteIds, request.TeamTwoAthleteIds);
+        await userTeamService.TradeAthletesAsync(request.TeamOneId, request.TeamTwoId, request.TeamOneAthleteIds, request.TeamTwoAthleteIds);
     }
 
     [HttpDelete("{teamId:int}/athletes/{athleteId:int}")]

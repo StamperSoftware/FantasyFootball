@@ -27,6 +27,8 @@ public class LeaguesController(IGenericRepository<League> repo, ILeagueService s
     [HttpPost]
     public async Task<ActionResult<League>> CreateLeague(League league)
     {
+        if (String.IsNullOrWhiteSpace(league.Name)) return BadRequest("Must have a name.");
+        league.NumberOfGames = 12;
         repo.Add(league);
         if (await repo.SaveAllAsync())
         {
@@ -49,9 +51,16 @@ public class LeaguesController(IGenericRepository<League> repo, ILeagueService s
 
         return Ok();
     }
+    
+    
+    [HttpPut("{leagueId:int}/team/{teamId:int}/athletes/{athleteId:int}")]
+    public async Task AddAthleteToTeamAsync([FromRoute]int leagueId, [FromRoute]int teamId, [FromRoute]int athleteId)
+    {
+        await service.AddAthleteToTeamAsync(leagueId, teamId, athleteId);
+    }
 
-    [HttpPost("draft")]
-    public async Task SubmitDraft(SubmitDraftRequest request)
+    [HttpPost("{leagueId:int}/draft")]
+    public async Task SubmitDraft(int leagueId, SubmitDraftRequest request)
     {
         Dictionary<int, IList<int>> teamAthleteDictionary = [];
         
@@ -60,6 +69,13 @@ public class LeaguesController(IGenericRepository<League> repo, ILeagueService s
             teamAthleteDictionary.Add(team.TeamId, team.Athletes);
         }
         
-        await service.SubmitDraft(teamAthleteDictionary);
+        await service.SubmitDraft(leagueId, teamAthleteDictionary);
     }
+
+    [HttpPost("{leagueId:int}/schedule")]
+    public async Task CreateSchedule(int leagueId)
+    {
+        await service.CreateSchedule(leagueId);
+    }
+    
 }

@@ -27,10 +27,19 @@ export class LeagueService {
   addPlayer(leagueId:number, playerId:number){
     return this.http.post(`${this.leagueUrl}/${leagueId}/players/${playerId}`, {});
   }
+
+  addAthleteToTeam(leagueId:number, athleteId:number, teamId:number){
+    return this.http.put(`${this.leagueUrl}/${leagueId}/team/${teamId}/athletes/${athleteId}`, {})
+  }
   
-  submitDraft(results:Map<number,number[]>) {
+  submitDraft(leagueId:number, results:Map<number,number[]>) {
     let request:any= [];
     results.forEach((athletes:number[],teamId:number)=> request.push({teamId, athletes}));
-    return this.http.post(`${this.leagueUrl}/draft`, {results:request})
+    return this.http.post(`${this.leagueUrl}/${leagueId}/draft`, {results:request})
+  }
+  
+  createSchedule(leagueId:number) {
+    console.log(leagueId);
+    return this.http.post(`${this.leagueUrl}/${leagueId}/schedule`, {})
   }
 }

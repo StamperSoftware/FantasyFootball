@@ -18,5 +18,9 @@ public class FantasyFootballContext(DbContextOptions<FantasyFootballContext> opt
     public DbSet<Team> Teams { get; set; }
     
     public DbSet<Athlete> Athletes { get; set; }
- 
+    
+    public DbSet<Schedule> Schedules { get; set; }
+    
+    public DbSet<Game> Games { get; set; }
+    
 }

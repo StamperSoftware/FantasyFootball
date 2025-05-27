@@ -1,11 +1,10 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Athlete, League, Position } from "../../../models";
 import { ActivatedRoute, Router } from "@angular/router";
 import { LeagueService } from "../../../core/services/league.service";
 import { FaIconComponent } from "@fortawesome/angular-fontawesome";
 import { faAdd } from "@fortawesome/free-solid-svg-icons";
-import { NgbActiveModal, NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { SelectPlayerComponent } from "../../player/select-player/select-player.component";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { SelectAthleteListComponent } from "../../athlete/select-list/select-list.component";
 import { AthleteService } from "../../../core/services/athlete.service";
 import { NgStyle } from "@angular/common";
@@ -118,7 +117,7 @@ export class DraftComponent implements OnInit {
     if (!this.leagueId) return;
     if (!this.draftResults.size) return;
     
-    this.leagueService.submitDraft(this.draftResults).subscribe({
+    this.leagueService.submitDraft(+this.leagueId,this.draftResults).subscribe({
       next:() => this.router.navigateByUrl(`/leagues/${this.leagueId}`),
       error : err => this.hasErrors = true,
     });

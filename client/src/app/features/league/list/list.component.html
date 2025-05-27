@@ -17,7 +17,7 @@
                 }
                 @else if (leagues.length) {
                     @for(league of leagues; track league.id){
-                        <tr [routerLink]="league.id">
+                        <tr routerLink="{{league.id}}" class="clickable">
                             <td>{{league.name}}</td>
                             <td></td>
                         </tr>

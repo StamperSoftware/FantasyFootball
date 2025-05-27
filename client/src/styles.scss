@@ -61,6 +61,10 @@
   --bs-dropdown-link-hover-bg:unset;
 }
 
+.table {
+  --bs-table-striped-bg: rgba(var(--bs-secondary-color-rgb), 0.05)
+}
+
 #root {
   display:grid;
   grid-template-rows: auto 1fr auto;

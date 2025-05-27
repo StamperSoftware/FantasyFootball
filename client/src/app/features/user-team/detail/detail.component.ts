@@ -8,6 +8,7 @@ import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { EditUserTeamComponent } from "../edit/edit.component";
 import { AthleteListComponent } from "../../athlete/list/list.component";
 import { SelectAthleteListComponent } from "../../athlete/select-list/select-list.component";
+import { LeagueService } from "../../../core/services/league.service";
 
 @Component({
   selector: 'app-user-team-detail',
@@ -26,6 +27,7 @@ export class UserTeamDetailComponent implements OnInit {
     }
     
     private teamService = inject(UserTeamService);
+    private leagueService = inject(LeagueService);
     private activatedRoute = inject(ActivatedRoute);
     private modalService = inject(NgbModal);
     
@@ -62,9 +64,9 @@ export class UserTeamDetailComponent implements OnInit {
     }
     
     addAthleteToTeam(athleteId:number){
-        if (this.teamId == null) return;
+        if (this.teamId == null || this.leagueId == null) return;
         
-        this.teamService.addAthleteToTeam(athleteId, +this.teamId).subscribe({
+        this.leagueService.addAthleteToTeam(+this.leagueId,athleteId, +this.teamId).subscribe({
             next: () => this.getTeam(),
             error : () => this.hasErrors = true,
         });

@@ -1,4 +1,4 @@
-#roster-section {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+#section-league-info {
+  display: flex;
+  justify-content: space-between;
 }
