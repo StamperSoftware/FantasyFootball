@@ -27,13 +27,12 @@ public class LeaguesController(IGenericRepository<League> repo, ILeagueService s
     [HttpPost]
     public async Task<ActionResult<League>> CreateLeague(League league)
     {
-        if (String.IsNullOrWhiteSpace(league.Name)) return BadRequest("Must have a name.");
+        if (string.IsNullOrWhiteSpace(league.Name)) return BadRequest("Must have a name");
         league.NumberOfGames = 12;
         repo.Add(league);
-        if (await repo.SaveAllAsync())
-        {
-            return CreatedAtAction("GetLeague", new { id = league.Id }, league);
-        }
+        
+        if (await repo.SaveAllAsync()) return CreatedAtAction("GetLeague", new { id = league.Id }, league);
+        
         return BadRequest("Issue creating league");
     }
 

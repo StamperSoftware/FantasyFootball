@@ -6,6 +6,7 @@ export type League = {
     name : string
     teams : UserTeam[]
     schedule : Schedule
+    season : number
 }
 
 export type CreateLeagueDto = {

@@ -1,0 +1,50 @@
+@if (game) {
+    <div id="game-header">
+        <h2>Week {{game.week}}<br>{{game.home.name}} vs {{game.away.name}}</h2>
+    </div>
+    
+    <div class="d-flex justify-content-evenly gap-5">
+        <div class="w-25">
+            <h4>{{game.home.name}}</h4>    
+            <table class="table-hover table-striped table">
+                <thead>
+                    <th></th>
+                    <th>Athlete</th>
+                    <th class="text-center">Score</th>
+                </thead>
+                <tbody>
+                    @for (athlete of game.home.athletes; track athlete.id) {
+                        <tr>
+                            <td class="w-25">{{Position[athlete.position]}}</td>
+                            <td>{{athlete.firstName}} {{athlete.lastName}}</td>
+                            <td class="text-center">{{athlete.position}}</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div>Total Score: 5</div>
+        </div>
+        
+        
+        <div class="w-25">
+            <h4>{{game.away.name}}</h4>
+            <table class="table-hover table-striped table">
+                <thead>
+                <th></th>
+                <th>Athlete</th>
+                <th class="text-center">Score</th>
+                </thead>
+                <tbody>
+                    @for (athlete of game.away.athletes; track athlete.id) {
+                        <tr>
+                            <td class="w-25">{{Position[athlete.position]}}</td>
+                            <td>{{athlete.firstName}} {{athlete.lastName}}</td>
+                            <td class="text-center">{{athlete.position}}</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div>Total Score: 5</div>
+        </div>
+    </div>
+}

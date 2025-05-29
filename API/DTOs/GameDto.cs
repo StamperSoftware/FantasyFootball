@@ -5,6 +5,7 @@ namespace API.DTOs;
 
 public class GameDto
 {
+    public int Id { get; set; }
     public int HomeId { get; set; }
     public required UserTeamDto Home { get; set; }
     public int AwayId { get; set; }
@@ -27,6 +28,7 @@ public class GameDto
     [SetsRequiredMembers]
     public GameDto(Game game)
     {
+        Id = game.Id;
         HomeId = game.HomeId;
         Home = new UserTeamDto(game.Home);
         AwayId = game.AwayId;

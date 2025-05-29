@@ -62,7 +62,16 @@
 }
 
 .table {
-  --bs-table-striped-bg: rgba(var(--bs-secondary-color-rgb), 0.05)
+  --bs-table-hover-bg: rgba(var(--bs-secondary-color-rgb), 0.05);
+  
+  
+  tr:not(:last-of-type) {
+    border-bottom : solid 1px rgba(var(--bs-primary-rgb), 0.25);
+  }
+  
+  td {
+    border-bottom:none;
+  }
 }
 
 #root {

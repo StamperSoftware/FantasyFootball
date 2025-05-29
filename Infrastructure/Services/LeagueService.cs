@@ -60,7 +60,7 @@ public class LeagueService(FantasyFootballContext db, IGenericRepository<Player>
                 .ThenInclude(t => t.Athletes.OrderBy(a => a.Position))
                     .ThenInclude(a => a.Team)
             .Include(l => l.Schedule)
-                .ThenInclude(s => s.Games)
+                .ThenInclude(s => s != null ? s.Games : null)
             .FirstOrDefaultAsync(l => l.Id == id);
     }
     

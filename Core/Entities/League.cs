@@ -6,4 +6,5 @@ public class League : BaseEntity
     public IList<UserTeam> Teams { get; set; } = [];
     public int NumberOfGames { get; set; }
     public Schedule? Schedule { get; set; }
+    public required int Season { get; set; }
 }

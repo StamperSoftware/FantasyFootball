@@ -12,19 +12,25 @@ import { AthleteListComponent } from "./features/athlete/list/list.component";
 import { AthleteDetailComponent } from "./features/athlete/detail/detail.component";
 import { TradeComponent } from "./features/league/trade/trade.component";
 import { DraftComponent } from "./features/league/draft/draft.component";
+import { GameDetailComponent } from "./features/game/detail/detail.component";
 
 export const routes: Routes = [
     {path:"", component:HomeComponent},
+    
     {path:"leagues", component:LeagueListComponent},
     {path:"leagues/:id", component:LeagueDetailComponent},
     {path:"leagues/:league-id/trade", pathMatch:"full", component:TradeComponent},
     {path:"leagues/:league-id/draft", pathMatch:"full", component:DraftComponent},
     {path:"leagues/:league-id/user-teams", pathMatch:"full", component:UserTeamListComponent},
     {path:"leagues/:league-id/user-teams/:id", pathMatch:"full", component:UserTeamDetailComponent},
+    {path:"leagues/:league-id/games/:id", pathMatch:"full", component:GameDetailComponent},
+    
     {path:"users", component:UserListComponent},
     {path:"users/:id", component:UserDetailComponent},
+    
     {path:"players", component:PlayerListComponent},
     {path:"players/:id", component:PlayerDetailComponent},
+    
     {path:"athletes", component:AthleteListComponent},
     {path:"athletes/:id", component:AthleteDetailComponent},
 ];

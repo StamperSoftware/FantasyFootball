@@ -4,4 +4,5 @@ export type Game = {
     id : number
     home : UserTeam
     away : UserTeam
+    week : number
 }
