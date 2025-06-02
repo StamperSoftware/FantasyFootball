@@ -11,7 +11,7 @@
                 </thead>
                 <tbody>
                     @for (athlete of athletes; track athlete.id) {
-                        <tr>
+                        <tr routerLink="/athletes/{{athlete.id}}" target="_blank" class="clickable">
                             <td>{{Position[athlete.position]}}</td>
                             <td>{{athlete.team.name}}</td>
                             <td>{{athlete.firstName}} {{athlete.lastName}}</td>

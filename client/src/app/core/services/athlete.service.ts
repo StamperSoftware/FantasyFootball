@@ -20,4 +20,8 @@ export class AthleteService {
     return this.http.get<Athlete>(`${this.athleteUrl}/${id}`);
   }
   
+  updateAthleteStats(athleteId:number, body:any) {
+    return this.http.put(`${this.athleteUrl}/${athleteId}/stats`, body)
+  }
+
 }

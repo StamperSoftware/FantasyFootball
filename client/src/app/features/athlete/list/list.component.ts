@@ -1,11 +1,14 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { AthleteService } from "../../../core/services/athlete.service";
 import { Athlete, Position } from "../../../models";
+import { RouterLink } from "@angular/router";
 
 @Component({
   selector: 'app-athlete-list',
   standalone: true,
-  imports: [],
+    imports: [
+        RouterLink
+    ],
   templateUrl: './list.component.html',
   styleUrl: './list.component.scss'
 })

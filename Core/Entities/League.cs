@@ -7,4 +7,5 @@ public class League : BaseEntity
     public int NumberOfGames { get; set; }
     public Schedule? Schedule { get; set; }
     public required int Season { get; set; }
+    public int CurrentWeek { get; set; }
 }

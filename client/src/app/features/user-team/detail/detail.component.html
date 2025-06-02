@@ -1,42 +1,40 @@
-<main>
-    @if (team) {
-        <section class="d-flex justify-content-between">
-            <div class="d-flex align-items-center">
-                <fa-icon class="btn" [icon]="faCircleLeft" routerLink="/leagues/{{leagueId}}" />
-                <h2>{{team.name}}</h2>
-            </div>
-            <div>
-                <button class="btn" routerLink="/players/{{team.player.id}}">{{team.player.appUser.userName}}</button>
-                <fa-icon [icon]="faEdit" class="btn" (click)="openEditModal()"/>
-            </div>
-        </section>
-        
-        <section>
-            <div>
-                <table class="table table-striped table-hover w-25">
-                    <thead>
+@if (team) {
+    <section class="d-flex justify-content-between">
+        <div class="d-flex align-items-center">
+            <fa-icon class="btn" [icon]="faCircleLeft" routerLink="/leagues/{{leagueId}}" />
+            <h2>{{team.name}}</h2>
+        </div>
+        <div>
+            <button class="btn" routerLink="/players/{{team.player.id}}">{{team.player.appUser.userName}}</button>
+            <fa-icon [icon]="faEdit" class="btn" (click)="openEditModal()"/>
+        </div>
+    </section>
+    
+    <section>
+        <div>
+            <table class="table table-striped table-hover w-25">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Name</th>
+                        <th class="text-center"><fa-icon [icon]="faPlus" class="btn" (click)="openAddAthleteModal()"/></th>
+                    </tr>
+                </thead>
+                
+                <tbody>
+                    @for (athlete of team.athletes; track athlete.id) {
                         <tr>
-                            <th>Position</th>
-                            <th>Name</th>
-                            <th><fa-icon [icon]="faPlus" class="btn" (click)="openAddAthleteModal()"/></th>
+                            <td>{{Position[athlete.position]}}</td>
+                            <td>
+                                <a routerLink="/athletes/{{athlete.id}}" target="_blank">{{athlete.firstName}} {{athlete.lastName}}</a>
+                            </td>
+                            <td class="text-center">
+                                <fa-icon (click)="dropAthlete(athlete.id)" [icon]="faTrashCan"/> 
+                            </td>
                         </tr>
-                    </thead>
-                    
-                    <tbody>
-                        @for (athlete of team.athletes; track athlete.id) {
-                            <tr>
-                                <td>{{Position[athlete.position]}}</td>
-                                <td>{{athlete.firstName}} {{athlete.lastName}}</td>
-                                <td>
-                                    <div class="float-end d-flex gap-2">
-                                        <fa-icon (click)="dropAthlete(athlete.id)" [icon]="faTrashCan"/> 
-                                    </div>
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </section>
-    }
-</main>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </section>
+}

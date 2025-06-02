@@ -9,7 +9,7 @@ public class Game : BaseEntity
     public int AwayId { get; set; }
     public required UserTeam Away { get; set; }
     public int Week { get; set; }
-
+    public int Season { get; set; }
 
     public int? WinnerId { get; set; }
     public UserTeam? Winner { get; set; }

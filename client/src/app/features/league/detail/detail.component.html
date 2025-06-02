@@ -50,7 +50,7 @@
                         </thead>
                         <tbody>
                             @for (athlete of currentTeam?.athletes; track athlete.id) {
-                                <tr>
+                                <tr routerLink="/athletes/{{athlete.id}}" class="clickable">
                                     <td>{{Position[athlete.position]}}</td>    
                                     <td>{{athlete.firstName}} {{athlete.lastName}}</td>    
                                     <td></td>
