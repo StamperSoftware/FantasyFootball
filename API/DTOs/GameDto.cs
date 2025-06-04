@@ -23,8 +23,6 @@ public class GameDto
     
     public int ScheduleId { get; set; }
 
-    public GameDto(){}
-
     [SetsRequiredMembers]
     public GameDto(Game game)
     {

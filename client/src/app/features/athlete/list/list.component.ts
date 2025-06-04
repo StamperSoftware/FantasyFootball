@@ -29,5 +29,9 @@ export class AthleteListComponent implements OnInit {
     })
   }
   
+  generateYearlyStats(){
+      this.athleteService.generateYearlyStats().subscribe();
+  }
+  
   protected readonly Position = Position;
 }

@@ -1,0 +1,45 @@
+<div class="m-3">
+    <form (ngSubmit)="updateAthleteStats()" class="d-flex flex-column gap-3">
+        <div class="form-floating">
+            <input type="number" [(ngModel)]="data.week" name="week" class="form-control" id="week" placeholder="Week"/>
+            <label class="form-label" for="week">Week</label>
+        </div>
+        <div class="form-floating">
+            <input type="number"  [(ngModel)]="data.season" name="season" class="form-control" id="season" placeholder="Season" readonly value="2025"/>
+            <label class="form-label" for="season">Season</label>
+        </div>
+        <div class="form-floating">
+            <input type="number"  [(ngModel)]="data.receptions" name="receptions" class="form-control" id="receptions" placeholder="Receptions"/>
+            <label class="form-label" for="receptions">Receptions</label>
+        </div>
+
+        <div class="form-floating">
+            <input type="number"  [(ngModel)]="data.receivingYards" name="receiving-yards" class="form-control" id="receiving-yards" placeholder="Receiving Yards"/>
+            <label class="form-label" for="receiving-yards">Receiving Yards</label>
+        </div>
+        <div class="form-floating">
+            <input type="number"  [(ngModel)]="data.receivingTouchdowns" name="receiving-touchdowns" class="form-control" id="receiving-touchdowns" placeholder="Receiving Touchdowns"/>
+            <label class="form-label" for="receiving-touchdowns">Receiving Touchdowns</label>
+        </div>
+
+        <div class="form-floating">
+            <input type="number"  [(ngModel)]="data.rushingYards" name="rushing-yards" class="form-control" id="rushing-yards" placeholder="Rushing Yards"/>
+            <label class="form-label" for="rushing-yards">Rushing Yards</label>
+        </div>
+        <div class="form-floating">
+            <input type="number"  [(ngModel)]="data.rushingTouchdowns" name="rushing-touchdowns" class="form-control" id="rushing-touchdowns" placeholder="Rushing Touchdowns"/>
+            <label class="form-label" for="rushing-touchdowns">Rushing Touchdowns</label>
+        </div>
+
+        <div class="form-floating">
+            <input type="number"  [(ngModel)]="data.passingYards" name="passing-yards" class="form-control" id="passing-yards" placeholder="Passing Yards"/>
+            <label class="form-label" for="passing-yards">Passing Yards</label>
+        </div>
+        <div class="form-floating">
+            <input type="number"  [(ngModel)]="data.passingTouchdowns" name="passing-touchdowns" class="form-control" id="passing-touchdowns" placeholder="Passing Touchdowns"/>
+            <label class="form-label" for="passing-touchdowns">Passing Touchdowns</label>
+        </div>
+        
+        <button type="submit" class="btn w-25">Update Stats</button>
+    </form>
+</div>

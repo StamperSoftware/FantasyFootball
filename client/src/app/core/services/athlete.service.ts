@@ -20,8 +20,16 @@ export class AthleteService {
     return this.http.get<Athlete>(`${this.athleteUrl}/${id}`);
   }
   
+  getAthleteWithStats(id:number){
+    return this.http.get<Athlete>(`${this.athleteUrl}/${id}/with-stats`);
+  }
+  
   updateAthleteStats(athleteId:number, body:any) {
     return this.http.put(`${this.athleteUrl}/${athleteId}/stats`, body)
   }
 
+  generateYearlyStats(){
+      return this.http.post(`${this.athleteUrl}/generate-yearly-stats`, {});
+  }
+  
 }

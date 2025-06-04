@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
-public class GamesController(IGenericRepository<Game> repo, IGameService gameService):BaseApiController
+public class GamesController(IGameService gameService):BaseApiController
 {
     [HttpGet("{gameId:int}")]
     public async Task<ActionResult<GameDto>> GetGame(int gameId)

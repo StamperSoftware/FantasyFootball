@@ -1,15 +1,15 @@
-﻿using Core.Entities;
+﻿using System.Diagnostics.CodeAnalysis;
+using Core.Entities;
 
 namespace API.DTOs;
 
 public class TeamDto
 {
     public int Id { get; set; }
-    public string Name { get; set; }
-    public string Location { get; set; }
-    
-    public TeamDto(){}
+    public required string Name { get; set; }
+    public required string Location { get; set; }
 
+    [SetsRequiredMembers]
     public TeamDto(Team team)
     {
         Id = team.Id;

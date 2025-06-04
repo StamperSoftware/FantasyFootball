@@ -9,6 +9,21 @@ public class AthleteService(FantasyFootballContext db) : IAthleteService
 {
     
     public async Task<IList<Athlete>> GetAthletesWithTeamsAsync() => await db.Athletes.Include(a => a.Team).ToListAsync();
+    
+    public async Task<Athlete> GetAthleteWithStatsAsync(int athleteId)
+    {
+        var athlete = await db.Athletes
+            .Include(a => a.WeeklyStats)
+            .FirstAsync(a => a.Id == athleteId);
+        
+        athlete.SeasonStats = new AthleteSeasonStats(athlete.WeeklyStats)
+        {
+            AthleteId = athleteId,
+            Season = 2025,
+        };
+        
+        return athlete;
+    }
 
     public async Task UpdateAthleteWeeklyStatsAsync(int athleteId, int week, int season, int receptions, int receivingYards,
         int receivingTouchdowns, int passingYards, int passingTouchdowns, int rushingYards, int rushingTouchdowns)
@@ -16,7 +31,7 @@ public class AthleteService(FantasyFootballContext db) : IAthleteService
         var athlete = await db.Athletes.FindAsync(athleteId);
         if (athlete == null) throw new Exception("Could not find athlete");
 
-        var stats = await db.AthleteWeeklyStats.Where(stat => stat.Week == week).Where(stat => stat.AthleteId == athleteId).Where(stat => stat.Season == season).FirstOrDefaultAsync();
+        var stats = await db.AthleteWeeklyStats.FirstOrDefaultAsync(aws => aws.AthleteId == athleteId && aws.Season == season && aws.Week == week);
 
         if (stats != null)
         {
@@ -32,7 +47,18 @@ public class AthleteService(FantasyFootballContext db) : IAthleteService
         }
         else
         {
-            stats = new AthleteWeeklyStats(athlete, week, season, receptions, receivingYards, receivingTouchdowns, passingYards, passingTouchdowns, rushingYards, rushingTouchdowns);
+            stats = new AthleteWeeklyStats(week, season, athlete.Id)
+            {
+                Receptions = receptions,
+                ReceivingTouchdowns = receivingTouchdowns,
+                ReceivingYards = receivingYards,
+                RushingTouchdowns = rushingTouchdowns,
+                RushingYards = rushingYards,
+                PassingTouchdowns = passingTouchdowns,
+                PassingYards = passingYards
+
+            };
+                
             await db.AthleteWeeklyStats.AddAsync(stats);
         }
         

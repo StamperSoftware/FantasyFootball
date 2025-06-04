@@ -8,6 +8,8 @@ public class Athlete : BaseEntity
     public required Team Team { get; set; }
     public Position Position { get; set; }
     public IList<UserTeam> UserTeam { get; set; } = [];
+    public IList<AthleteWeeklyStats> WeeklyStats { get; set; } = [];
+    public AthleteSeasonStats SeasonStats { get; set; } = new();
 }
 
 public enum Position

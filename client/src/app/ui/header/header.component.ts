@@ -21,9 +21,7 @@ import { RegisterComponent } from "../../features/account/register/register.comp
 export class HeaderComponent {
     
     accountService = inject(AccountService);
-    private router = inject(Router);
     private modalService = inject(NgbModal);
-    
     
     handleLogout(){
       this.accountService.logout();
