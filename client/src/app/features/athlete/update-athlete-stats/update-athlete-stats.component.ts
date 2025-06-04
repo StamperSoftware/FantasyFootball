@@ -1,4 +1,4 @@
-import { Component, inject, Input, input } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { AthleteService } from "../../../core/services/athlete.service";
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 import { WeeklyStats } from "../../../models";
