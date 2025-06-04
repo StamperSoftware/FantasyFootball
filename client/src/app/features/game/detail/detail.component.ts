@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { GameService } from "../../../core/services/game.service";
-import { Game, Position } from "../../../models";
+import { Game, Position, WeeklyStats } from "../../../models";
 import { ActivatedRoute, Router } from "@angular/router";
 
 @Component({
@@ -32,5 +32,11 @@ export class GameDetailComponent implements OnInit {
         });
     }
 
+    getAthleteStats(athleteId:number) {
+        if (!this.game) return;
+        
+        return this.game.weeklyStats.find(ws => ws.athleteId == athleteId);
+    }
+    
     protected readonly Position = Position;
 }

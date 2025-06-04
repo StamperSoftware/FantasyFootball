@@ -28,7 +28,8 @@ export class UpdateAthleteStatsComponent {
         passingYards: 0,
         passingTouchdowns: 0,
         rushingYards: 0,
-        rushingTouchdowns: 0
+        rushingTouchdowns: 0,
+        score:0,
     };
     
     updateAthleteStats() {

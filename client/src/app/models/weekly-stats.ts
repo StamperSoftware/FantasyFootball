@@ -10,4 +10,5 @@
     passingTouchdowns:number,
     rushingYards:number,
     rushingTouchdowns:number,
+    score:number
 }

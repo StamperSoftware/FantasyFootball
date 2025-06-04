@@ -3,36 +3,18 @@ using Core.Entities;
 
 namespace API.DTOs;
 
-public class GameDto
+[method: SetsRequiredMembers]
+public class GameDto(Game game)
 {
-    public int Id { get; set; }
-    public int HomeId { get; set; }
-    public required UserTeamDto Home { get; set; }
-    public int AwayId { get; set; }
-    public required UserTeamDto Away { get; set; }
-    public int Week { get; set; }
-    
-    
-    public int? WinnerId { get; set; }
-    public UserTeamDto? Winner { get; set; }
-    public int? LoserId { get; set; }
-    public UserTeamDto? Loser { get; set; }
-    
-    public int? WinningScore { get; set; }
-    public int? LosingScore { get; set; }
-    
-    public int ScheduleId { get; set; }
-
-    [SetsRequiredMembers]
-    public GameDto(Game game)
-    {
-        Id = game.Id;
-        HomeId = game.HomeId;
-        Home = new UserTeamDto(game.Home);
-        AwayId = game.AwayId;
-        Away = new UserTeamDto(game.Away);
-        Week = game.Week;
-        ScheduleId = game.ScheduleId;
-    }
-    
+    public int Id { get; set; } = game.Id;
+    public int HomeId { get; set; } = game.HomeId;
+    public required UserTeamDto Home { get; set; } = new(game.Home);
+    public int AwayId { get; set; } = game.AwayId;
+    public required UserTeamDto Away { get; set; } = new(game.Away);
+    public int Week { get; set; } = game.Week;
+    public int Season { get; set; } = game.Season;
+    public IList<AthleteWeeklyStatsDto> WeeklyStats { get; set; } = game.WeeklyStats.Select(ws => new AthleteWeeklyStatsDto(ws)).ToList();
+    public int? HomeScore { get; set; } = game.HomeScore;
+    public int? AwayScore { get; set; } = game.AwayScore;
+    public int ScheduleId { get; set; } = game.ScheduleId;
 }
