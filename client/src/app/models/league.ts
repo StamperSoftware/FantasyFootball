@@ -1,11 +1,11 @@
 ﻿import { UserTeam } from "./user-team";
-import { Schedule } from "./schedule";
+import { Game } from "./game";
 
 export type League = {
     id : number
     name : string
     teams : UserTeam[]
-    schedule : Schedule
+    schedule : Game[]
     season : number
 }
 

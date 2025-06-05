@@ -24,7 +24,6 @@ builder.Services.AddScoped<ILeagueService, LeagueService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserTeamService, UserTeamService>();
 builder.Services.AddScoped<IAthleteService, AthleteService>();
-builder.Services.AddScoped<IScheduleService, ScheduleService>();
 builder.Services.AddScoped<IGameService, GameService>();
 
 builder.Services.AddDbContext<FantasyFootballContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));

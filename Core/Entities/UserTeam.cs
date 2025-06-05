@@ -6,11 +6,10 @@ public class UserTeam : BaseEntity
 {
     public int LeagueId { get; set; }
     public int PlayerId { get; set; }
-    public required Player Player { get; set; } = null!;
+    public required Player Player { get; set; }
     public string? Name { get; set; }
     public int Wins { get; set; }
     public int Losses { get; set; }
-
     public IList<Athlete> Athletes { get; set; } = [];
 
     public UserTeam(){}

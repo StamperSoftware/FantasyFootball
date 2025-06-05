@@ -14,19 +14,17 @@ public class Game : BaseEntity
     public int HomeScore { get; set; }
     public int AwayScore { get; set; }
 
-    public int ScheduleId { get; set; }
-
     public override string ToString() => $"Home: {Home.Name} ({HomeScore})vs Away: {Away.Name} ({AwayScore})";
 
     public Game(){}
 
     [SetsRequiredMembers]
-    public Game(UserTeam home, UserTeam away, int week)
+    public Game(UserTeam home, UserTeam away, int week, int season)
     {
         Home = home;
         Away = away;
         Week = week;
-        Season = 2025;
+        Season = season;
     }
 
 }

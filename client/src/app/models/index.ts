@@ -10,6 +10,5 @@ export { Athlete } from "./athlete";
 export { Team } from "./team";
 export { Position, getPositionName } from "./position";
 export { Game } from "./game"; 
-export { Schedule } from "./schedule"; 
-export {WeeklyStats} from './weekly-stats'
-export {SeasonStats} from './season-stats'
+export { WeeklyStats } from './weekly-stats'
+export { SeasonStats } from './season-stats'

@@ -64,7 +64,7 @@
             @if (league.schedule) {
                 <div>
                     
-                    @for (game of league.schedule.games; track game.id) {
+                    @for (game of league.schedule; track game.id) {
                         <div>
                             <a target="_blank" routerLink="games/{{game.id}}">{{game.home.name}} vs {{game.away.name}}</a>
                         </div>
