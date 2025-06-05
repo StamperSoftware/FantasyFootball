@@ -59,8 +59,14 @@ export class UserTeamDetailComponent implements OnInit {
     }
 
     openAddAthleteModal() {
-        const modal = this.modalService.open(SelectAthleteListComponent);
-        modal.result.then((athlete:Athlete) => this.addAthleteToTeam(athlete.id));
+        if(!this.leagueId) return;
+        this.leagueService.getAvailableAthletes(+this.leagueId).subscribe({
+            next: athletes => {
+                const modal = this.modalService.open(SelectAthleteListComponent);
+                modal.componentInstance.data = {athletes};
+                modal.result.then((athlete:Athlete) => this.addAthleteToTeam(athlete.id));
+            }
+        })
     }
     
     addAthleteToTeam(athleteId:number){

@@ -75,5 +75,13 @@ public class LeaguesController(IGenericRepository<League> repo, ILeagueService s
     {
         await service.CreateSchedule(leagueId);
     }
-    
-}
+
+
+    [HttpGet("{leagueId:int}/available-athletes")]
+    public async Task<ActionResult<IList<Athlete>>> GetAvailableAthletes(int leagueId)
+    {
+        return Ok(await service.GetAvailableAthletes(leagueId));
+    }
+
+
+} 

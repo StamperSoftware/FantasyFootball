@@ -9,4 +9,5 @@ public interface ILeagueService
     public Task AddAthleteToTeamAsync(int leagueId, int teamId, int athleteId);
     public Task SubmitDraft(int leagueId, IDictionary<int, IList<int>> teamAthleteDictionary);
     public Task CreateSchedule(int leagueId);
+    public Task<IList<Athlete>> GetAvailableAthletes(int leagueId);
 }

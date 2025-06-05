@@ -86,8 +86,15 @@ public class LeagueService(FantasyFootballContext db, IGenericRepository<Player>
             .Include(l => l.Settings)
             .FirstOrDefaultAsync(l => l.Id == id);
     }
-    
-    
+
+    public async Task<IList<Athlete>> GetAvailableAthletes(int leagueId)
+    {
+        var league = await db.Leagues.Include(l => l.Teams).ThenInclude(t => t.Athletes).FirstOrDefaultAsync(l => l.Id == leagueId);
+        if (league is null) throw new Exception("Could not get league");
+        var takenAthletes = league.Teams.SelectMany(t => t.Athletes.Select(a => a.Id));
+        return await db.Athletes.Where(a => !takenAthletes.Contains(a.Id)).ToListAsync();
+    }
+
     private static bool IsPlayerAvailable(League league, IList<int> athleteIds)
     {
         return !league.Teams.Any(t => t.Athletes.Any(a => athleteIds.Contains(a.Id)));
