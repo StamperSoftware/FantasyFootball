@@ -1,5 +1,4 @@
-﻿import { UserTeam } from "./user-team";
-import { WeeklyStats } from "./weekly-stats";
+﻿import { UserTeam, WeeklyStats } from ".";
 
 export type Game = {
     id : number

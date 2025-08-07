@@ -47,6 +47,16 @@ public class UserTeamsController(IGenericRepository<UserTeam> repo, IUserTeamSer
     {
         await userTeamService.DropAthleteFromTeamAsync(teamId, athleteId);
     }
+    [HttpPut("{teamId:int}/bench/{athleteId:int}")]
+    public async Task MoveAthleteToBench(int teamId, int athleteId)
+    {
+        await userTeamService.MoveAthleteToBench(teamId, athleteId);
+    }
+    [HttpPut("{teamId:int}/starters/{athleteId:int}")]
+    public async Task MoveAthleteToStarters(int teamId, int athleteId)
+    {
+        await userTeamService.MoveAthleteToStarters(teamId, athleteId);
+    }
     
     
 }

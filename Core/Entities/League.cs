@@ -7,5 +7,5 @@ public class League : BaseEntity
     public IList<Game> Schedule { get; set; } = [];
     public required int Season { get; set; }
     public int CurrentWeek { get; set; }
-    public required LeagueSettings Settings { get; set; }
+    public LeagueSettings Settings { get; set; }
 }

@@ -12,7 +12,8 @@ public class UserTeamDto
     
     public string? Name { get; set; }
 
-    public IList<AthleteDto> Athletes { get; set; }
+    public string RosterId { get; set; }
+    public Roster? Roster { get; set; }
 
     public UserTeamDto(UserTeam team)
     {
@@ -20,7 +21,8 @@ public class UserTeamDto
         LeagueId = team.LeagueId;
         Player = new PlayerDto(team.Player);
         Name = team.Name;
-        Athletes = team.Athletes.Select(a => new AthleteDto(a)).ToList();
+        RosterId = team.RosterId;
+        Roster = team.Roster;
     }
     
 }

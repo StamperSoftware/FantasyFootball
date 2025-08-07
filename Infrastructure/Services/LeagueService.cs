@@ -4,7 +4,7 @@ using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Services;
-public class LeagueService(FantasyFootballContext db, IGenericRepository<Player> playerRepo, IGenericRepository<UserTeam> userTeamRepo, IUserTeamService userTeamService) : ILeagueService
+public class LeagueService(FantasyFootballContext db, IGenericRepository<Player> playerRepo, IUserTeamService userTeamService) : ILeagueService
 {
     
     private Random random = new();
@@ -18,13 +18,9 @@ public class LeagueService(FantasyFootballContext db, IGenericRepository<Player>
         
         if (league.Teams.Count >= league.Settings.NumberOfTeams) throw new Exception("League is full.");
         if (league.Teams.Any(t => t.PlayerId == playerId)) throw new Exception("Player is in league already.");
-
-        var userTeam = new UserTeam(leagueId, player, 0, 0, $"(NEW) Team #{league.Teams.Count + 1}");
-        userTeamRepo.Add(userTeam);
-        if (!await userTeamRepo.SaveAllAsync()) throw new Exception("Could not create team."); 
+        var userTeam = await userTeamService.CreateUserTeam(leagueId, player, league.Teams.Count);
         
         league.Teams.Add(userTeam);
-        player.Teams.Add(userTeam);
         await db.SaveChangesAsync();
     }
 
@@ -75,29 +71,42 @@ public class LeagueService(FantasyFootballContext db, IGenericRepository<Player>
 
     public async Task<League?> GetLeagueWithFullDetailsAsync(int id)
     {
-        return await db.Leagues
+        var league =  await db.Leagues
             .Include(l => l.Teams.OrderBy(t => id))
                 .ThenInclude(t => t.Player)
                     .ThenInclude(p => p.User)
-            .Include(l => l.Teams)
-                .ThenInclude(t => t.Athletes.OrderBy(a => a.Position))
-                    .ThenInclude(a => a.Team)
             .Include(l => l.Schedule)
             .Include(l => l.Settings)
-            .FirstOrDefaultAsync(l => l.Id == id);
+            .FirstOrDefaultAsync(l => l.Id == id) ?? throw new Exception("Could not get league");
+        
+        
+        
+        for (int i = 0; i < league.Teams.Count; i++)
+        {
+            league.Teams[i] = await userTeamService.GetUserTeamFullDetailAsync(league.Teams[i].Id);
+        }
+        return league;
+
+
     }
 
     public async Task<IList<Athlete>> GetAvailableAthletes(int leagueId)
     {
-        var league = await db.Leagues.Include(l => l.Teams).ThenInclude(t => t.Athletes).FirstOrDefaultAsync(l => l.Id == leagueId);
-        if (league is null) throw new Exception("Could not get league");
-        var takenAthletes = league.Teams.SelectMany(t => t.Athletes.Select(a => a.Id));
+        var league = await db.Leagues.Include(l => l.Teams).FirstOrDefaultAsync(l => l.Id == leagueId) ?? throw new Exception("Could not get league");
+
+        for (int i = 0; i < league.Teams.Count; i++)
+        {
+            league.Teams[i] = await userTeamService.GetUserTeamFullDetailAsync(league.Teams[i].Id);
+        }
+        
+        var takenAthletes = league.Teams.SelectMany(t => t.Roster is not null ? t.Roster.Bench.Union(t.Roster.Starters).Select(a => a.Id) : []);
+        
         return await db.Athletes.Where(a => !takenAthletes.Contains(a.Id)).ToListAsync();
     }
 
     private static bool IsPlayerAvailable(League league, IList<int> athleteIds)
     {
-        return !league.Teams.Any(t => t.Athletes.Any(a => athleteIds.Contains(a.Id)));
+        return !league.Teams.Any(t => t.Roster is not null && t.Roster.Starters.Union(t.Roster.Bench).Any(a => athleteIds.Contains(a.Id)));
     }
     
 }

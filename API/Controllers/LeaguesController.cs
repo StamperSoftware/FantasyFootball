@@ -25,9 +25,18 @@ public class LeaguesController(IGenericRepository<League> repo, ILeagueService s
     }
     
     [HttpPost]
-    public async Task<ActionResult<League>> CreateLeague(League league)
+    public async Task<ActionResult<League>> CreateLeague(CreateLeagueDto leagueDto)
     {
-        if (string.IsNullOrWhiteSpace(league.Name)) return BadRequest("Must have a name");
+        if (string.IsNullOrWhiteSpace(leagueDto.Name)) return BadRequest("Must have a name");
+        var league = new League()
+        {
+            Name = leagueDto.Name,
+            Season = 2025,
+        };
+
+        var settings = new LeagueSettings(league.Id);
+        league.Settings = settings;
+        
         repo.Add(league);
         
         if (await repo.SaveAllAsync()) return CreatedAtAction("GetLeague", new { id = league.Id }, league);

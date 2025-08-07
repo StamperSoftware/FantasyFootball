@@ -1,4 +1,7 @@
-﻿namespace Core.Entities;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
+
+namespace Core.Entities;
 
 public class Athlete : BaseEntity
 {
@@ -7,7 +10,6 @@ public class Athlete : BaseEntity
     public int TeamId { get; set; }
     public required Team Team { get; set; }
     public Position Position { get; set; }
-    public IList<UserTeam> UserTeam { get; set; } = [];
     public IList<AthleteWeeklyStats> WeeklyStats { get; set; } = [];
     public AthleteSeasonStats SeasonStats { get; set; } = new();
 }

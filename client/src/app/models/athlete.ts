@@ -1,7 +1,4 @@
-﻿import { Team } from "./team";
-import { Position } from "./position";
-import { WeeklyStats } from "./weekly-stats";
-import { SeasonStats } from "./season-stats";
+﻿import { Team, Position, WeeklyStats, SeasonStats } from ".";
 
 export type Athlete = {
     firstName : string

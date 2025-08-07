@@ -22,7 +22,8 @@
                 </thead>
                 
                 <tbody>
-                    @for (athlete of team.athletes; track athlete.id) {
+                    <tr>Starters</tr>
+                    @for (athlete of team.roster.starters; track athlete.id) {
                         <tr>
                             <td>{{Position[athlete.position]}}</td>
                             <td>
@@ -30,9 +31,24 @@
                             </td>
                             <td class="text-center">
                                 <fa-icon (click)="dropAthlete(athlete.id)" [icon]="faTrashCan"/> 
+                                <fa-icon (click)="moveToBench(athlete.id)" [icon]="faArrowDown"/>
                             </td>
                         </tr>
                     }
+                    <tr>Bench</tr>
+                    @for (athlete of team.roster.bench; track athlete.id) {
+                        <tr>
+                            <td>{{Position[athlete.position]}}</td>
+                            <td>
+                                <a routerLink="/athletes/{{athlete.id}}" target="_blank">{{athlete.firstName}} {{athlete.lastName}}</a>
+                            </td>
+                            <td class="text-center">
+                                <fa-icon (click)="dropAthlete(athlete.id)" [icon]="faTrashCan"/>
+                                <fa-icon (click)="moveToStarters(athlete.id)" [icon]="faArrowUp"/>
+                            </td>
+                        </tr>
+                    }
+
                 </tbody>
             </table>
         </div>

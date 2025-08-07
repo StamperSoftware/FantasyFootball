@@ -3,10 +3,17 @@ import { UserTeamService } from "../../../core/services/user-team.service";
 import { ActivatedRoute, RouterLink } from "@angular/router";
 import { Athlete, Position, UserTeam } from "../../../models";
 import { FaIconComponent } from "@fortawesome/angular-fontawesome";
-import { faChevronDown, faCircleLeft, faEdit, faPlus, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import {
+    faArrowDown,
+    faArrowUp,
+    faChevronDown,
+    faCircleLeft,
+    faEdit,
+    faPlus,
+    faTrashCan
+} from "@fortawesome/free-solid-svg-icons";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { EditUserTeamComponent } from "../edit/edit.component";
-import { AthleteListComponent } from "../../athlete/list/list.component";
 import { SelectAthleteListComponent } from "../../athlete/select-list/select-list.component";
 import { LeagueService } from "../../../core/services/league.service";
 
@@ -86,15 +93,28 @@ export class UserTeamDetailComponent implements OnInit {
             error : () => this.hasErrors = true,
         });
     }
+    
+    moveToBench(athleteId:number) {
+        if (!this.teamId) return;
 
-    openDescription(athleteId:number) {
-        
+        this.teamService.moveToBench(athleteId, +this.teamId).subscribe({
+            next: () => this.getTeam(),
+            error : () => this.hasErrors = true,
+        });
     }
     
-    
+    moveToStarters(athleteId:number) {
+        if (!this.teamId) return;
+
+        this.teamService.moveToStarters(athleteId, +this.teamId).subscribe({
+            next: () => this.getTeam(),
+            error : () => this.hasErrors = true,
+        });
+    }
     
     protected readonly faCircleLeft = faCircleLeft;
     protected readonly Position = Position;
-    protected readonly faChevronDown = faChevronDown;
     protected readonly faTrashCan = faTrashCan;
+    protected readonly faArrowUp = faArrowUp;
+    protected readonly faArrowDown = faArrowDown;
 }

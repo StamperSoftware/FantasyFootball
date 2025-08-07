@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Core.Entities;
 
@@ -10,8 +11,10 @@ public class UserTeam : BaseEntity
     public string? Name { get; set; }
     public int Wins { get; set; }
     public int Losses { get; set; }
-    public IList<Athlete> Athletes { get; set; } = [];
-
+    public required string RosterId { get; set; }
+    [NotMapped]
+    public Roster? Roster { get; set; }
+    
     public UserTeam(){}
 
     [SetsRequiredMembers]

@@ -49,7 +49,16 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @for (athlete of currentTeam?.athletes; track athlete.id) {
+                            <tr>Starters</tr>
+                            @for (athlete of currentTeam?.roster?.starters; track athlete.id) {
+                                <tr routerLink="/athletes/{{athlete.id}}" class="clickable">
+                                    <td>{{Position[athlete.position]}}</td>    
+                                    <td>{{athlete.firstName}} {{athlete.lastName}}</td>    
+                                    <td></td>
+                                </tr>
+                            }
+                            <tr>Bench</tr>
+                            @for (athlete of currentTeam?.roster?.bench; track athlete.id) {
                                 <tr routerLink="/athletes/{{athlete.id}}" class="clickable">
                                     <td>{{Position[athlete.position]}}</td>    
                                     <td>{{athlete.firstName}} {{athlete.lastName}}</td>    

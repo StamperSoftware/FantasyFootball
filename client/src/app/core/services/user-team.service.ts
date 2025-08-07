@@ -26,6 +26,12 @@ export class UserTeamService {
   dropAthlete(athleteId:number, teamId:number){
     return this.http.delete(`${this.teamUrl}/${teamId}/athletes/${athleteId}`);
   }
+  moveToBench(athleteId:number, teamId:number){
+    return this.http.put(`${this.teamUrl}/${teamId}/bench/${athleteId}`, {});
+  }
+  moveToStarters(athleteId:number, teamId:number){
+    return this.http.put(`${this.teamUrl}/${teamId}/starters/${athleteId}`, {});
+  }
   
   
   tradeAthletes(teamOneId:number, teamTwoId:number, teamOneAthleteIds:number[], teamTwoAthleteIds:number[]){

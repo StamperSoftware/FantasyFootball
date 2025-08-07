@@ -1,4 +1,4 @@
-﻿import { AppUser } from "./app-user";
+﻿import { AppUser } from ".";
 
 export type Player = {
     userId : string

@@ -12,3 +12,4 @@ export { Position, getPositionName } from "./position";
 export { Game } from "./game"; 
 export { WeeklyStats } from './weekly-stats'
 export { SeasonStats } from './season-stats'
+export { Roster } from './roster'

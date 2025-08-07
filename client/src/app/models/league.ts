@@ -1,5 +1,4 @@
-﻿import { UserTeam } from "./user-team";
-import { Game } from "./game";
+﻿import { UserTeam, Game } from ".";
 
 export type League = {
     id : number

@@ -24,7 +24,7 @@
                     <th class="text-center">Score</th>
                 </thead>
                 <tbody>
-                    @for (athlete of game.home.athletes; track athlete.id) {
+                    @for (athlete of game.home.roster.starters; track athlete.id) {
                         <tr>
                             <td>{{Position[athlete.position]}}</td>
                             <td>{{athlete.firstName}} {{athlete.lastName}}</td>
@@ -58,7 +58,7 @@
                     <th class="text-center">Score</th>
                 </thead>
                 <tbody>
-                    @for (athlete of game.away.athletes; track athlete.id) {
+                    @for (athlete of game.away.roster.starters; track athlete.id) {
                         <tr>
                             <td>{{Position[athlete.position]}}</td>
                             <td>{{athlete.firstName}} {{athlete.lastName}}</td>

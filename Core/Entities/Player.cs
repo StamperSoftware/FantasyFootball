@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Serialization;
 
 namespace Core.Entities;
 
@@ -10,7 +11,6 @@ public class Player : BaseEntity
     [Required] public required string LastName { get; set; }
     public required AppUser User { get; set; }
     public required string UserId { get; set; }
-    public IList<UserTeam> Teams { get; set; } = [];
     
     public Player() {}
     
@@ -21,7 +21,6 @@ public class Player : BaseEntity
         UserId = user.Id;
         FirstName = firstName;
         LastName = lastName;
-        Teams = [];
     }
     
 }

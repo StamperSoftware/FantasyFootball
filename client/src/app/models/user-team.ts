@@ -1,9 +1,10 @@
-﻿import { Player } from "./player";
-import { Athlete } from "./athlete";
+﻿import { Player, Athlete, Roster } from ".";
 
 export type UserTeam = {
     player : Player
     id:number
     name?:string
     athletes : Athlete[]
+    rosterId:string
+    roster:Roster
 }

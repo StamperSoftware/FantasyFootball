@@ -2,6 +2,7 @@ using API.Helpers;
 using Core.Entities;
 using Core.Interfaces;
 using Infrastructure.Data;
+using Infrastructure.Data.MongoDb;
 using Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -25,8 +26,10 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserTeamService, UserTeamService>();
 builder.Services.AddScoped<IAthleteService, AthleteService>();
 builder.Services.AddScoped<IGameService, GameService>();
+builder.Services.AddScoped<IRosterService, RosterService>();
 
 builder.Services.AddDbContext<FantasyFootballContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.Configure<DbSettings>(builder.Configuration.GetSection("MongoDb"));
 
 builder.Services.AddIdentityApiEndpoints<AppUser>()
     .AddRoles<IdentityRole>()
