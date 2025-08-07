@@ -11,6 +11,7 @@ export class RosterService {
   
   
   getRoster(id:string) {
+    return this.http.get(`${this.url}/${id}`);
   }
   
 }
