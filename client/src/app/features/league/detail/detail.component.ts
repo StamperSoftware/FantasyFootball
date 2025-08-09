@@ -79,7 +79,7 @@ export class LeagueDetailComponent implements OnInit {
   }
 
   getWeeklySchedule(){
-    if (this.league?.schedule == null) return;
+    if (!this.league?.schedule) return;
     this.weeklySchedule = this.league.schedule.filter(s => s.week === this.currentWeek);
   }
   
