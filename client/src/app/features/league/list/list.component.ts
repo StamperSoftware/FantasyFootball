@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { LeagueService } from "../../../core/services/league.service";
-import { League } from "../../../models";
+import { League } from "@models";
 import { FaIconComponent } from "@fortawesome/angular-fontawesome";
 import { faAdd } from "@fortawesome/free-solid-svg-icons";
 import { RouterLink } from "@angular/router";

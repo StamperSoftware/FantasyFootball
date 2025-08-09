@@ -1,0 +1,18 @@
+<div class="container">
+    
+    <form class="d-flex flex-column gap-3 align-items-center" (ngSubmit)="updateSettings()">
+        
+        <div class="form-floating">
+            <input class="form-control" type="number" id="current-week" name="currentWeek" placeholder="Current Week" [formControl]="currentWeek">
+            <label class="form-label" for="current-week">Current Week</label>
+        </div>
+        
+        <div class="form-floating">
+            <input class="form-control" type="number" id="current-season" name="currentSeason" placeholder="Current Season" [formControl]="currentSeason" >
+            <label class="form-label" for="current-season">Current Season</label>
+        </div>
+        <button class="btn btn-primary" type="submit">Update Settings</button>
+    </form>
+</div>
+
+

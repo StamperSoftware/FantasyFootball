@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { UserTeamService } from "../../../core/services/user-team.service";
 import { ActivatedRoute, RouterLink } from "@angular/router";
-import { Athlete, Position, UserTeam } from "../../../models";
+import { Athlete, Position, UserTeam } from "@models";
 import { FaIconComponent } from "@fortawesome/angular-fontawesome";
 import {
     faArrowDown,

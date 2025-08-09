@@ -13,6 +13,7 @@ import { AthleteDetailComponent } from "./features/athlete/detail/detail.compone
 import { TradeComponent } from "./features/league/trade/trade.component";
 import { DraftComponent } from "./features/league/draft/draft.component";
 import { GameDetailComponent } from "./features/game/detail/detail.component";
+import { SiteSettingsComponent } from "./features/admin/site-settings/site-settings.component";
 
 export const routes: Routes = [
     {path:"", component:HomeComponent},
@@ -33,4 +34,7 @@ export const routes: Routes = [
     
     {path:"athletes", component:AthleteListComponent},
     {path:"athletes/:id", component:AthleteDetailComponent},
+
+    {path:"admin/site-settings", component:SiteSettingsComponent}
+    
 ];

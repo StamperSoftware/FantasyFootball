@@ -1,6 +1,6 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { AthleteService } from "../../../core/services/athlete.service";
-import { Athlete, Position } from "../../../models";
+import { Athlete, Position } from "@models";
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 
 @Component({

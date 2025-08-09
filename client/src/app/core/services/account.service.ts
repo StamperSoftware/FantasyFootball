@@ -1,7 +1,7 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { HttpClient, HttpParams } from "@angular/common/http";
-import { environment } from "../../../environments/environment";
-import { AppUser, LoginDto, RegisterDto } from "../../models";
+import { environment } from "@environments";
+import { AppUser, LoginDto, RegisterDto } from "@models";
 import { map } from "rxjs";
 import { Router } from "@angular/router";
 

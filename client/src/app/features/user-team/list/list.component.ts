@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { UserTeam } from "../../../models";
+import { UserTeam } from "@models";
 import { UserTeamService } from "../../../core/services/user-team.service";
 
 @Component({

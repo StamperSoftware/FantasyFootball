@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { Athlete, League, Position } from "../../../models";
+import { Athlete, League, Position } from "@models";
 import { ActivatedRoute, Router } from "@angular/router";
 import { LeagueService } from "../../../core/services/league.service";
 import { FaIconComponent } from "@fortawesome/angular-fontawesome";

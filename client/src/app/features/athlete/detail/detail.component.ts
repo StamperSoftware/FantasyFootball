@@ -1,13 +1,12 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { AthleteService } from "../../../core/services/athlete.service";
-import { Athlete, Position, WeeklyStats } from "../../../models";
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from "@angular/forms";
+import { Athlete, Position, WeeklyStats } from "@models";
+import { ReactiveFormsModule } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import { FaIconComponent } from "@fortawesome/angular-fontawesome";
-import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { UpdateAthleteStatsComponent } from "../update-athlete-stats/update-athlete-stats.component";
-import { EditUserTeamComponent } from "../../user-team/edit/edit.component";
 
 @Component({
   selector: 'app-athlete-detail',

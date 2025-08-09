@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormsModule } from "@angular/forms";
 import { AccountService } from "../../../core/services/account.service";
-import { RegisterDto } from "../../../models";
+import { RegisterDto } from "@models";
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 import { Router } from "@angular/router";
 

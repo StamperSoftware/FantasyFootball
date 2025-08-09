@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { AthleteService } from "../../../core/services/athlete.service";
-import { Athlete, Position } from "../../../models";
+import { Athlete, Position } from "@models";
 import { RouterLink } from "@angular/router";
 
 @Component({

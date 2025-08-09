@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { PlayerService } from "../../../core/services/player.service";
-import { Player } from "../../../models";
+import { Player } from "@models";
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 
 @Component({

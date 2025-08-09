@@ -1,7 +1,7 @@
 import { Component, inject, Input } from '@angular/core';
 import { AthleteService } from "../../../core/services/athlete.service";
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
-import { WeeklyStats } from "../../../models";
+import { WeeklyStats } from "@models";
 import { FormsModule } from "@angular/forms";
 
 @Component({

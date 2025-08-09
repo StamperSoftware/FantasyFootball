@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { GameService } from "../../../core/services/game.service";
-import { Game, Position, WeeklyStats } from "../../../models";
-import { ActivatedRoute, Router } from "@angular/router";
+import { Game, Position } from "@models";
+import { ActivatedRoute } from "@angular/router";
 
 @Component({
   selector: 'app-game-detail',

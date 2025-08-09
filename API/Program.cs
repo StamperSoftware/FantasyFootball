@@ -27,6 +27,7 @@ builder.Services.AddScoped<IUserTeamService, UserTeamService>();
 builder.Services.AddScoped<IAthleteService, AthleteService>();
 builder.Services.AddScoped<IGameService, GameService>();
 builder.Services.AddScoped<IRosterService, RosterService>();
+builder.Services.AddScoped<ISiteSettingsService, SiteSettingsService>();
 
 builder.Services.AddDbContext<FantasyFootballContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.Configure<DbSettings>(builder.Configuration.GetSection("MongoDb"));
