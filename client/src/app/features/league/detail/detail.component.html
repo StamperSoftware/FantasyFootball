@@ -71,13 +71,27 @@
             }
         
             @if (league.schedule) {
-                <div>
-                    
-                    @for (game of league.schedule; track game.id) {
-                        <div>
+                <div class="d-flex flex-column gap-4">
+                    <div id="schedule-container">
+                        @if (currentWeek > 1) {
+                            <fa-icon (click)="updateCurrentWeek(-1)" [icon]="faChevronCircleLeft"/>
+                        } @else {
+                            <div></div>
+                        }
+                        
+                        <div>Week {{currentWeek}} of {{siteSettings.currentSeason()}}</div>   
+                        
+                        @if (currentWeek < league.settings.numberOfGames){
+                            <fa-icon (click)="updateCurrentWeek(1)" [icon]="faChevronCircleRight"/>
+                        } @else {
+                            <div></div>
+                        }
+                    </div>
+                    <div class="d-flex flex-column gap-2">
+                        @for (game of this.weeklySchedule; track game.id) {
                             <a target="_blank" routerLink="games/{{game.id}}">{{game.home.name}} vs {{game.away.name}}</a>
-                        </div>
-                    }
+                        }
+                    </div>
                 </div>
             }
         </section>
