@@ -11,6 +11,7 @@ public class UserTeam : BaseEntity
     public string? Name { get; set; }
     public int Wins { get; set; }
     public int Losses { get; set; }
+    public int Ties { get; set; }
     public required string RosterId { get; set; }
     [NotMapped]
     public Roster? Roster { get; set; }
@@ -18,7 +19,7 @@ public class UserTeam : BaseEntity
     public UserTeam(){}
 
     [SetsRequiredMembers]
-    public UserTeam(int leagueId, Player player, int wins, int losses, string name)
+    public UserTeam(int leagueId, Player player, int wins, int losses, int ties, string name)
     {
         LeagueId = leagueId;
         Player = player;
@@ -26,5 +27,22 @@ public class UserTeam : BaseEntity
         Name = name;
         Wins = wins;
         Losses = losses;
+        Ties = ties;
     }
+
+    public void AddWin()
+    {
+        Wins++;
+    }
+
+    public void AddLoss()
+    {
+        Losses++;
+    }
+
+    public void AddTie()
+    {
+        Ties++;
+    }
+    
 }

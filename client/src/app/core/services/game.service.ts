@@ -15,4 +15,13 @@ export class GameService {
     getGame(gameId:number) {
         return this.http.get<Game>(`${this.gameUrl}/${gameId}`);
     }
+    finalizeGame(id:number){
+        return this.http.put(`${this.gameUrl}/${id}/finalize`, {});
+    }
+    finalizeGames(){
+        return this.http.put(`${this.gameUrl}/finalize`, {});
+    }
+    updateScore(id:number){
+        return this.http.put(`${this.gameUrl}/${id}/score`, {});
+    }
 }

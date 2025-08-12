@@ -16,4 +16,5 @@ public class GameDto(Game game)
     public IList<AthleteWeeklyStatsDto> WeeklyStats { get; set; } = game.WeeklyStats.Select(ws => new AthleteWeeklyStatsDto(ws)).ToList();
     public int? HomeScore { get; set; } = game.HomeScore;
     public int? AwayScore { get; set; } = game.AwayScore;
+    public bool IsFinalized { get; set; } = game.IsFinalized;
 }

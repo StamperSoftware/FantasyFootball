@@ -7,4 +7,7 @@ export type UserTeam = {
     athletes : Athlete[]
     rosterId:string
     roster:Roster
+    wins:number
+    losses:number
+    ties:number
 }

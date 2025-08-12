@@ -16,5 +16,13 @@ public class SiteSettingsController(ISiteSettingsService siteSettingsService):Ba
     public async Task UpdateSiteSettings(SiteSettings updateSiteSettingsDto)
     {
         await siteSettingsService.UpdateSettings(updateSiteSettingsDto);
-    }   
+    }
+
+    [HttpPut("advance-week")]
+    public async Task<ActionResult<SiteSettings>> AdvanceWeek()
+    {
+        var updatedSettings = await siteSettingsService.AdvanceWeek();
+        return Ok(updatedSettings);
+    }
+    
 }

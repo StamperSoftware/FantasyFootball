@@ -19,13 +19,15 @@
                             <tr>
                                 <th>Team</th>
                                 <th>Owner</th>
+                                <th>Record</th>
                             </tr>
                         </thead>
                         <tbody>                    
                             @for (team of league.teams; track team.id) {
-                                <tr>
-                                    <td class="clickable" routerLink="user-teams/{{team.id}}">{{team.name}}</td>
-                                    <td class="clickable" routerLink="/players/{{team.player.id}}">{{team.player.appUser.userName}}</td>
+                                <tr class="clickable" routerLink="user-teams/{{team.id}}">
+                                    <td>{{team.name}}</td>
+                                    <td>{{team.player.appUser.userName}}</td>
+                                    <td>{{team.wins}}-{{team.losses}}-{{team.ties}}</td>
                                 </tr>
                             }
                         </tbody>
@@ -89,7 +91,11 @@
                     </div>
                     <div class="d-flex flex-column gap-2">
                         @for (game of this.weeklySchedule; track game.id) {
-                            <a target="_blank" routerLink="games/{{game.id}}">{{game.home.name}} vs {{game.away.name}}</a>
+                            <div class="game-container clickable" routerLink="games/{{game.id}}" target="_blank">
+                                <span>{{game.home.name}} ({{game.homeScore}})</span>
+                                <span>vs</span>
+                                <span>{{game.away.name}} ({{game.awayScore}})</span>
+                            </div>
                         }
                     </div>
                 </div>

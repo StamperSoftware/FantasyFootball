@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
-public class LeaguesController(IGenericRepository<League> repo, ILeagueService service) : BaseApiController
+public class LeaguesController(IGenericRepository<League> repo, ILeagueService service, ISiteSettingsService siteSettingsService) : BaseApiController
 {
     [HttpGet]
     public async Task<ActionResult<IReadOnlyList<League?>>> GetLeagues([FromQuery] LeagueSpecParams specParams)
@@ -28,10 +28,12 @@ public class LeaguesController(IGenericRepository<League> repo, ILeagueService s
     public async Task<ActionResult<League>> CreateLeague(CreateLeagueDto leagueDto)
     {
         if (string.IsNullOrWhiteSpace(leagueDto.Name)) return BadRequest("Must have a name");
-        var league = new League()
+        var siteSettings = await siteSettingsService.GetSettings();
+        
+        var league = new League
         {
             Name = leagueDto.Name,
-            Season = 2025,
+            Season = siteSettings.CurrentSeason,
         };
 
         var settings = new LeagueSettings(league.Id);

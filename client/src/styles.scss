@@ -54,6 +54,11 @@
   --bs-border-color: rgba(var(--secondary-color-rgb),.5);  
 }
 
+.btn-primary{
+  --bs-btn-bg: #000080;
+  --bs-btn-border-color: #000080;
+}
+
 .dropdown-menu {
   --bs-dropdown-link-active-bg:var(--active);
   --bs-dropdown-link-active-color:var(--secondary-background);

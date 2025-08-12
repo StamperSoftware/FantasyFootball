@@ -16,12 +16,6 @@ public class AthleteService(FantasyFootballContext db) : IAthleteService
             .Include(a => a.WeeklyStats)
             .FirstAsync(a => a.Id == athleteId);
         
-        athlete.SeasonStats = new AthleteSeasonStats(athlete.WeeklyStats)
-        {
-            AthleteId = athleteId,
-            Season = 2025,
-        };
-        
         return athlete;
     }
 

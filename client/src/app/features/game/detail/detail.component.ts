@@ -1,12 +1,17 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { GameService } from "../../../core/services/game.service";
 import { Game, Position } from "@models";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, RouterLink } from "@angular/router";
+import { FaIconComponent } from "@fortawesome/angular-fontawesome";
+import { faCircleArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
 @Component({
   selector: 'app-game-detail',
   standalone: true,
-  imports: [],
+    imports: [
+        FaIconComponent,
+        RouterLink
+    ],
   templateUrl: './detail.component.html',
   styleUrl: './detail.component.scss'
 })
@@ -14,7 +19,8 @@ export class GameDetailComponent implements OnInit {
     
     private gameService = inject(GameService);
     private route = inject(ActivatedRoute);
-    gameId = this.route.snapshot.paramMap.get("id");
+    gameId = +this.route.snapshot.paramMap.get("id")!;
+    leagueId = +this.route.snapshot.paramMap.get("league-id")!;
     game?:Game;
     hasErrors = false;
     ngOnInit(): void {
@@ -38,5 +44,20 @@ export class GameDetailComponent implements OnInit {
         return this.game.weeklyStats.find(ws => ws.athleteId == athleteId);
     }
     
+    finalizeGame(){
+        if(!this.gameId) return;
+        this.gameService.finalizeGame(this.gameId).subscribe({
+            next:()=>this.getGame(),
+        });
+    }
+    
+    updateScores(){
+        if(!this.gameId) return;
+        this.gameService.updateScore(this.gameId).subscribe({
+            next:()=>this.getGame(),
+        });
+    }
+    
     protected readonly Position = Position;
+    protected readonly faCircleArrowLeft = faCircleArrowLeft;
 }

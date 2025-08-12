@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
-public class AthleteController(IGenericRepository<Athlete> repo, IAthleteService service, FantasyFootballContext db):BaseApiController
+public class AthleteController(IGenericRepository<Athlete> repo, IAthleteService service, FantasyFootballContext db, ISiteSettingsService siteSettingsService):BaseApiController
 {
     private Random rand = new();
     
@@ -48,68 +48,67 @@ public class AthleteController(IGenericRepository<Athlete> repo, IAthleteService
         return Ok();
     }
 
-    [HttpPost("generate-yearly-stats")]
-    public async Task<ActionResult> GenerateYearlyStats()
+    [HttpPost("generate-weekly-stats")]
+    public async Task<ActionResult> GenerateWeeklyStats()
     {
+        var siteSettings = await siteSettingsService.GetSettings();
         var athletes = await repo.ListAllAsync();
         List<AthleteWeeklyStats> aws = [];
+        
         foreach (var athlete in athletes)
         {
             if (athlete == null) continue;
             
-            for (var i = 1; i <= 17; i++)
+            var receptions = 0;
+            var receivingYards =  0;
+            var receivingTouchdowns = 0;
+            var passingYards = 0;
+            var passingTouchdowns = 0;
+            var rushingYards = 0;
+            var rushingTouchdowns = 0;
+
+            switch (athlete.Position)
             {
-                var receptions = 0;
-                var receivingYards =  0;
-                var receivingTouchdowns = 0;
-                var passingYards = 0;
-                var passingTouchdowns = 0;
-                var rushingYards = 0;
-                var rushingTouchdowns = 0;
+                case Position.QuarterBack:
+                    passingYards = rand.Next(150,450);
+                    passingTouchdowns = rand.Next(0, 5);
+                    rushingYards = rand.Next(0,50);
+                    rushingTouchdowns = rand.Next(0, 2);
 
-                switch (athlete.Position)
-                {
-                    case Position.QuarterBack:
-                        passingYards = rand.Next(150,450);
-                        passingTouchdowns = rand.Next(0, 5);
-                        rushingYards = rand.Next(0,50);
-                        rushingTouchdowns = rand.Next(0, 2);
-
-                        break;
-                    case Position.RunningBack:
-                        receptions = rand.Next(0, 5);
-                        receivingYards =  receptions > 0 ? rand.Next(10,30) : 0;
-                        receivingTouchdowns = receptions > 0 ? rand.Next(0, receptions/2) : 0;
-                        rushingYards = rand.Next(40,200);
-                        rushingTouchdowns = rand.Next(0, 5);
-                        break;
-                    case Position.WideReceiver:
-                        receptions = rand.Next(3, 10);
-                        receivingYards = rand.Next(60,160);
-                        receivingTouchdowns = rand.Next(0, (receptions/2)+1);
-                        break;
-                    case Position.TightEnd:
-                        receptions = rand.Next(3, 7);
-                        receivingYards =  rand.Next(30,90);
-                        receivingTouchdowns = rand.Next(0, receptions/2);
-                        break;
-                    case Position.Defense:
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
-
-                aws.Add(new AthleteWeeklyStats(i, 2025, athlete.Id)
-                {
-                    Receptions=receptions,
-                    ReceivingYards = receivingYards, 
-                    ReceivingTouchdowns = receivingTouchdowns,
-                    PassingYards = passingYards, 
-                    PassingTouchdowns = passingTouchdowns, 
-                    RushingYards = rushingYards, 
-                    RushingTouchdowns = rushingTouchdowns
-                });
+                    break;
+                case Position.RunningBack:
+                    receptions = rand.Next(0, 5);
+                    receivingYards =  receptions > 0 ? rand.Next(10,30) : 0;
+                    receivingTouchdowns = receptions > 0 ? rand.Next(0, receptions/2) : 0;
+                    rushingYards = rand.Next(40,200);
+                    rushingTouchdowns = rand.Next(0, 5);
+                    break;
+                case Position.WideReceiver:
+                    receptions = rand.Next(3, 10);
+                    receivingYards = rand.Next(60,160);
+                    receivingTouchdowns = rand.Next(0, (receptions/2)+1);
+                    break;
+                case Position.TightEnd:
+                    receptions = rand.Next(3, 7);
+                    receivingYards =  rand.Next(30,90);
+                    receivingTouchdowns = rand.Next(0, receptions/2);
+                    break;
+                case Position.Defense:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
+
+            aws.Add(new AthleteWeeklyStats(siteSettings.CurrentWeek, siteSettings.CurrentSeason, athlete.Id)
+            {
+                Receptions=receptions,
+                ReceivingYards = receivingYards, 
+                ReceivingTouchdowns = receivingTouchdowns,
+                PassingYards = passingYards, 
+                PassingTouchdowns = passingTouchdowns, 
+                RushingYards = rushingYards, 
+                RushingTouchdowns = rushingTouchdowns
+            });
         }
 
         await db.AthleteWeeklyStats.AddRangeAsync(aws);

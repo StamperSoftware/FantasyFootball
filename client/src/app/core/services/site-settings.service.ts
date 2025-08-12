@@ -23,12 +23,16 @@ export class SiteSettingsService implements OnInit {
     return this.http.get<SiteSettings>(this.url).pipe(
         map(siteSettings => {
             this.currentSeason.set(siteSettings.currentSeason);  
-            this.currentWeek.set(siteSettings.currentWeek);  
+            this.currentWeek.set(siteSettings.currentWeek);
             return siteSettings;
         })
     )
   }
-  
+
+    advanceWeek(){
+        return this.http.put<SiteSettings>(`${this.url}/advance-week`, {})
+            .pipe(map(siteSettings => this.currentWeek.set(siteSettings.currentWeek)));
+    }
   updateSettings(settingsDto :UpdateSiteSettingsDto){
     return this.http.put(this.url, settingsDto);
   }

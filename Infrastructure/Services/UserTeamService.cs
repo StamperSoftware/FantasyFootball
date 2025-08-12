@@ -126,7 +126,7 @@ public class UserTeamService(FantasyFootballContext db, IRosterService rosterSer
 
     public async Task<UserTeam> CreateUserTeam(int leagueId, Player player, int teamCount)
     {
-        var userTeam = new UserTeam(leagueId, player, 0, 0, $"(NEW) Team #{teamCount + 1}");
+        var userTeam = new UserTeam(leagueId, player, 0, 0, 0,$"(NEW) Team #{teamCount + 1}");
         var roster = await rosterService.CreateRoster();
         userTeam.RosterId = roster.Id;
         await db.AddAsync(userTeam);

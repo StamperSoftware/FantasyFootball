@@ -4,6 +4,7 @@ using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(FantasyFootballContext))]
-    partial class FantasyFootballContextModelSnapshot : ModelSnapshot
+    [Migration("20250810135247_AddedToGameAndUserTeam")]
+    partial class AddedToGameAndUserTeam
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -170,6 +173,9 @@ namespace Infrastructure.Migrations
                     b.Property<int>("AthleteId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("GameId")
+                        .HasColumnType("int");
+
                     b.Property<int>("PassingTouchdowns")
                         .HasColumnType("int");
 
@@ -201,6 +207,8 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("AthleteId");
 
+                    b.HasIndex("GameId");
+
                     b.ToTable("AthleteWeeklyStats");
                 });
 
@@ -224,7 +232,7 @@ namespace Infrastructure.Migrations
                     b.Property<int>("HomeScore")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsFinalized")
+                    b.Property<bool>("IsComplete")
                         .HasColumnType("bit");
 
                     b.Property<int?>("LeagueId")
@@ -581,6 +589,10 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("AthleteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Core.Entities.Game", null)
+                        .WithMany("WeeklyStats")
+                        .HasForeignKey("GameId");
                 });
 
             modelBuilder.Entity("Core.Entities.Game", b =>
@@ -699,6 +711,11 @@ namespace Infrastructure.Migrations
                     b.Navigation("SeasonStats")
                         .IsRequired();
 
+                    b.Navigation("WeeklyStats");
+                });
+
+            modelBuilder.Entity("Core.Entities.Game", b =>
+                {
                     b.Navigation("WeeklyStats");
                 });
 

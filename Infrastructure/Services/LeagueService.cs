@@ -4,7 +4,7 @@ using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Services;
-public class LeagueService(FantasyFootballContext db, IGenericRepository<Player> playerRepo, IUserTeamService userTeamService) : ILeagueService
+public class LeagueService(FantasyFootballContext db, IGenericRepository<Player> playerRepo, IUserTeamService userTeamService, ISiteSettingsService siteSettingService) : ILeagueService
 {
     
     private Random random = new();
@@ -41,10 +41,9 @@ public class LeagueService(FantasyFootballContext db, IGenericRepository<Player>
 
     public async Task CreateSchedule(int leagueId)
     {
-        var league = await GetLeagueWithFullDetailsAsync(leagueId);
-        if (league is null) throw new Exception("Could not get league");
+        var league = await GetLeagueWithFullDetailsAsync(leagueId) ?? throw new Exception("Could not get league");
         if (league.Schedule.Count > 0) throw new Exception("Schedule already created");
-        
+        var siteSettings = await siteSettingService.GetSettings();
         for (var week = 1; week <= league.Settings.NumberOfGames; week++)
         {
             HashSet<int> playedTeamIds = [];
@@ -60,7 +59,7 @@ public class LeagueService(FantasyFootballContext db, IGenericRepository<Player>
                     .OrderBy(t => random.Next())
                     .First();
                 
-                league.Schedule.Add(new Game(team, matchup, week, 2025));
+                league.Schedule.Add(new Game(team, matchup, week, siteSettings.CurrentSeason, false));
                 playedTeamIds.Add(team.Id);
                 playedTeamIds.Add(matchup.Id);
             }

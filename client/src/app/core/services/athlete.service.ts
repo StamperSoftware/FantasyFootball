@@ -28,8 +28,8 @@ export class AthleteService {
     return this.http.put(`${this.athleteUrl}/${athleteId}/stats`, body)
   }
 
-  generateYearlyStats(){
-      return this.http.post(`${this.athleteUrl}/generate-yearly-stats`, {});
+  generateWeeklyStats(){
+      return this.http.post(`${this.athleteUrl}/generate-weekly-stats`, {});
   }
   
 }

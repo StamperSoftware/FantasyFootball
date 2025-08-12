@@ -1,18 +1,17 @@
 <div class="container">
     
-    <form class="d-flex flex-column gap-3 align-items-center" (ngSubmit)="updateSettings()">
-        
-        <div class="form-floating">
-            <input class="form-control" type="number" id="current-week" name="currentWeek" placeholder="Current Week" [formControl]="currentWeek">
-            <label class="form-label" for="current-week">Current Week</label>
-        </div>
-        
-        <div class="form-floating">
-            <input class="form-control" type="number" id="current-season" name="currentSeason" placeholder="Current Season" [formControl]="currentSeason" >
-            <label class="form-label" for="current-season">Current Season</label>
-        </div>
-        <button class="btn btn-primary" type="submit">Update Settings</button>
-    </form>
+    <dl class="w-25">
+        <dt>Current Week</dt><dd>{{siteSettingsService.currentWeek()}}</dd>
+        <dt>Current Season</dt><dd>{{siteSettingsService.currentSeason()}}</dd>
+    </dl>
+    
+    <div class="d-flex gap-1">
+        <button class="btn btn-primary" (click)="generateWeeklyStats()">Generate Week {{siteSettingsService.currentWeek()}} Stats</button>
+        <button class="btn btn-primary" (click)="finalizeWeeklyGames()">Finalize Week {{siteSettingsService.currentWeek()}} Games</button>
+        <button class="btn btn-primary" (click)="advanceWeek()">Advance Week</button>
+        <button class="btn btn-primary" (click)="completeSeason()">Complete Season</button>
+    </div>
+    
 </div>
 
 

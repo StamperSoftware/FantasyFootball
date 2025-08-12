@@ -14,6 +14,9 @@ public class UserTeamDto
 
     public string RosterId { get; set; }
     public Roster? Roster { get; set; }
+    public int Wins { get; set; }
+    public int Losses { get; set; }
+    public int Ties { get; set; }
 
     public UserTeamDto(UserTeam team)
     {
@@ -23,6 +26,9 @@ public class UserTeamDto
         Name = team.Name;
         RosterId = team.RosterId;
         Roster = team.Roster;
+        Wins = team.Wins;
+        Losses = team.Losses;
+        Ties = team.Ties;
     }
     
 }

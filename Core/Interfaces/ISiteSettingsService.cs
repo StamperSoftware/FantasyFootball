@@ -6,4 +6,5 @@ public interface ISiteSettingsService
 {
     public Task<SiteSettings> GetSettings();
     public Task UpdateSettings(SiteSettings settings);
+    public Task<SiteSettings> AdvanceWeek();
 }

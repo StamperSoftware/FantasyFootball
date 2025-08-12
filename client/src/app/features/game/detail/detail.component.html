@@ -1,10 +1,11 @@
-<div class="clickable">
-    
-</div>
-
 @if (game) {
     <section id="game-header">
-        <h2>Week {{game.week}} - {{game.home.name}} vs {{game.away.name}}</h2>
+        <div class="d-flex">
+            <fa-icon class="btn" [icon]="faCircleArrowLeft" routerLink="/leagues/{{leagueId}}"/>
+            <h2>Week {{game.week}} - {{game.home.name}} vs {{game.away.name}}</h2>
+        </div>
+        <button (click)="finalizeGame()" class="btn btn-primary">Finalize Game</button>
+        <button (click)="updateScores()" class="btn btn-primary">Update Scores</button>
     </section>
     
     <section id="game-container">

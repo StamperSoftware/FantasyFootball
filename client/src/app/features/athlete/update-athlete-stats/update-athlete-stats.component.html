@@ -1,13 +1,8 @@
 <div class="m-3">
+    
+    <h2 class="text-center">Week {{data.week}} of {{data.season}} Season</h2>
+    
     <form (ngSubmit)="updateAthleteStats()" class="d-flex flex-column gap-3">
-        <div class="form-floating">
-            <input type="number" [(ngModel)]="data.week" name="week" class="form-control" id="week" placeholder="Week"/>
-            <label class="form-label" for="week">Week</label>
-        </div>
-        <div class="form-floating">
-            <input type="number"  [(ngModel)]="data.season" name="season" class="form-control" id="season" placeholder="Season" readonly value="2025"/>
-            <label class="form-label" for="season">Season</label>
-        </div>
         <div class="form-floating">
             <input type="number"  [(ngModel)]="data.receptions" name="receptions" class="form-control" id="receptions" placeholder="Receptions"/>
             <label class="form-label" for="receptions">Receptions</label>
@@ -40,6 +35,6 @@
             <label class="form-label" for="passing-touchdowns">Passing Touchdowns</label>
         </div>
         
-        <button type="submit" class="btn w-25">Update Stats</button>
+        <button type="submit" class="btn w-25 btn-primary">Update Stats</button>
     </form>
 </div>

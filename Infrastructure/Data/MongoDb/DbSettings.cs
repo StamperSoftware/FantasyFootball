@@ -9,4 +9,5 @@ public class DbSettings
     public string Rosters { get; set; } = null!;
     
     public string SiteSettings { get; set; } = null!;
+    public string Games { get; set; } = null!;
 }
