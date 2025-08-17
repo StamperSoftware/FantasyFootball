@@ -5,6 +5,12 @@
   --primary-color-rgb:194,152,61; /*mustard*/
   --faded-primary-rgb:194,152,61,.5;
   
+  
+  --btn-bg-color: #C2B03D;
+  --btn-bg-color-rgb: 194,176,61;
+  --btn-border-color: #C2B03D;
+  --btn-color:var(--primary-background);
+  
   --secondary-color:#C2CCC5; /*putty*/
   --secondary-color-rgb:194,204,197; /*putty*/
 
@@ -55,8 +61,14 @@
 }
 
 .btn-primary{
-  --bs-btn-bg: #000080;
-  --bs-btn-border-color: #000080;
+  --bs-btn-bg: rgba(var(--btn-bg-color-rgb), .75);
+  --bs-btn-border-color: var(--btn-bg-color);
+  --bs-btn-color:var(--btn-color);
+  
+  --bs-btn-hover-bg: var(--btn-bg-color);
+  --bs-btn-hover-border-color: var(--btn-bg-color);
+  --bs-btn-hover-color:var(--btn-color);
+  font-weight: 600;
 }
 
 .dropdown-menu {
