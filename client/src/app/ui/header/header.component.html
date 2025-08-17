@@ -10,7 +10,7 @@
         <div id="end-links">
             
             <div ngbDropdown>
-                <button ngbDropdownToggle class="btn" >Account</button>
+                <button ngbDropdownToggle class="btn nav-link">Account</button>
                 <div ngbDropdownMenu>
                     @if (this.accountService.currentUser() == null) {
                         <button ngbDropdownItem class="btn nav-link" (click)="openLoginModal()">Login</button>

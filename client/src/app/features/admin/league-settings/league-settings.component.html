@@ -1,31 +1,33 @@
 <div class="p-4 container">
-    <form class="d-flex flex-column gap-5" (ngSubmit)="updateSettings()">
-        <div class="d-flex gap-5 justify-content-between">
-            <div class="column">
-                <h3>League Settings</h3>
-                <app-floating-input placeholder="Number Of Games" name="numberOfGames" id="number-of-games" type="number" [(value)]="settings.numberOfGames"/>
-                <app-floating-input placeholder="Number Of Teams" name="numberOfTeams" id="number-of-teams" type="number" [(value)]="settings.numberOfTeams"/>
+    @if (settings) {
+        <form class="d-flex flex-column gap-5" (ngSubmit)="updateSettings()">
+            <div class="d-flex gap-5 justify-content-between">
+                <div class="column">
+                    <h3>League Settings</h3>
+                    <app-floating-input [placeholder]="'Number Of Games'" [name]="'numberOfGames'" [id]="'number-of-games'" [type]="'number'" [(value)]="settings.numberOfGames"/>
+                    <app-floating-input [placeholder]="'Number Of Teams'" [name]="'numberOfTeams'" [id]="'number-of-teams'" [type]="'number'" [(value)]="settings.numberOfTeams"/>
+                </div>
+                <div class="column">
+                    <h3>Roster Limits</h3>
+                    <app-floating-input [placeholder]="'Total'" [name]="'rosterLimit'" [id]="'roster-limit'" [type]="'number'" [(value)]="settings.rosterLimit"/>
+                    <app-floating-input [placeholder]="'Starting QBs'" [name]="'startingQuarterBackLimit'" [id]="'qb-limit'" [type]="'number'" [(value)]="settings.startingQuarterBackLimit"/>
+                    <app-floating-input [placeholder]="'Starting RBs'" [name]="'startingRunningBackLimit'" [id]="'rb-limit'" [type]="'number'" [(value)]="settings.startingRunningBackLimit"/>
+                    <app-floating-input [placeholder]="'Starting WRs'" [name]="'startingWideReceiverLimit'" [id]="'wr-limit'" [type]="'number'" [(value)]="settings.startingWideReceiverLimit"/>
+                    <app-floating-input [placeholder]="'Starting TEs'" [name]="'startingTightEndLimit'" [id]="'te-limit'" [type]="'number'" [(value)]="settings.startingTightEndLimit"/>
+                    <app-floating-input [placeholder]="'Starting Flex'" [name]="'flexLimit'" [id]="'flex-limit'" [type]="'number'" [(value)]="settings.flexLimit"/>
+                </div>
+                <div class="column">
+                    <h3>Scoring</h3>
+                    <app-floating-input [placeholder]="'Passing Yards'" [name]="'passingYardsScore'" [id]="'passing-yards-score'" [type]="'number'" [(value)]="settings.passingYardsScore"/>
+                    <app-floating-input [placeholder]="'Passing Touchdowns'" [name]="'passingTouchdownsScore'" [id]="'passing-touchdowns-score'" [type]="'number'" [(value)]="settings.passingTouchdownsScore"/>
+                    <app-floating-input [placeholder]="'Rushing Yards'" [name]="'rushingYardsScore'" [id]="'rushing-yards-score'" [type]="'number'" [(value)]="settings.rushingYardsScore"/>
+                    <app-floating-input [placeholder]="'Rushing Touchdowns'" [name]="'rushingTouchdownsScore'" [id]="'rushing-touchdowns-score'" [type]="'number'" [(value)]="settings.rushingTouchdownsScore"/>
+                    <app-floating-input [placeholder]="'Receptions'" [name]="'receptionsScore'" [id]="'receptions-score'" [type]="'number'" [(value)]="settings.receptionScore"/>
+                    <app-floating-input [placeholder]="'Receiving Yards'" [name]="'receivingYardsScore'" [id]="'receiving-yards-score'" [type]="'number'" [(value)]="settings.receivingYardsScore"/>
+                    <app-floating-input [placeholder]="'Receiving Touchdowns'" [name]="'receivingTouchdownsScore'" [id]="'receiving-touchdowns-score'" [type]="'number'" [(value)]="settings.receivingTouchdownsScore"/>
+                </div>
             </div>
-            <div class="column">
-                <h3>Roster Limits</h3>
-                <app-floating-input placeholder="Total" name="rosterLimit" id="roster-limit" type="number" [(value)]="settings.rosterLimit"/>
-                <app-floating-input placeholder="Starting QBs" name="startingQuarterBackLimit" id="qb-limit" type="number" [(value)]="settings.startingQuarterBackLimit"/>
-                <app-floating-input placeholder="Starting RBs" name="startingRunningBackLimit" id="rb-limit" type="number" [(value)]="settings.startingRunningBackLimit"/>
-                <app-floating-input placeholder="Starting WRs" name="startingWideReceiverLimit" id="wr-limit" type="number" [(value)]="settings.startingWideReceiverLimit"/>
-                <app-floating-input placeholder="Starting TEs" name="startingTightEndLimit" id="te-limit" type="number" [(value)]="settings.startingTightEndLimit"/>
-                <app-floating-input placeholder="Starting Flex" name="flexLimit" id="flex-limit" type="number" [(value)]="settings.flexLimit"/>
-            </div>
-            <div class="column">
-                <h3>Scoring</h3>
-                <app-floating-input placeholder="Passing Yards" name="passingYardsScore" id="passing-yards-score" type="number" [(value)]="settings.passingYardsScore"/>
-                <app-floating-input placeholder="Passing Touchdowns" name="passingTouchdownsScore" id="passing-touchdowns-score" type="number" [(value)]="settings.passingTouchdownsScore"/>
-                <app-floating-input placeholder="Rushing Yards" name="rushingYardsScore" id="rushing-yards-score" type="number" [(value)]="settings.rushingYardsScore"/>
-                <app-floating-input placeholder="Rushing Touchdowns" name="rushingTouchdownsScore" id="rushing-touchdowns-score" type="number" [(value)]="settings.rushingTouchdownsScore"/>
-                <app-floating-input placeholder="Receptions" name="receptionsScore" id="receptions-score" type="number" [(value)]="settings.receptionScore"/>
-                <app-floating-input placeholder="Receiving Yards" name="receivingYardsScore" id="receiving-yards-score" type="number" [(value)]="settings.receivingYardsScore"/>
-                <app-floating-input placeholder="Receiving Touchdowns" name="receivingTouchdownsScore" id="receiving-touchdowns-score" type="number" [(value)]="settings.receivingTouchdownsScore"/>
-            </div>
-        </div>
-        <button type="submit" class="w-25 btn btn-primary align-self-end">Update Settings</button>
-    </form>
+            <button type="submit" class="btn btn-primary align-self-end me-3">Update Settings</button>
+        </form>
+    }
 </div>

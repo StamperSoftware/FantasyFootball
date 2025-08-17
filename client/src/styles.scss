@@ -7,6 +7,7 @@
   
   
   --btn-bg-color: #C2B03D;
+  --btn-bg-disabled-color: #6B7280;
   --btn-bg-color-rgb: 194,176,61;
   --btn-border-color: #C2B03D;
   --btn-color:var(--primary-background);
@@ -60,15 +61,33 @@
   --bs-border-color: rgba(var(--secondary-color-rgb),.5);  
 }
 
+.btn[disabled] {
+  pointer-events:auto;
+  cursor:not-allowed !important;
+  
+  --bs-btn-disabled-bg: var(--btn-bg-disabled-color);
+  --bs-btn-disabled-border-color: var(--btn-bg-disabled-color);
+  --bs-btn-disabled-color:var(--btn-color);
+
+  --bs-btn-active-bg: var(--btn-bg-disabled-color);
+  --bs-btn-active-border-color:  var(--btn-bg-disabled-color);
+  --bs-btn-active-color:var(--btn-color);
+}
+
 .btn-primary{
-  --bs-btn-bg: rgba(var(--btn-bg-color-rgb), .75);
+  font-weight: 600;
+  
+  --bs-btn-bg: rgba(var(--btn-bg-color-rgb), .85);
   --bs-btn-border-color: var(--btn-bg-color);
   --bs-btn-color:var(--btn-color);
   
   --bs-btn-hover-bg: var(--btn-bg-color);
   --bs-btn-hover-border-color: var(--btn-bg-color);
   --bs-btn-hover-color:var(--btn-color);
-  font-weight: 600;
+  
+  --bs-btn-active-bg: var(--btn-bg-color);
+  --bs-btn-active-border-color: var(--btn-bg-color);
+  --bs-btn-active-color:var(--btn-color);
 }
 
 .dropdown-menu {
