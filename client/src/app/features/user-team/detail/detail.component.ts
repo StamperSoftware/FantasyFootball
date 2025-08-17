@@ -44,7 +44,7 @@ export class UserTeamDetailComponent implements OnInit {
     team?:UserTeam;
     hasErrors = false;
     
-    teamId = this.activatedRoute.snapshot.paramMap.get("id");
+    teamId = this.activatedRoute.snapshot.paramMap.get("user-team-id");
     leagueId = this.activatedRoute.snapshot.paramMap.get("league-id");
     
     getTeam(){

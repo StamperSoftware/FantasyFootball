@@ -14,27 +14,66 @@ import { TradeComponent } from "./features/league/trade/trade.component";
 import { DraftComponent } from "./features/league/draft/draft.component";
 import { GameDetailComponent } from "./features/game/detail/detail.component";
 import { SiteSettingsComponent } from "./features/admin/site-settings/site-settings.component";
+import { LeagueSettingsComponent } from "./features/admin/league-settings/league-settings.component";
 
 export const routes: Routes = [
     {path:"", component:HomeComponent},
     
-    {path:"leagues", component:LeagueListComponent},
-    {path:"leagues/:id", component:LeagueDetailComponent},
-    {path:"leagues/:league-id/trade", pathMatch:"full", component:TradeComponent},
-    {path:"leagues/:league-id/draft", pathMatch:"full", component:DraftComponent},
-    {path:"leagues/:league-id/user-teams", pathMatch:"full", component:UserTeamListComponent},
-    {path:"leagues/:league-id/user-teams/:id", pathMatch:"full", component:UserTeamDetailComponent},
-    {path:"leagues/:league-id/games/:id", pathMatch:"full", component:GameDetailComponent},
-    
-    {path:"users", component:UserListComponent},
-    {path:"users/:id", component:UserDetailComponent},
-    
-    {path:"players", component:PlayerListComponent},
-    {path:"players/:id", component:PlayerDetailComponent},
-    
-    {path:"athletes", component:AthleteListComponent},
-    {path:"athletes/:id", component:AthleteDetailComponent},
+    {
+        path:"leagues", 
+        children:[
+            {path:"", component:LeagueListComponent},
+            {
+                path:":league-id",
+                children:[
+                    {path:"", component:LeagueDetailComponent},
+                    {path:"trade", component:TradeComponent},
+                    {path:"draft", component:DraftComponent},
+                    {
+                        path:"user-teams",
+                        children:[
+                            {path: "", component:UserTeamListComponent},
+                            {path:":user-team-id", component:UserTeamDetailComponent},
+                        ]
+                    },
+                    {path:"games/:game-id", component:GameDetailComponent},
+                ],
+            },
+        ],
+    },
 
-    {path:"admin/site-settings", component:SiteSettingsComponent}
+    {
+        path:"users",
+        children:[
+            {path:"", component:UserListComponent},
+            {path:":id", component:UserDetailComponent},
+        ]
+    },
+
+    {
+        path:"players",
+        children:[
+            {path:"", component:PlayerListComponent},
+            {path:":id", component:PlayerDetailComponent},
+        ]
+    },
+
+    {
+        path:"athletes",
+        children:[
+            {path:"", component:AthleteListComponent},
+            {path:":id", component:AthleteDetailComponent},
+        ]
+    },
+
+    {
+        path:"admin",
+        children:[
+            {path:"site-settings", component:SiteSettingsComponent},
+            {path:"league-settings/:league-id", component:LeagueSettingsComponent},
+        ]
+        
+    },
+    
     
 ];

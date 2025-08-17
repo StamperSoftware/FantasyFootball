@@ -9,7 +9,7 @@ import {
   faPlay,
   faRightToBracket,
   faShuffle,
-  faCalendarAlt, faChevronCircleRight, faChevronCircleLeft
+  faCalendarAlt, faChevronCircleRight, faChevronCircleLeft, faGear
 } from "@fortawesome/free-solid-svg-icons";
 import { FaIconComponent } from "@fortawesome/angular-fontawesome";
 import { SiteSettingsService } from "../../../core/services/site-settings.service";
@@ -31,7 +31,7 @@ export class LeagueDetailComponent implements OnInit {
   private leagueService = inject(LeagueService);
   private route = inject(ActivatedRoute);
   private modalService = inject(NgbModal);
-  private id = +this.route.snapshot.paramMap.get("id")!;
+  private id = +this.route.snapshot.paramMap.get("league-id")!;
   
   siteSettings = inject(SiteSettingsService);
   currentWeek = this.siteSettings.currentWeek() ?? 1;
@@ -91,4 +91,5 @@ export class LeagueDetailComponent implements OnInit {
   protected readonly Position = Position;
   protected readonly faChevronCircleRight = faChevronCircleRight;
   protected readonly faChevronCircleLeft = faChevronCircleLeft;
+  protected readonly faGear = faGear;
 }

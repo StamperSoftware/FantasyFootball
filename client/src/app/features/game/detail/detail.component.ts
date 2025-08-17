@@ -19,7 +19,7 @@ export class GameDetailComponent implements OnInit {
     
     private gameService = inject(GameService);
     private route = inject(ActivatedRoute);
-    gameId = +this.route.snapshot.paramMap.get("id")!;
+    gameId = +this.route.snapshot.paramMap.get("game-id")!;
     leagueId = +this.route.snapshot.paramMap.get("league-id")!;
     game?:Game;
     hasErrors = false;

@@ -8,6 +8,7 @@
                 <fa-icon class="btn" title="Start League" (click)="startLeague()" [icon]="faPlay"></fa-icon>
                 <fa-icon class="btn" title="Join Draft" routerLink="draft" [state]="{league}" [icon]="faRightToBracket"></fa-icon>
                 <fa-icon class="btn" title="Create Schedule" (click)="createSchedule()" [icon]="faCalendarAlt"/>
+                <fa-icon class="btn" title="Settings" routerLink="/admin/league-settings/{{league.id}}" [icon]="faGear"/>
             </div>
         </section>
         

@@ -1,4 +1,4 @@
-﻿import { UserTeam, Game } from ".";
+﻿import { UserTeam, Game,LeagueSettings } from ".";
 
 export type League = {
     id : number
@@ -16,9 +16,4 @@ export type CreateLeagueDto = {
 export type AddPlayerToLeagueDto = {
     playerId:number
     leagueId:number
-}
-
-export type LeagueSettings = {
-    numberOfGames:number
-    numberOfTeams:number
 }

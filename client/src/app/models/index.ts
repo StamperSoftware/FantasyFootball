@@ -14,5 +14,6 @@ export * from './weekly-stats';
 export * from './season-stats';
 export * from './roster';
 export * from './site-settings';
+export * from './league-settings';
 
 

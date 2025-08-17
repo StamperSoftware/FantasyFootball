@@ -1,1 +1,7 @@
-<p>list works!</p>
+<div>
+    @for(team of teams;track team.id){
+        <div class="clickable" routerLink="{{team.id}}">
+            {{team.name}}
+        </div>
+    }
+</div>

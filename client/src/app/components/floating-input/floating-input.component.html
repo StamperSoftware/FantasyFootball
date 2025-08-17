@@ -1,0 +1,4 @@
+<div class="form-floating">
+    <input [id]="id()" [name]="name()" [type]="type()" class="form-control" [placeholder]="placeholder()" [value]="value()" (change)="updateValue($event)">
+    <label class="form-label" [for]="id()">{{placeholder()}}</label>
+</div>
