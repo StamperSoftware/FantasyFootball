@@ -2,6 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { UserService } from "../../../core/services/user.service";
 import { AppUser } from "@models";
 import { ActivatedRoute } from "@angular/router";
+import { AccountService } from "../../../core/services/account.service";
 
 @Component({
   selector: 'app-user-detail',
@@ -17,6 +18,7 @@ export class UserDetailComponent implements OnInit {
     
     private activatedRoute = inject(ActivatedRoute);
     private userService = inject(UserService);
+    accountService = inject(AccountService);
     private userId?:string = this.activatedRoute.snapshot.paramMap.get("id") ?? "";
     
     user?:AppUser;

@@ -1,5 +1,17 @@
 @if(hasErrors) {
     <h1 class="text-danger">There are errors, please try again later</h1>
 } @else if (user) {
-    <h1>{{user.userName}}</h1>
+    <div>
+        
+        <h1>{{user.userName}}</h1>
+        @if (user.id == accountService.currentUser()?.id) {
+            <div>
+                
+            </div>
+        } @else {
+            <div>
+                
+            </div>
+        }
+    </div>
 }
