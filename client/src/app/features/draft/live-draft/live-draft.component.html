@@ -47,9 +47,9 @@
                     }
 
                     @for (slot of helper.draftOrder; track slot.position) {
-                        <div class="draft-slot {{helper.index == slot.position && 'active'}}" [ngStyle]="{'order' : slot.displayOrder}" >
+                        <div class="draft-slot {{helper.index == slot.position ? 'active' : ''}}" [ngStyle]="{'order' : slot.displayOrder}" >
                             @if (slot.athlete) {
-                                <p>{{ slot.athlete.firstName }} {{slot.athlete.lastName}} ({{Position[slot.athlete.position]}}) </p>
+                                <span>{{ slot.athlete.firstName }} {{slot.athlete.lastName}} ({{Position[slot.athlete.position]}})</span>
                             }
                         </div>
                     }
