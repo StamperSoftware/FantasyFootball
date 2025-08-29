@@ -46,6 +46,9 @@ export class LeagueService {
     return this.http.get<Athlete[]>(`${this.leagueUrl}/${leagueId}/available-athletes`);
   }
   
+  deleteLeague(leagueId:number){
+    return this.http.delete(`${this.leagueUrl}/${leagueId}`)
+  }
   
   
 }

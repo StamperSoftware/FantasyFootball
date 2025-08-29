@@ -6,7 +6,7 @@
                 <fa-icon class="btn" title="Add Team" (click)="addTeam()" [icon]="faAdd"/>
                 <fa-icon class="btn" title="Trade Athletes" routerLink="trade" [icon]="faShuffle"></fa-icon>
                 <fa-icon class="btn" title="Start League" (click)="startLeague()" [icon]="faPlay"></fa-icon>
-                <fa-icon class="btn" title="Join Draft" routerLink="draft" [state]="{league}" [icon]="faRightToBracket"></fa-icon>
+                <fa-icon class="btn" title="Join Draft" routerLink="live-draft" [state]="{league}" [icon]="faRightToBracket"></fa-icon>
                 <fa-icon class="btn" title="Create Schedule" (click)="createSchedule()" [icon]="faCalendarAlt"/>
                 <fa-icon class="btn" title="Settings" routerLink="/admin/league-settings/{{league.id}}" [icon]="faGear"/>
             </div>
@@ -73,7 +73,7 @@
                 </div>
             }
         
-            @if (league.schedule) {
+            @if (league.schedule.length) {
                 <div class="d-flex flex-column gap-4">
                     <div id="schedule-container">
                         @if (currentWeek > 1) {

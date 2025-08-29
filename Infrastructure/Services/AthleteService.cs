@@ -9,7 +9,13 @@ public class AthleteService(FantasyFootballContext db) : IAthleteService
 {
     
     public async Task<IList<Athlete>> GetAthletesWithTeamsAsync() => await db.Athletes.Include(a => a.Team).ToListAsync();
-    
+    public async Task<IList<Athlete>> GetAthletes() => await db.Athletes.ToListAsync();
+
+    public async Task<Athlete> GetAthlete(int athleteId)
+    {
+        return await db.Athletes.FirstOrDefaultAsync(a => a.Id == athleteId) ?? throw new Exception("Could not get athlete");
+    }
+
     public async Task<Athlete> GetAthleteWithStatsAsync(int athleteId)
     {
         var athlete = await db.Athletes

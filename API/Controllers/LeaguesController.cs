@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
-public class LeaguesController(IGenericRepository<League> repo, ILeagueService service, ISiteSettingsService siteSettingsService) : BaseApiController
+public class LeaguesController(IGenericRepository<League> repo, ILeagueService service, ISiteSettingsService siteSettingsService, ILeagueSettingsService leagueSettingsService) : BaseApiController
 {
     [HttpGet]
     public async Task<ActionResult<IReadOnlyList<League?>>> GetLeagues([FromQuery] LeagueSpecParams specParams)
@@ -35,13 +35,14 @@ public class LeaguesController(IGenericRepository<League> repo, ILeagueService s
             Name = leagueDto.Name,
             Season = siteSettings.CurrentSeason,
         };
-
-        var settings = new LeagueSettings(league.Id);
-        league.Settings = settings;
         
         repo.Add(league);
-        
-        if (await repo.SaveAllAsync()) return CreatedAtAction("GetLeague", new { id = league.Id }, league);
+
+        if (await repo.SaveAllAsync())
+        {
+            league.Settings = await leagueSettingsService.CreateLeagueSettings(league.Id);
+            return CreatedAtAction("GetLeague", new { id = league.Id }, league);
+        }
         
         return BadRequest("Issue creating league");
     }
@@ -52,6 +53,7 @@ public class LeaguesController(IGenericRepository<League> repo, ILeagueService s
         try
         {
             await service.AddPlayerToLeagueAsync(playerId, leagueId);
+            
         }
         catch (Exception ex)
         {
@@ -59,6 +61,12 @@ public class LeaguesController(IGenericRepository<League> repo, ILeagueService s
         }
 
         return Ok();
+    }
+
+    [HttpDelete("{leagueId:int}")]
+    public async Task DeleteLeague(int leagueId)
+    {
+        await service.DeleteLeague(leagueId);
     }
     
     

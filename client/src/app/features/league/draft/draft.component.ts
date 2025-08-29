@@ -1,12 +1,11 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Athlete, League, Position } from "@models";
 import { ActivatedRoute, Router } from "@angular/router";
-import { LeagueService } from "../../../core/services/league.service";
+import { LeagueService, AthleteService } from "@services";
 import { FaIconComponent } from "@fortawesome/angular-fontawesome";
 import { faAdd } from "@fortawesome/free-solid-svg-icons";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { SelectAthleteListComponent } from "../../athlete/select-list/select-list.component";
-import { AthleteService } from "../../../core/services/athlete.service";
 import { NgStyle } from "@angular/common";
 
 @Component({

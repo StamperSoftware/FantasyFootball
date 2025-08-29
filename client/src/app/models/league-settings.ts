@@ -16,4 +16,5 @@
     passingTouchdownsScore:number
     rushingYardsScore:number
     rushingTouchdownsScore:number
+    draftOrder:number[]
 }

@@ -10,4 +10,5 @@ export type UserTeam = {
     wins:number
     losses:number
     ties:number
+    isOnline?:boolean
 }

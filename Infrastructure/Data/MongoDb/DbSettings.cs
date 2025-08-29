@@ -10,4 +10,5 @@ public class DbSettings
     
     public string SiteSettings { get; set; } = null!;
     public string Games { get; set; } = null!;
+    public string LeagueSettings { get; set; } = null!;
 }

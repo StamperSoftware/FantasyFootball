@@ -1,0 +1,60 @@
+<div class="d-flex flex-column gap-2">
+    @if (isConnected()) {
+        @let helper = draftHelper();
+        @if (helper) {
+            <section class="d-flex gap-3 align-items-center">
+                <button class="btn" (click)="leaveRoom()"><fa-icon [icon]="faCircleArrowLeft" title="Leave Room"/></button>
+                @if (helper.status == DraftStatus.completed) {
+                    <h3>Draft Is Complete!</h3>
+                } @else {
+                    <h3>Current Team: {{helper.currentPick.name}} | Pick: #{{helper.index+1}}</h3>
+                }
+            </section>
+            <div id="draft-container" class="px-5">
+                @if (helper.status == DraftStatus.inprogress){
+                    <section id="available-athletes" class="d-flex flex-column gap-3">
+                        <app-position-dropdown [(position)]="position"/>
+                        <div class="striped">
+                            @for(athlete of getAthletes(); track athlete.id){
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span>{{position() == 'all' ? Position[athlete.position] : ''}} {{athlete.lastName}}, {{athlete.firstName}}</span>
+                                    @if (helper.currentPick.id == userTeam().id){
+                                        <button class="btn btn-sm me-2" (click)="draftPlayer(athlete.id)"><fa-icon [icon]="faAdd"/></button>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    </section>
+                }
+                
+                <section>
+                    <app-user-team-dropdown [options]="helper.teams" [(userTeamId)]="currentTeamId"/>
+                    <div class="d-flex flex-column striped">
+                        @for(athlete of getRoster(); track athlete.id){
+                            <div>
+                                <span>{{athlete.firstName}} {{athlete.lastName}} ({{Position[athlete.position]}})</span>
+                            </div>
+                        }
+                    </div>
+                </section>
+
+                <section id="draft-board" class="pe-3" [ngStyle]="{'grid-template-columns':'repeat('+league.teams.length+', 1fr)'}">
+                    @for (team of helper.teams;track team.id) {
+                        <div class="team-cell text-center" [class.current-pick]="helper.currentPick.id == team.id">
+                            <div class="status-indicator" [class.online]="team.isOnline"></div>
+                            {{team.name}}
+                        </div>
+                    }
+
+                    @for (slot of helper.draftOrder; track slot.position) {
+                        <div class="draft-slot {{helper.index == slot.position && 'active'}}" [ngStyle]="{'order' : slot.displayOrder}" >
+                            @if (slot.athlete) {
+                                <p>{{ slot.athlete.firstName }} {{slot.athlete.lastName}} ({{Position[slot.athlete.position]}}) </p>
+                            }
+                        </div>
+                    }
+                </section>
+            </div>
+        }
+    }
+</div>

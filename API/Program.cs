@@ -1,4 +1,5 @@
 using API.Helpers;
+using API.Hubs;
 using Core.Entities;
 using Core.Interfaces;
 using Infrastructure.Data;
@@ -19,6 +20,7 @@ builder.Services.AddOpenApi();
 builder.Services.AddCors();
 builder.Services.AddControllers();
 builder.Services.AddAuthorization();
+builder.Services.AddSignalR();
 
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<ILeagueService, LeagueService>();
@@ -28,6 +30,7 @@ builder.Services.AddScoped<IAthleteService, AthleteService>();
 builder.Services.AddScoped<IGameService, GameService>();
 builder.Services.AddScoped<IRosterService, RosterService>();
 builder.Services.AddScoped<ISiteSettingsService, SiteSettingsService>();
+builder.Services.AddScoped<ILeagueSettingsService, LeagueSettingsService>();
 
 builder.Services.AddDbContext<FantasyFootballContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.Configure<DbSettings>(builder.Configuration.GetSection("MongoDb"));
@@ -42,7 +45,7 @@ var app = builder.Build();
 app.UseCors(p => p.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("https://localhost:4200"));
 app.UseAuthorization();
 app.MapGroup("api").MapIdentityApi<AppUser>();
-
+app.MapHub<DraftHub>("/api/live-draft");
 app.UseHttpsRedirection();
 app.MapControllers();
 

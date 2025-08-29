@@ -1,4 +1,6 @@
-﻿namespace Core.Entities;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Core.Entities;
 
 public class League : BaseEntity
 {
@@ -7,5 +9,7 @@ public class League : BaseEntity
     public IList<Game> Schedule { get; set; } = [];
     public required int Season { get; set; }
     public int CurrentWeek { get; set; }
-    public LeagueSettings Settings { get; set; }
+    [NotMapped]
+    public LeagueSettings Settings { get; set; } = null!;
+    
 }

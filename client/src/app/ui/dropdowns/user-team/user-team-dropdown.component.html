@@ -1,0 +1,5 @@
+<select name="select-user-team" id="select-user-team" class="form-select form-select-sm" [(ngModel)]="userTeamId">
+    @for(option of options(); track $index){
+        <option [value]="option.id">{{option.name}}</option>
+    }
+</select>

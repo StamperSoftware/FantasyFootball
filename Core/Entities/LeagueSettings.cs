@@ -1,7 +1,11 @@
-﻿namespace Core.Entities;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using MongoDB.Bson.Serialization.Attributes;
 
-public class LeagueSettings(int leagueId):BaseEntity
+namespace Core.Entities;
+
+public class LeagueSettings(int leagueId)
 {
+    [BsonId]
     public int LeagueId { get; set; } = leagueId;
     public int NumberOfGames { get; set; } = 12;
     public int NumberOfTeams { get; set; } = 10;
@@ -19,4 +23,7 @@ public class LeagueSettings(int leagueId):BaseEntity
     public int RushingTouchdownsScore { get; set; } = 6;
     public double PassingYardsScore { get; set; } = .1;
     public int PassingTouchdownsScore { get; set; } = 6;
+
+    public IList<int> DraftOrder { get; set; } = [];
 }
+

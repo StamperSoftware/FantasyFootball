@@ -26,8 +26,20 @@
                     <app-floating-input [placeholder]="'Receiving Yards'" [name]="'receivingYardsScore'" [id]="'receiving-yards-score'" [type]="'number'" [(value)]="settings.receivingYardsScore"/>
                     <app-floating-input [placeholder]="'Receiving Touchdowns'" [name]="'receivingTouchdownsScore'" [id]="'receiving-touchdowns-score'" [type]="'number'" [(value)]="settings.receivingTouchdownsScore"/>
                 </div>
+                <div class="column">
+                    <h3>Draft Order</h3>
+                    <dl cdkDropList (cdkDropListDropped)="drop($event)">
+                        @for (order of settings.draftOrder; track $index) {
+                            <div cdkDrag>
+                                <dt>{{$index+1}}</dt>
+                                <dd>{{order}}</dd>
+                            </div>
+                        }
+                    </dl>
+                </div>
             </div>
             <button type="submit" class="btn btn-primary align-self-end me-3">Update Settings</button>
         </form>
-    }
+}
 </div>
+

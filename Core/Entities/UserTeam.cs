@@ -13,9 +13,9 @@ public class UserTeam : BaseEntity
     public int Losses { get; set; }
     public int Ties { get; set; }
     public required string RosterId { get; set; }
-    [NotMapped]
-    public Roster? Roster { get; set; }
-    
+    [NotMapped] public Roster? Roster { get; set; }
+    [NotMapped] public bool IsOnline { get; set; }
+    public int DraftOrder { get; set; }
     public UserTeam(){}
 
     [SetsRequiredMembers]
@@ -44,5 +44,24 @@ public class UserTeam : BaseEntity
     {
         Ties++;
     }
+
+    public void SetOnline()
+    {
+        IsOnline = true;
+    }
+    public void SetOffline()
+    {
+        IsOnline = false;
+    }
     
+    public override bool Equals(object? obj)
+    {
+        if (obj == null || GetType() != obj.GetType()) return false;
+        return Id ==  ((UserTeam)obj).Id;
+    }
+
+    public override int GetHashCode()
+    {
+        return Id.GetHashCode();
+    }
 }

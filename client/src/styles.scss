@@ -160,3 +160,13 @@ input[type="checkbox"] {
   --bs-btn-padding-x: .5rem;
   --bs-btn-padding-y: .25rem;
 }
+
+.striped {
+  & > :nth-child(2n) {
+    background: rgba(var(--primary-color-rgb), .1);
+  }
+
+  & > :hover {
+    background: rgba(var(--primary-color-rgb), .2);
+  }
+}

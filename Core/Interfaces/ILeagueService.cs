@@ -10,4 +10,5 @@ public interface ILeagueService
     public Task SubmitDraft(int leagueId, IDictionary<int, IList<int>> teamAthleteDictionary);
     public Task CreateSchedule(int leagueId);
     public Task<IList<Athlete>> GetAvailableAthletes(int leagueId);
+    public Task DeleteLeague(int leagueId);
 }

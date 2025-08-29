@@ -1,0 +1,52 @@
+.team-cell{
+  position:relative;
+  & > .status-indicator {
+    background-color:red;
+    &.online{
+      background-color: green;
+    }
+    width: 8px;
+    height: 8px;
+    position: absolute;
+    border-radius: 8px;
+    top:3px;
+    left:3px;
+  }
+  
+  &.current-pick { 
+    background-color: rgba(dodgerblue, .25);
+  }
+}
+
+#available-athletes {
+  & > div {
+    max-height:50vh;
+    overflow-y:auto;
+  }
+}
+
+#draft-board {
+  display: grid;
+  max-height:80vh;
+  overflow-y:auto;
+}
+
+.draft-slot {
+  border: solid 1px rgba(255,255,255,.5);
+  height: 75px;
+  border-collapse: collapse;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+
+  &.active {
+    background-color:rgba(var(--primary-color-rgb),.1);
+  }
+}
+
+#draft-container {
+  display:grid;
+  grid-template-columns: 1fr 1fr 6fr;
+  gap:1.5em;
+}

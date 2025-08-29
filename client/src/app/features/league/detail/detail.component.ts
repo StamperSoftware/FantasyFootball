@@ -13,6 +13,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FaIconComponent } from "@fortawesome/angular-fontawesome";
 import { SiteSettingsService } from "../../../core/services/site-settings.service";
+import { AccountService } from "@services";
 
 @Component({
   selector: 'app-league-detail',
@@ -32,7 +33,7 @@ export class LeagueDetailComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private modalService = inject(NgbModal);
   private id = +this.route.snapshot.paramMap.get("league-id")!;
-  
+  private accountService = inject(AccountService);
   siteSettings = inject(SiteSettingsService);
   currentWeek = this.siteSettings.currentWeek() ?? 1;
   weeklySchedule:Game[] = [];
@@ -43,7 +44,7 @@ export class LeagueDetailComponent implements OnInit {
     return this.leagueService.getLeague(this.id).subscribe({
       next:response => {
         this.league = response;
-        this.currentTeam = this.league?.teams[0];
+        this.currentTeam = this.league?.teams.find(t => t.player.appUser.id == this.accountService.currentUser()?.id) ?? this.league?.teams[0];
         this.getWeeklySchedule();
       },
     });

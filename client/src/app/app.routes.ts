@@ -15,6 +15,7 @@ import { DraftComponent } from "./features/league/draft/draft.component";
 import { GameDetailComponent } from "./features/game/detail/detail.component";
 import { SiteSettingsComponent } from "./features/admin/site-settings/site-settings.component";
 import { LeagueSettingsComponent } from "./features/admin/league-settings/league-settings.component";
+import { LiveDraftComponent } from "./features/draft/live-draft/live-draft.component";
 
 export const routes: Routes = [
     {path:"", component:HomeComponent},
@@ -37,6 +38,7 @@ export const routes: Routes = [
                         ]
                     },
                     {path:"games/:game-id", component:GameDetailComponent},
+                    {path:"live-draft", component:LiveDraftComponent}
                 ],
             },
         ],
