@@ -19,20 +19,21 @@ export class GameDetailComponent implements OnInit {
     
     private gameService = inject(GameService);
     private route = inject(ActivatedRoute);
+    
     gameId = +this.route.snapshot.paramMap.get("game-id")!;
     leagueId = +this.route.snapshot.paramMap.get("league-id")!;
     game?:Game;
     hasErrors = false;
+    
     ngOnInit(): void {
-         this.getGame(); 
+        this.getGame(); 
     }
-
     
     getGame(){
         
         if(!this.gameId) return;
         
-        this.gameService.getGame(+this.gameId).subscribe({
+        this.gameService.getGame(this.gameId).subscribe({
             next: response => this.game = response,
             error : err => this.hasErrors = true,
         });
@@ -40,22 +41,7 @@ export class GameDetailComponent implements OnInit {
 
     getAthleteStats(athleteId:number) {
         if (!this.game) return;
-        
         return this.game.weeklyStats.find(ws => ws.athleteId == athleteId);
-    }
-    
-    finalizeGame(){
-        if(!this.gameId) return;
-        this.gameService.finalizeGame(this.gameId).subscribe({
-            next:()=>this.getGame(),
-        });
-    }
-    
-    updateScores(){
-        if(!this.gameId) return;
-        this.gameService.updateScore(this.gameId).subscribe({
-            next:()=>this.getGame(),
-        });
     }
     
     protected readonly Position = Position;

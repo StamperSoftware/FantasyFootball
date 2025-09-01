@@ -41,9 +41,13 @@ export class LiveDraftService {
         return await this.hubConnection.invoke<DraftHelper>("DraftPlayer", leagueId, teamId, athleteId);
     }
     
+    async simulateDraft(leagueId:number){
+        return await this.hubConnection.invoke<DraftHelper>("SimulateDraft", leagueId);
+    }
+    
     addEventListener(event:LiveDraftEvent, handleCallback:(response?:any)=>any){
         this.hubConnection.on(event, handleCallback);
     }
 }
 
-type LiveDraftEvent = "DraftedPlayer" | "JoinedGroup" | "LeftGroup";
+type LiveDraftEvent = "DraftedPlayer" | "JoinedGroup" | "LeftGroup" | "DraftSimulated";

@@ -97,6 +97,11 @@ export class LiveDraftComponent implements OnDestroy {
         await this.liveDraftService.draftPlayer(this.leagueId, this.draftHelper()!.currentPick.id,athleteId).then(dh => this.draftHelper.set(dh));
     }
     
+    async simulateDraft(){
+        if (!this.draftHelper()) return;
+        await this.liveDraftService.simulateDraft(this.leagueId).then(dh => this.draftHelper.set(dh));
+    }
+    
     protected readonly Position = Position;
     protected readonly DraftStatus = DraftStatus;
     protected readonly faAdd = faAdd;

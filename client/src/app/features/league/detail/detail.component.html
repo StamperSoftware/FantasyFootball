@@ -42,7 +42,7 @@
                                 <th>Position</th>
                                 <th>Name</th>
                                 <th>
-                                    <select class="form-select float-end" (change)="handleUpdateTeams($event)" [value]="currentTeam?.id">
+                                    <select class="form-select form-select-sm float-end" (change)="handleUpdateTeams($event)" [value]="currentTeam?.id">
                                         <option class="d-none" value="{{currentTeam?.id}}">{{currentTeam?.name}}</option>
                                         @for (team of league.teams; track team.id) {
                                             <option value="{{team.id}}">{{team.name}}</option>

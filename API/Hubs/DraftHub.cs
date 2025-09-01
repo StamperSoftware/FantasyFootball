@@ -11,6 +11,7 @@ public class DraftHub:Hub
 
     private ILeagueService LeagueService { get; set; }
     private IAthleteService AthleteService { get; set; }
+    private Random _random = new();
     
     public DraftHub(ILeagueService leagueService, IAthleteService athleteService)
     {
@@ -66,7 +67,18 @@ public class DraftHub:Hub
         {
             await LeagueService.SubmitDraft(leagueId, draftHelper.GetDraftResults());
         }
-        await Clients.Group(leagueId.ToString()).SendAsync("DraftedPlayer", draftHelper);
+        await Clients.GroupExcept(leagueId.ToString(), [Context.ConnectionId]).SendAsync("DraftedPlayer", draftHelper);
+        return draftHelper;
+    }
+
+    public async Task<DraftHelper> SimulateDraft(int leagueId)
+    {
+        var draftHelper = ConnectedLeagues[leagueId];
+        do
+        {
+            draftHelper = await DraftPlayer(leagueId, draftHelper.CurrentPick.Id, draftHelper.AvailableAthletes.OrderBy(a => _random.Next()).First().Id);
+        } while (draftHelper.Status == DraftStatus.InProgress);
+
         return draftHelper;
     }
 

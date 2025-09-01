@@ -2,10 +2,8 @@
     <section id="game-header">
         <div class="d-flex">
             <fa-icon class="btn" [icon]="faCircleArrowLeft" routerLink="/leagues/{{leagueId}}"/>
-            <h2>Week {{game.week}} - {{game.home.name}} vs {{game.away.name}}</h2>
+            <h3>Week {{game.week}} - {{game.home.name}} vs {{game.away.name}}</h3>
         </div>
-        <button (click)="finalizeGame()" class="btn btn-primary">Finalize Game</button>
-        <button (click)="updateScores()" class="btn btn-primary">Update Scores</button>
     </section>
     
     <section id="game-container">
@@ -26,17 +24,18 @@
                 </thead>
                 <tbody>
                     @for (athlete of game.home.roster.starters; track athlete.id) {
+                        @let stats = getAthleteStats(athlete.id);
                         <tr>
                             <td>{{Position[athlete.position]}}</td>
                             <td>{{athlete.firstName}} {{athlete.lastName}}</td>
-                            <td class="text-center">{{getAthleteStats(athlete.id)?.receptions}}</td>
-                            <td class="text-center">{{getAthleteStats(athlete.id)?.receivingYards}}</td>
-                            <td class="text-center">{{getAthleteStats(athlete.id)?.receivingTouchdowns}}</td>
-                            <td class="text-center">{{getAthleteStats(athlete.id)?.passingYards}}</td>
-                            <td class="text-center">{{getAthleteStats(athlete.id)?.passingTouchdowns}}</td>
-                            <td class="text-center">{{getAthleteStats(athlete.id)?.rushingYards}}</td>
-                            <td class="text-center">{{getAthleteStats(athlete.id)?.rushingTouchdowns}}</td>
-                            <td class="text-center">{{getAthleteStats(athlete.id)?.score}}</td>
+                            <td class="text-center">{{stats?.receptions}}</td>
+                            <td class="text-center">{{stats?.receivingYards}}</td>
+                            <td class="text-center">{{stats?.receivingTouchdowns}}</td>
+                            <td class="text-center">{{stats?.passingYards}}</td>
+                            <td class="text-center">{{stats?.passingTouchdowns}}</td>
+                            <td class="text-center">{{stats?.rushingYards}}</td>
+                            <td class="text-center">{{stats?.rushingTouchdowns}}</td>
+                            <td class="text-center">{{stats?.score}}</td>
                         </tr>
                     }
                 </tbody>
@@ -60,17 +59,18 @@
                 </thead>
                 <tbody>
                     @for (athlete of game.away.roster.starters; track athlete.id) {
+                        @let stats = getAthleteStats(athlete.id);
                         <tr>
                             <td>{{Position[athlete.position]}}</td>
                             <td>{{athlete.firstName}} {{athlete.lastName}}</td>
-                            <td class="text-center">{{getAthleteStats(athlete.id)?.receptions}}</td>
-                            <td class="text-center">{{getAthleteStats(athlete.id)?.receivingYards}}</td>
-                            <td class="text-center">{{getAthleteStats(athlete.id)?.receivingTouchdowns}}</td>
-                            <td class="text-center">{{getAthleteStats(athlete.id)?.passingYards}}</td>
-                            <td class="text-center">{{getAthleteStats(athlete.id)?.passingTouchdowns}}</td>
-                            <td class="text-center">{{getAthleteStats(athlete.id)?.rushingYards}}</td>
-                            <td class="text-center">{{getAthleteStats(athlete.id)?.rushingTouchdowns}}</td>
-                            <td class="text-center">{{getAthleteStats(athlete.id)?.score}}</td>
+                            <td class="text-center">{{stats?.receptions}}</td>
+                            <td class="text-center">{{stats?.receivingYards}}</td>
+                            <td class="text-center">{{stats?.receivingTouchdowns}}</td>
+                            <td class="text-center">{{stats?.passingYards}}</td>
+                            <td class="text-center">{{stats?.passingTouchdowns}}</td>
+                            <td class="text-center">{{stats?.rushingYards}}</td>
+                            <td class="text-center">{{stats?.rushingTouchdowns}}</td>
+                            <td class="text-center">{{stats?.score}}</td>
                         </tr>
                     }
                 </tbody>

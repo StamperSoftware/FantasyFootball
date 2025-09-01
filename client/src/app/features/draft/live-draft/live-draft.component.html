@@ -8,24 +8,23 @@
                     <h3>Draft Is Complete!</h3>
                 } @else {
                     <h3>Current Team: {{helper.currentPick.name}} | Pick: #{{helper.index+1}}</h3>
+                    <button class="btn" (click)="simulateDraft()">simulate draft</button>
                 }
             </section>
             <div id="draft-container" class="px-5">
-                @if (helper.status == DraftStatus.inprogress){
-                    <section id="available-athletes" class="d-flex flex-column gap-3">
-                        <app-position-dropdown [(position)]="position"/>
-                        <div class="striped">
-                            @for(athlete of getAthletes(); track athlete.id){
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <span>{{position() == 'all' ? Position[athlete.position] : ''}} {{athlete.lastName}}, {{athlete.firstName}}</span>
-                                    @if (helper.currentPick.id == userTeam().id){
-                                        <button class="btn btn-sm me-2" (click)="draftPlayer(athlete.id)"><fa-icon [icon]="faAdd"/></button>
-                                    }
-                                </div>
-                            }
-                        </div>
-                    </section>
-                }
+                <section id="available-athletes" class="d-flex flex-column gap-3">
+                    <app-position-dropdown [(position)]="position"/>
+                    <div class="striped">
+                        @for(athlete of getAthletes(); track athlete.id){
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span>{{position() == 'all' ? Position[athlete.position] : ''}} {{athlete.lastName}}, {{athlete.firstName}}</span>
+                                @if (helper.currentPick.id == userTeam().id){
+                                    <button class="btn btn-sm me-2" (click)="draftPlayer(athlete.id)"><fa-icon [icon]="faAdd"/></button>
+                                }
+                            </div>
+                        }
+                    </div>
+                </section>
                 
                 <section>
                     <app-user-team-dropdown [options]="helper.teams" [(userTeamId)]="currentTeamId"/>
