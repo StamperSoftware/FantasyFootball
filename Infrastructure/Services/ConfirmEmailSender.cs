@@ -8,7 +8,7 @@ using Microsoft.Extensions.Options;
 
 namespace Infrastructure.Services;
 
-public class EmailSender(IOptions<AuthMessageSenderOptions> optionsAccessor) : IEmailSender
+public class ConfirmEmailSender(IOptions<AuthMessageSenderOptions> optionsAccessor) : IEmailSender
 {
     private AuthMessageSenderOptions Options { get; } = optionsAccessor.Value;
 
