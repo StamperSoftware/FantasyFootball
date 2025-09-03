@@ -1,14 +1,16 @@
-﻿using API.DTOs;
+﻿using System.Net;
+using API.DTOs;
 using API.Extensions;
 using Core.Entities;
 using Core.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace API.Controllers;
 
-public class AccountsController(SignInManager<AppUser> signInManager, IGenericRepository<Player> playerRepo) : BaseApiController
+public class AccountsController(SignInManager<AppUser> signInManager, UserManager<AppUser> userManager, IGenericRepository<Player> playerRepo, IEmailSender<AppUser> userEmailSender) : BaseApiController
 {
     [HttpPost("register")]
     public async Task<ActionResult> CreateUser(RegisterDto registerDto)
@@ -16,7 +18,7 @@ public class AccountsController(SignInManager<AppUser> signInManager, IGenericRe
         
         AppUser user = new(registerDto.Email, registerDto.UserName);
 
-        var result = await signInManager.UserManager.CreateAsync(user, registerDto.Password);
+        var result = await userManager.CreateAsync(user, registerDto.Password);
 
         if (result.Succeeded)
         {
@@ -24,6 +26,12 @@ public class AccountsController(SignInManager<AppUser> signInManager, IGenericRe
             playerRepo.Add(newPlayer);
             
             if (!await playerRepo.SaveAllAsync()) return BadRequest("App User was created but could not create Player");
+
+            var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
+            var confirmLink = Url.Action("ConfirmEmail", "accounts", new { email = user.Email, token=WebUtility.UrlEncode(token) },
+                Request.Scheme) ?? throw new Exception("Could not create confirm link");
+            
+            await userEmailSender.SendConfirmationLinkAsync(user, registerDto.Email,confirmLink);
             return Ok();
         }
 
@@ -33,6 +41,13 @@ public class AccountsController(SignInManager<AppUser> signInManager, IGenericRe
         }
 
         return ValidationProblem();
+    }
+    
+    [HttpGet("{email}/confirm/{token}")]
+    public async Task ConfirmEmail(string email, string token)
+    {
+        var user = await userManager.FindByEmailAsync(email) ?? throw new Exception("Could not get user");
+        await userManager.ConfirmEmailAsync(user, WebUtility.UrlDecode(token));
     }
 
     [Authorize]

@@ -6,8 +6,10 @@ namespace Core.Entities;
 public class Game : BaseEntity
 {
     public int HomeId { get; set; }
+    [NotMapped]
     public required UserTeam Home { get; set; }
     public int AwayId { get; set; }
+    [NotMapped]
     public required UserTeam Away { get; set; }
     public int Week { get; set; }
     public int Season { get; set; }
