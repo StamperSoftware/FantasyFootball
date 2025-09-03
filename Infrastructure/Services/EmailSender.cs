@@ -8,9 +8,9 @@ using Microsoft.Extensions.Options;
 
 namespace Infrastructure.Services;
 
-public class ConfirmEmailSender(IOptions<AuthMessageSenderOptions> optionsAccessor) : IEmailSender
+public class EmailSender(IOptions<AuthMessageSenderOptions> optionsAccessor) : IEmailSender
 {
-    public AuthMessageSenderOptions Options { get; } = optionsAccessor.Value;
+    private AuthMessageSenderOptions Options { get; } = optionsAccessor.Value;
 
     public async Task SendEmailAsync(string email, string subject, string htmlMessage)
     {
@@ -18,7 +18,7 @@ public class ConfirmEmailSender(IOptions<AuthMessageSenderOptions> optionsAccess
         await Execute(subject, htmlMessage, email);
     }
 
-    public async Task Execute(string subject, string message, string toEmail)
+    private async Task Execute(string subject, string message, string toEmail)
     {
         var sender = new SmtpSender(() => new SmtpClient("smtp.gmail.com")
         {
