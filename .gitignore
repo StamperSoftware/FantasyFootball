@@ -16,3 +16,4 @@ docker-compose.yml
 API/.env
 /Infrastructure/Migrations
 *.user
+/Infrastructure/Data/Migrations
