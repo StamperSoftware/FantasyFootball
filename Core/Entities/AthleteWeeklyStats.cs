@@ -13,6 +13,5 @@ public class AthleteWeeklyStats(int week, int season, int athleteId) : BaseEntit
     public int PassingTouchdowns { get; set; }
     public int Week { get; set; } = week;
     public int Season { get; set; } = season;
-
     public int AthleteId { get; set; } = athleteId;
 }

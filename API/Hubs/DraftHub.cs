@@ -11,7 +11,7 @@ public class DraftHub:Hub
 
     private ILeagueService LeagueService { get; set; }
     private IAthleteService AthleteService { get; set; }
-    private Random _random = new();
+    private readonly Random _random = new();
     
     public DraftHub(ILeagueService leagueService, IAthleteService athleteService)
     {

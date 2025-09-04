@@ -34,4 +34,9 @@ public class LeagueSettingsService:ILeagueSettingsService
         await _leagueSettings.InsertOneAsync(settings);
         return settings;
     }
+
+    public async Task DeleteLeagueSettings(int leagueId)
+    {
+        await _leagueSettings.DeleteOneAsync(l => l.LeagueId == leagueId);
+    }
 }

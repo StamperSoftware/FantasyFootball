@@ -14,8 +14,9 @@ public class GameService:IGameService
     private readonly FantasyFootballContext _db;
     private readonly IRosterService _rosterService;
     private readonly ISiteSettingsService _siteSettingsService;
+    private readonly IUserTeamService _userTeamService;
     
-    public GameService(IOptions<DbSettings> dbSettings,FantasyFootballContext db, IRosterService rosterService, ISiteSettingsService siteSettingsService)
+    public GameService(IOptions<DbSettings> dbSettings,FantasyFootballContext db, IRosterService rosterService, ISiteSettingsService siteSettingsService, IUserTeamService userTeamService)
     {
         var mongoClient = new MongoClient(dbSettings.Value.ConnectionString);
         var mongoDb = mongoClient.GetDatabase(dbSettings.Value.DatabaseName);
@@ -23,24 +24,20 @@ public class GameService:IGameService
         _db = db;
         _rosterService = rosterService;
         _siteSettingsService = siteSettingsService;
+        _userTeamService = userTeamService;
     }
 
     
     public async Task<Game?> GetFullDetailAsync(int gameId)
     {
         var game = await _db.Games
-            .Include(g => g.Away)
-                .ThenInclude(u => u.Player)
-                    .ThenInclude(p => p.User)
-            .Include(g => g.Home)
-                .ThenInclude(u => u.Player)
-                    .ThenInclude(p => p.User)
             .FirstOrDefaultAsync(g => g.Id == gameId);
 
         if (game == null) throw new Exception("Could not get game");
-        
+        game.Home = await _userTeamService.GetUserTeamFullDetailAsync(game.HomeId) ?? throw new Exception("Could not get home team");
         var homeRoster = await _rosterService.GetRoster(game.Home.RosterId) ?? throw new Exception("Could not get roster");
         game.Home.Roster = homeRoster;
+        game.Away = await _userTeamService.GetUserTeamFullDetailAsync(game.AwayId) ??  throw new Exception("Could not get home team");
         var awayRoster = await _rosterService.GetRoster(game.Away.RosterId) ?? throw new Exception("Could not get roster");
         game.Away.Roster = awayRoster;
         var athleteIds = homeRoster.Starters.Union(homeRoster.Bench).Union(awayRoster.Starters).Union(awayRoster.Bench)
@@ -102,16 +99,11 @@ public class GameService:IGameService
         var games = await _db.Games
             .Where(g => g.Season == siteSettings.CurrentSeason)
             .Where(g => g.Week == siteSettings.CurrentWeek)
-                .Include(g => g.Away)
-                    .ThenInclude(u => u.Player)
-                        .ThenInclude(p => p.User)
-                .Include(g => g.Home)
-                    .ThenInclude(u => u.Player)
-                        .ThenInclude(p => p.User)
             .ToListAsync();
 
-        foreach (var game in games)
+        foreach (var _game in games)
         {
+            var game = await GetFullDetailAsync(_game.Id) ?? throw new Exception("Could not get game");
             var homeRoster = await _rosterService.GetRoster(game.Home.RosterId) ?? throw new Exception("Could not get roster");
             game.Home.Roster = homeRoster;
             var awayRoster = await _rosterService.GetRoster(game.Away.RosterId) ?? throw new Exception("Could not get roster");
@@ -132,7 +124,12 @@ public class GameService:IGameService
         await _games.InsertManyAsync(games);
         await _db.SaveChangesAsync();
     }
-    
+
+    public async Task DeleteGames(IEnumerable<int> gameIds)
+    {
+        await _games.DeleteManyAsync(g => gameIds.Contains(g.Id));
+    }
+
     private void _finalizeGameAsync(Game game)
     {
         if (game.IsFinalized) throw new Exception("Game is already finalized");

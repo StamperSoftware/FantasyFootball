@@ -79,7 +79,8 @@ export class TradeComponent implements OnInit{
     if (!this.sendingTeam?.team || !this.receivingTeam?.team) return;
     if (!team) return;
     
-    const athlete = [...this.sendingTeam?.team?.athletes, ...this.receivingTeam?.team?.athletes].find(a => a.id == id);
+    const athlete = [...this.sendingTeam?.team?.roster?.starters, ...this.sendingTeam?.team?.roster?.bench, 
+      ...this.receivingTeam?.team?.roster?.starters, ...this.receivingTeam?.team?.roster?.bench].find(a => a.id == id);
     if (!athlete) return;
     
     if (team.has(athlete)) {

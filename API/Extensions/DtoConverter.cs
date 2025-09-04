@@ -69,7 +69,8 @@ public static class DtoConverter
             Id = player.Id,
             FirstName = player.FirstName,
             LastName = player.LastName,
-            AppUser = player.User.Convert(),
+            UserId = player.UserId,
+            UserName = player.User.UserName!,
         };
     }
 

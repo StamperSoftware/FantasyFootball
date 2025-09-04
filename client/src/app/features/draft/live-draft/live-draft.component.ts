@@ -47,7 +47,7 @@ export class LiveDraftComponent implements OnDestroy {
             next: async (league) => {
                 this.league = league;
                 
-                this.userTeam.set(league.teams.find(ut => ut.player.appUser.id == this.accountService.currentUser()?.id)!);
+                this.userTeam.set(league.teams.find(ut => ut.player.userId == this.accountService.currentUser()?.id)!);
                 
                 this.liveDraftService.addEventListener("DraftedPlayer", (draftHelper:DraftHelper)=> this.draftHelper.set(draftHelper));
                 this.liveDraftService.addEventListener("JoinedGroup", (draftHelper:DraftHelper)=> this.draftHelper.set(draftHelper));
@@ -71,7 +71,7 @@ export class LiveDraftComponent implements OnDestroy {
 
     async disconnect(){
         
-        if (this.draftHelper()?.teams?.find(ut => ut.player.user?.id == this.accountService.currentUser()?.id)?.isOnline) {
+        if (this.draftHelper()?.teams?.find(ut => ut.player.userId == this.accountService.currentUser()?.id)?.isOnline) {
             await this.leaveRoom();
         }
         

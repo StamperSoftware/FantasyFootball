@@ -1,42 +1,42 @@
 ﻿using Core.Entities;
 using Core.Interfaces;
 using Infrastructure.Data;
+using Infrastructure.Factories;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Services;
-public class LeagueService(FantasyFootballContext db, IGenericRepository<Player> playerRepo, IUserTeamService userTeamService, ISiteSettingsService siteSettingService, ILeagueSettingsService leagueSettingsService) : ILeagueService
+public class LeagueService(FantasyFootballContext db, IPlayerService playerService, IUserTeamService userTeamService, ISiteSettingsService siteSettingService, ILeagueSettingsService leagueSettingsService, IRosterService rosterService, IGameService gameService) : ILeagueService
 {
     
     private readonly Random _random = new();
+    private readonly SiteSettings _siteSettings = siteSettingService.GetSettings().Result;
     public async Task AddPlayerToLeagueAsync(int playerId, int leagueId)
     {
-        var player = await playerRepo.GetByIdAsync(playerId);
-        if (player == null) throw new Exception("Could not find player");
-
-        var league = await GetLeagueWithFullDetailsAsync(leagueId);
-        if (league == null) throw new Exception("Could not find league");
+        var player = await playerService.GetPlayer(playerId) ?? throw new Exception("Could not find player");
+        var league = await GetLeagueWithFullDetailsAsync(leagueId) ?? throw new Exception("Could not find league");
         
         if (league.Teams.Count >= league.Settings.NumberOfTeams) throw new Exception("League is full.");
         if (league.Teams.Any(t => t.PlayerId == playerId)) throw new Exception("Player is in league already.");
+        
         var userTeam = await userTeamService.CreateUserTeam(leagueId, player, league.Teams.Count);
+        
         league.Teams.Add(userTeam);
         league.Settings.DraftOrder.Add(userTeam.Id);
+        
         await leagueSettingsService.UpdateLeagueSettings(league.Settings);
         await db.SaveChangesAsync();
     }
 
     public async Task AddAthleteToTeamAsync(int leagueId, int teamId, int athleteId)
     {
-        var league = await GetLeagueWithFullDetailsAsync(leagueId);
-        if (league is null) throw new Exception("Could not get league");
+        var league = await GetLeagueWithFullDetailsAsync(leagueId) ?? throw new Exception("Could not get league");
         if (!IsPlayerAvailable(league, [athleteId])) throw new Exception("Athlete is already on a team");
         await userTeamService.AddAthleteToTeamAsync(teamId, athleteId);
     }
 
     public async Task SubmitDraft(int leagueId, IDictionary<int, IList<int>> request)
     {
-        var league = await GetLeagueWithFullDetailsAsync(leagueId);
-        if (league is null) throw new Exception("Could not get league");
+        var league = await GetLeagueWithFullDetailsAsync(leagueId) ?? throw new Exception("Could not get league");
         await userTeamService.AddAthletesToTeamsAsync(request);
     }
 
@@ -44,7 +44,7 @@ public class LeagueService(FantasyFootballContext db, IGenericRepository<Player>
     {
         var league = await GetLeagueWithFullDetailsAsync(leagueId) ?? throw new Exception("Could not get league");
         if (league.Schedule.Count > 0) throw new Exception("Schedule already created");
-        var siteSettings = await siteSettingService.GetSettings();
+        
         for (var week = 1; week <= league.Settings.NumberOfGames; week++)
         {
             HashSet<int> playedTeamIds = [];
@@ -60,7 +60,7 @@ public class LeagueService(FantasyFootballContext db, IGenericRepository<Player>
                     .OrderBy(t => _random.Next())
                     .First();
                 
-                league.Schedule.Add(new Game(team, matchup, week, siteSettings.CurrentSeason, false));
+                league.Schedule.Add(GameFactory.CreateGame(team, matchup, week, _siteSettings.CurrentSeason));
                 playedTeamIds.Add(team.Id);
                 playedTeamIds.Add(matchup.Id);
             }
@@ -71,9 +71,12 @@ public class LeagueService(FantasyFootballContext db, IGenericRepository<Player>
 
     public async Task DeleteLeague(int leagueId)
     {
-        var league = await db.Leagues.FindAsync(leagueId) ?? throw new Exception("Could not get league");
+        var league = await db.Leagues.Include(l => l.Teams).FirstOrDefaultAsync(l => l.Id == leagueId) ?? throw new Exception("Could not get league");
         
         db.Leagues.Remove(league);
+        await rosterService.DeleteRosters(league.Teams.Select(t => t.RosterId));
+        await leagueSettingsService.DeleteLeagueSettings(leagueId);
+        await gameService.DeleteGames(league.Schedule.Select(s => s.Id));
         await db.SaveChangesAsync();
     }
     
@@ -86,7 +89,12 @@ public class LeagueService(FantasyFootballContext db, IGenericRepository<Player>
             .Include(l => l.Schedule)
             .FirstOrDefaultAsync(l => l.Id == id) ?? throw new Exception("Could not get league");
 
-        league.Settings = await leagueSettingsService.GetLeagueSettings(league.Id) ?? throw new Exception("Could not get settings"); 
+        league.Settings = await leagueSettingsService.GetLeagueSettings(league.Id) ?? throw new Exception("Could not get settings");
+
+        for (int i = 0; i < league.Schedule.Count; i++)
+        {
+            league.Schedule[i] = await gameService.GetFullDetailAsync(league.Schedule[i].Id) ?? throw new Exception("Could not get game");
+        }
         
         for (int i = 0; i < league.Teams.Count; i++)
         {

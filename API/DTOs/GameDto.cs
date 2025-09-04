@@ -1,10 +1,6 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Core.Entities;
+﻿namespace API.DTOs;
 
-namespace API.DTOs;
-
-[method: SetsRequiredMembers]
-public class GameDto()
+public class GameDto
 {
     public int Id { get; set; }
     public int HomeId { get; set; } 

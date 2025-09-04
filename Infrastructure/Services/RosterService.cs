@@ -20,14 +20,23 @@ public class RosterService:IRosterService
     
     public async Task<Roster?> GetRoster(string id)
     {
-        var roster = await _rosters.Find(r => r.Id == id).FirstOrDefaultAsync();
-        roster.Starters = roster.Starters.OrderBy(a => a.Position).ToList();
-        roster.Bench = roster.Bench.OrderBy(a => a.Position).ToList();
-        return roster;
+        return await _rosters.Find(r => r.Id == id).FirstOrDefaultAsync();
     }
 
+    public async Task DeleteRoster(string id)
+    {
+        await _rosters.DeleteOneAsync(id);
+    }
+    
+    public async Task DeleteRosters(IEnumerable<string> rosterIds)
+    {
+        await _rosters.DeleteManyAsync(r => rosterIds.Contains(r.Id));
+    }
+    
     public async Task UpdateRoster(Roster roster)
     {
+        roster.Starters = roster.Starters.OrderBy(a => a.Position).ToList();
+        roster.Bench = roster.Bench.OrderBy(a => a.Position).ToList();
         await _rosters.ReplaceOneAsync(r => r.Id == roster.Id, roster);
     }
 
@@ -48,6 +57,7 @@ public class RosterService:IRosterService
         roster.Bench.Add(athlete);
         await UpdateRoster(roster);
     }
+    
     public async Task DropAthlete(Athlete athlete, string rosterId)
     {
         var roster = await GetRoster(rosterId) ?? throw new Exception("Could not get roster");
@@ -55,23 +65,46 @@ public class RosterService:IRosterService
         roster.Bench = roster.Bench.Where(a => a.Id != athlete.Id).ToList();
         await UpdateRoster(roster);
     }
+    
     public async Task MoveAthleteToBench(Athlete athlete, string rosterId)
     {
         var roster = await GetRoster(rosterId) ?? throw new Exception("Could not get roster");
-        if (roster.Starters.ToArray().FirstOrDefault(a => a.Id == athlete.Id) == null) throw new Exception("Athlete is not on the starter");
-        roster.Bench.Add(athlete);
+        if (roster.Starters.All(a => a.Id != athlete.Id)) throw new Exception("Athlete is not on the starter");
         roster.Starters = roster.Starters.Where(a => a.Id != athlete.Id).ToList();
+        roster.Bench.Add(athlete);
         await UpdateRoster(roster);
     }
+    
     public async Task MoveAthleteToStarters(Athlete athlete, string rosterId)
     {
         var roster = await GetRoster(rosterId) ?? throw new Exception("Could not get roster");
-        if (roster.Bench.ToArray().FirstOrDefault(a => a.Id == athlete.Id) == null) throw new Exception("Athlete is not on the bench");
-        
+        if (roster.Bench.All(a => a.Id != athlete.Id)) throw new Exception("Athlete is not on the bench");
         roster.Bench = roster.Bench.Where(a => a.Id != athlete.Id).ToList();
         roster.Starters.Add(athlete);
         await UpdateRoster(roster);
     }
-    
-    
+
+    public async Task HandleTradeAsync(UserTeam teamOne, UserTeam teamTwo, IList<Athlete> teamOneAthletes, IList<Athlete> teamTwoAthletes)
+    {
+        teamOne.Roster ??= await GetRoster(teamOne.RosterId) ?? throw new Exception("Could not get roster");
+        teamTwo.Roster ??= await GetRoster(teamTwo.RosterId) ?? throw new Exception("Could not get roster");
+        
+        foreach (var athlete in teamOneAthletes)
+        {
+            teamOne.Roster.Bench = teamOne.Roster.Bench.Where(a => a.Id != athlete.Id).ToList();
+            teamOne.Roster.Starters = teamOne.Roster.Starters.Where(a => a.Id != athlete.Id).ToList();
+            teamTwo.Roster.Bench.Add(athlete);
+        }
+        
+        foreach (var athlete in teamTwoAthletes)
+        {
+            
+            teamTwo.Roster.Bench = teamTwo.Roster.Bench.Where(a => a.Id != athlete.Id).ToList();
+            teamTwo.Roster.Starters = teamTwo.Roster.Starters.Where(a => a.Id != athlete.Id).ToList();
+            teamOne.Roster.Bench.Add(athlete);
+        }
+
+        await UpdateRoster(teamOne.Roster);
+        await UpdateRoster(teamTwo.Roster);
+    }
 }

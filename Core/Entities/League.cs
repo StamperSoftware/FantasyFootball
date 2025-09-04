@@ -9,7 +9,6 @@ public class League : BaseEntity
     public IList<Game> Schedule { get; set; } = [];
     public required int Season { get; set; }
     public int CurrentWeek { get; set; }
-    [NotMapped]
-    public LeagueSettings Settings { get; set; } = null!;
+    [NotMapped] public LeagueSettings Settings { get; set; } = null!;
     
 }

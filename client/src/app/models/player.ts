@@ -1,9 +1,6 @@
-﻿import { AppUser } from ".";
-
-export type Player = {
+﻿export type Player = {
     userId : string
-    appUser : AppUser
-    user? : AppUser
+    userName : string
     id : number
     firstName : string
     lastName : string

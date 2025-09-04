@@ -44,7 +44,7 @@ export class LeagueDetailComponent implements OnInit {
     return this.leagueService.getLeague(this.id).subscribe({
       next:response => {
         this.league = response;
-        this.currentTeam = this.league?.teams.find(t => t.player.appUser.id == this.accountService.currentUser()?.id) ?? this.league?.teams[0];
+        this.currentTeam = this.league?.teams.find(t => t.player.userId == this.accountService.currentUser()?.id) ?? this.league?.teams[0];
         this.getWeeklySchedule();
       },
     });

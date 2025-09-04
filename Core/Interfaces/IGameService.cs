@@ -9,4 +9,5 @@ public interface IGameService
     public Task FinalizeGameAsync(int gameId);
     public Task FinalizeGamesAsync();
     public Task UpdateScoreAsync(int gameId);
+    public Task DeleteGames(IEnumerable<int> gameIds);
 }

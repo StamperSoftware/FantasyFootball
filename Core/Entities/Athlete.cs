@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
-
+﻿
 namespace Core.Entities;
 
 public class Athlete : BaseEntity

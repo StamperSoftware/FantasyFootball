@@ -10,15 +10,13 @@ public class UserTeamService(FantasyFootballContext db, IRosterService rosterSer
 
     private async Task _AddAthleteToTeamAsync(UserTeam team, int athleteId)
     {
-        var athlete = await db.Athletes.FindAsync(athleteId);
-        if (athlete == null) throw new Exception("Could not get athlete");
+        var athlete = await db.Athletes.FindAsync(athleteId) ?? throw new Exception("Could not get athlete");
         await rosterService.AddAthlete(athlete, team.RosterId);
     }
 
     private async Task<UserTeam> _GetTeamAsync(int teamId)
     {
-        var team = await db.UserTeams.FindAsync(teamId);
-        if (team == null) throw new Exception("Could not get team");
+        var team = await db.UserTeams.FindAsync(teamId) ?? throw new Exception("Could not get team");
         team.Roster = await rosterService.GetRoster(team.RosterId);
         return team;
     }
@@ -73,22 +71,8 @@ public class UserTeamService(FantasyFootballContext db, IRosterService rosterSer
         var teamTwo = await GetUserTeamFullDetailAsync(teamTwoId);
 
         if (teamOne == null || teamTwo == null) throw new Exception("Could not find team");
-        var athletes = db.Athletes.Where(a => teamOneAthleteIds.Contains(a.Id) || teamTwoAthleteIds.Contains(a.Id));
-        foreach (var id in teamOneAthleteIds)
-        {
-            var athlete = await athletes.FirstOrDefaultAsync(a => a.Id == id);
-            if (athlete == null) throw new Exception($"Could not find athlete with id {id}");
-            await rosterService.DropAthlete(athlete, teamOne.RosterId);
-            await rosterService.AddAthlete(athlete, teamTwo.RosterId);
-        }
+        await rosterService.HandleTradeAsync(teamOne, teamTwo, db.Athletes.Where(a => teamOneAthleteIds.Contains(a.Id)).ToList(), db.Athletes.Where(a => teamTwoAthleteIds.Contains(a.Id)).ToList());
         
-        foreach (var id in teamTwoAthleteIds)
-        {
-            var athlete = await athletes.FirstOrDefaultAsync(a => a.Id == id);
-            if (athlete == null) throw new Exception($"Could not find athlete with id {id}");
-            await rosterService.AddAthlete(athlete, teamOne.RosterId);
-            await rosterService.DropAthlete(athlete, teamTwo.RosterId);
-        }
     }
     
     public async Task DropAthleteFromTeamAsync(int teamId, int athleteId)

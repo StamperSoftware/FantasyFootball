@@ -9,7 +9,7 @@ public class Player : BaseEntity
     
     [Required] public required string FirstName { get; set; }
     [Required] public required string LastName { get; set; }
-    public AppUser User { get; set; }
+    public required AppUser User { get; set; }
     public required string UserId { get; set; }
     
     public Player() {}
@@ -22,5 +22,4 @@ public class Player : BaseEntity
         FirstName = firstName;
         LastName = lastName;
     }
-    
 }

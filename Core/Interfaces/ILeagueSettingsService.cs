@@ -9,4 +9,5 @@ public interface ILeagueSettingsService
     Task UpdateLeagueSettings(LeagueSettings updateLeagueSettings);
  
     Task<LeagueSettings> CreateLeagueSettings(int leagueId);
+    Task DeleteLeagueSettings(int leagueId);
 }

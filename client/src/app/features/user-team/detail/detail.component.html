@@ -5,7 +5,7 @@
             <h2>{{team.name}}</h2>
         </div>
         <div>
-            <button class="btn" routerLink="/players/{{team.player.id}}">{{team.player.appUser.userName}}</button>
+            <button class="btn" routerLink="/players/{{team.player.id}}">{{team.player.userName}}</button>
             <fa-icon [icon]="faEdit" class="btn" (click)="openEditModal()"/>
         </div>
     </section>

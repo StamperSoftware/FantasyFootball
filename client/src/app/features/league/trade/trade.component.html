@@ -23,7 +23,16 @@
                         </tr>
                         </thead>
                         <tbody>
-                            @for (athlete of sendingTeam?.team?.athletes; track athlete.id) {
+                            @for (athlete of sendingTeam?.team?.roster?.starters; track athlete.id) {
+                                <tr>
+                                    <td>{{Position[athlete.position]}}</td>
+                                    <td>{{athlete.firstName}} {{athlete.lastName}}</td>
+                                    <td>
+                                        <input class="form-check-input float-end" id="receiving-team-{{athlete.id}}" type="checkbox" (change)="updateOffer(athlete.id, sendingTeam?.offer)">
+                                    </td>
+                                </tr>
+                            }
+                            @for (athlete of sendingTeam?.team?.roster?.bench; track athlete.id) {
                                 <tr>
                                     <td>{{Position[athlete.position]}}</td>
                                     <td>{{athlete.firstName}} {{athlete.lastName}}</td>
@@ -65,7 +74,16 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @for (athlete of receivingTeam?.team?.athletes; track athlete.id) {
+                            @for (athlete of receivingTeam?.team?.roster?.starters; track athlete.id) {
+                                <tr>
+                                    <td>{{Position[athlete.position]}}</td>
+                                    <td>{{athlete.firstName}} {{athlete.lastName}}</td>
+                                    <td>
+                                        <input class="form-check-input float-end" id="receiving-team-{{athlete.id}}" type="checkbox" (change)="updateOffer(athlete.id, receivingTeam?.offer)">
+                                    </td>
+                                </tr>
+                            }
+                            @for (athlete of receivingTeam?.team?.roster?.bench; track athlete.id) {
                                 <tr>
                                     <td>{{Position[athlete.position]}}</td>
                                     <td>{{athlete.firstName}} {{athlete.lastName}}</td>

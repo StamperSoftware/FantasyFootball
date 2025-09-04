@@ -11,4 +11,9 @@ public interface IRosterService
     Task DropAthlete(Athlete athlete, string rosterId);
     Task MoveAthleteToBench(Athlete athlete, string rosterId);
     Task MoveAthleteToStarters(Athlete athlete, string rosterId);
+    Task DeleteRoster(string rosterId);
+    Task DeleteRosters(IEnumerable<string> rosterIds);
+
+    Task HandleTradeAsync(UserTeam teamOne, UserTeam teamTwo, IList<Athlete> teamOneAthletes,
+        IList<Athlete> teamTwoAthletes);
 }

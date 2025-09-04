@@ -27,7 +27,7 @@
                             @for (team of league.teams; track team.id) {
                                 <tr class="clickable" routerLink="user-teams/{{team.id}}">
                                     <td>{{team.name}}</td>
-                                    <td>{{team.player.appUser.userName}}</td>
+                                    <td>{{team.player.userName}}</td>
                                     <td>{{team.wins}}-{{team.losses}}-{{team.ties}}</td>
                                 </tr>
                             }

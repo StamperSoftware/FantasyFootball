@@ -1,9 +1,9 @@
 ﻿namespace Core.Entities;
 
-public class AthleteSeasonStats:BaseEntity
+public class AthleteSeasonStats(int athleteId, int season):BaseEntity
 {
-    public int AthleteId { get; set; }
-    public int Season { get; set; }
+    public int AthleteId { get; set; } = athleteId;
+    public int Season { get; set; } = season;
     public int Receptions { get; set; }
     public int ReceivingYards { get; set; }
     public int ReceivingTouchdowns { get; set; }
@@ -11,20 +11,4 @@ public class AthleteSeasonStats:BaseEntity
     public int RushingTouchdowns { get; set; }
     public int PassingYards { get; set; }
     public int PassingTouchdowns { get; set; }
-
-    public AthleteSeasonStats() {}
-
-    public AthleteSeasonStats(IList<AthleteWeeklyStats> weeklyStats)
-    {
-        foreach (var stat in weeklyStats)
-        {
-            Receptions += stat.Receptions;
-            ReceivingTouchdowns += stat.ReceivingTouchdowns;
-            ReceivingYards += stat.ReceivingYards;
-            PassingTouchdowns += stat.PassingTouchdowns;
-            PassingYards += stat.PassingYards;
-            RushingTouchdowns += stat.RushingTouchdowns;
-            RushingYards += stat.RushingYards;
-        }
-    }
 }
