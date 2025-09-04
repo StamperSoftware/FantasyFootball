@@ -62,8 +62,7 @@ public class AccountsController(SignInManager<AppUser> signInManager, UserManage
     {
         if (User.Identity?.IsAuthenticated == false) return NoContent();
         var user = await signInManager.UserManager.GetUserByEmail(User);
-
-        return Ok(new AppUserDto(user));
+        return Ok(user.Convert());
     }
 
     [HttpGet("auth-status")]

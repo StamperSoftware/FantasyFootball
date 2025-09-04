@@ -17,18 +17,4 @@ public class UserTeamDto
     public int Wins { get; set; }
     public int Losses { get; set; }
     public int Ties { get; set; }
-
-    public UserTeamDto(UserTeam team)
-    {
-        Id = team.Id;
-        LeagueId = team.LeagueId;
-        Player = new PlayerDto(team.Player);
-        Name = team.Name;
-        RosterId = team.RosterId;
-        Roster = team.Roster;
-        Wins = team.Wins;
-        Losses = team.Losses;
-        Ties = team.Ties;
-    }
-    
 }

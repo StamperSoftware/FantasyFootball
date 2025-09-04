@@ -1,22 +1,11 @@
-﻿using Core.Entities;
-
-namespace API.DTOs;
+﻿namespace API.DTOs;
 
 public class AthleteDto
 {
     public int Id { get; set; }
-    public string FirstName { get; set; }
-    public string LastName { get; set; }
+    public required string FirstName { get; set; }
+    public required string LastName { get; set; }
+    public int TeamId { get; set; }
     public TeamDto? Team { get; set; }
     public PositionDto Position { get; set; }
-    
-    public AthleteDto(Athlete athlete)
-    {
-        Id = athlete.Id;
-        FirstName = athlete.FirstName;
-        LastName = athlete.LastName;
-        Team = new TeamDto(athlete.Team);
-        Position = (PositionDto) athlete.Position;
-    }
-    
 }

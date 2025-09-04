@@ -1,4 +1,5 @@
 ﻿using API.DTOs;
+using API.Extensions;
 using Core.Entities;
 using Core.Interfaces;
 using Core.Specifications;
@@ -21,7 +22,7 @@ public class LeaguesController(IGenericRepository<League> repo, ILeagueService s
         var league = await service.GetLeagueWithFullDetailsAsync(id);
         
         if (league is null) return BadRequest($"could not find league with id:{id}");
-        return Ok(new LeagueDto(league));
+        return Ok(league.Convert());
     }
     
     [HttpPost]

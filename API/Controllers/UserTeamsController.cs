@@ -1,4 +1,5 @@
 ﻿using API.DTOs;
+using API.Extensions;
 using Core.Entities;
 using Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -19,7 +20,7 @@ public class UserTeamsController(IGenericRepository<UserTeam> repo, IUserTeamSer
     {
         var team = await userTeamService.GetUserTeamFullDetailAsync(teamId);
         if (team == null) return BadRequest("Could not find team");
-        return Ok(new UserTeamDto(team));
+        return Ok(team.Convert());
     }
 
     [HttpPut]

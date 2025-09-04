@@ -1,4 +1,5 @@
 ﻿using API.DTOs;
+using API.Extensions;
 using Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,7 +12,7 @@ public class AthleteController(IAthleteService service):BaseApiController
     public async Task<ActionResult<IReadOnlyList<AthleteDto>>> GetAthletes()
     {
         var athletes = await service.GetAthletesWithTeamsAsync();
-        return Ok(athletes.Select(athlete => new AthleteDto(athlete)));
+        return Ok(athletes.Select(athlete => athlete.Convert()));
     }
 
     [HttpGet("{id:int}")]

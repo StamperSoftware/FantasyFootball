@@ -1,4 +1,5 @@
 ﻿using API.DTOs;
+using API.Extensions;
 using Core.Entities;
 using Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -13,7 +14,7 @@ public class GamesController(IGameService gameService):BaseApiController
         var game = await gameService.GetGame(gameId);
         
         if (game == null) return BadRequest("Could not get game");
-        return Ok(new GameDto(game));
+        return Ok(game.Convert());
     }
 
 

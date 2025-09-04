@@ -11,13 +11,4 @@ public class LeagueDto
     public int Season { get; set; }
     public LeagueSettings Settings { get; set; }
 
-    public LeagueDto(League league)
-    {
-        Id = league.Id;
-        Teams = league.Teams.Select(team => new UserTeamDto(team)).ToList();
-        Name = league.Name;
-        Season = league.Season;
-        Settings = league.Settings;
-        Schedule = league.Schedule?.Select(g => new GameDto(g)).ToList();
-    }
 }

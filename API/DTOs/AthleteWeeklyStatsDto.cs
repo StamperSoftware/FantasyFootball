@@ -17,18 +17,4 @@ public class AthleteWeeklyStatsDto
 
     public int Score { get; set; } 
 
-    public AthleteWeeklyStatsDto(AthleteWeeklyStats aws)
-    {
-        Receptions = aws.Receptions;
-        PassingTouchdowns = aws.PassingTouchdowns;
-        PassingYards = aws.PassingYards;
-        RushingTouchdowns = aws.RushingTouchdowns;
-        RushingYards = aws.RushingYards;
-        ReceivingTouchdowns = aws.ReceivingTouchdowns;
-        ReceivingYards = aws.ReceivingYards;
-        Score= Receptions + ((ReceivingTouchdowns + RushingTouchdowns + PassingTouchdowns) * 6) + ((ReceivingYards + RushingYards + PassingYards) /10);
-        Week = aws.Week;
-        Season = aws.Season;
-        AthleteId = aws.AthleteId;
-    }
 }

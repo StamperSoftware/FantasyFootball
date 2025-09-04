@@ -11,7 +11,7 @@ public class Athlete : BaseEntity
     public Team Team { get; set; } = null!;
     public Position Position { get; set; }
     public IList<AthleteWeeklyStats> WeeklyStats { get; set; } = [];
-    public AthleteSeasonStats SeasonStats { get; set; } = new();
+    public IList<AthleteSeasonStats> SeasonStats { get; set; } = [];
 }
 
 public enum Position
