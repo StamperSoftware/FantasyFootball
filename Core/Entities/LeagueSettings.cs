@@ -9,7 +9,7 @@ public class LeagueSettings(int leagueId)
     public int LeagueId { get; set; } = leagueId;
     public int NumberOfGames { get; set; } = 12;
     public int NumberOfTeams { get; set; } = 10;
-    public int RosterLimit { get; set; } = 20;
+    public int RosterLimit { get; set; } = 15;
     public int StartingQuarterBackLimit { get; set; } = 1;
     public int StartingRunningBackLimit { get; set; } = 2;
     public int StartingWideReceiverLimit { get; set; } = 3;

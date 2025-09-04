@@ -12,7 +12,7 @@ public class AthleteController(IAthleteService service):BaseApiController
     public async Task<ActionResult<IReadOnlyList<AthleteDto>>> GetAthletes()
     {
         var athletes = await service.GetAthletesWithTeamsAsync();
-        return Ok(athletes.Select(athlete => athlete.Convert()));
+        return Ok(athletes.OrderBy(a => a.Position).ThenBy(a => a.LastName).Select(athlete => athlete.Convert()));
     }
 
     [HttpGet("{id:int}")]
