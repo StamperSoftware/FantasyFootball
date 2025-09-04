@@ -30,6 +30,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserTeamService, UserTeamService>();
 builder.Services.AddScoped<IAthleteService, AthleteService>();
 builder.Services.AddScoped<IGameService, GameService>();
+builder.Services.AddScoped<IPlayerService, PlayerService>();
 builder.Services.AddScoped<IRosterService, RosterService>();
 builder.Services.AddScoped<ISiteSettingsService, SiteSettingsService>();
 builder.Services.AddScoped<ILeagueSettingsService, LeagueSettingsService>();

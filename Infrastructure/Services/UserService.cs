@@ -9,13 +9,11 @@ public class UserService(FantasyFootballContext db) : IUserService
 {
     public async Task<AppUser> GetUser(string userId)
     {
-        var user = await db.Users.FindAsync(userId);
-        if (user == null) throw new Exception("Could not find user");
-        return user;
+        return await db.Users.FindAsync(userId) ?? throw new Exception("Could not find user");
     }
 
     public async Task<IList<AppUser>> GetUsers()
     {
-        return await db.Users.ToListAsync();
+        return await db.Users.Where(u => u.EmailConfirmed).ToListAsync();
     }
 }
