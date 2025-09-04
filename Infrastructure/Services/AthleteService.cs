@@ -5,8 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Services;
 
-public class AthleteService(FantasyFootballContext db) : IAthleteService
+public class AthleteService(FantasyFootballContext db, ISiteSettingsService siteSettingsService) : IAthleteService
 {
+    private readonly Random _random = new();
     
     public async Task<IList<Athlete>> GetAthletesWithTeamsAsync() => await db.Athletes.Include(a => a.Team).ToListAsync();
     public async Task<IList<Athlete>> GetAthletes() => await db.Athletes.ToListAsync();
@@ -62,6 +63,71 @@ public class AthleteService(FantasyFootballContext db) : IAthleteService
             await db.AthleteWeeklyStats.AddAsync(stats);
         }
         
+        await db.SaveChangesAsync();
+    }
+
+    public async Task GenerateWeeklyStats()
+    {
+        var siteSettings = await siteSettingsService.GetSettings();
+        var athletes = await db.Athletes.ToListAsync();
+        List<AthleteWeeklyStats> aws = [];
+        
+        foreach (var athlete in athletes)
+        {
+            
+            var receptions = 0;
+            var receivingYards =  0;
+            var receivingTouchdowns = 0;
+            var passingYards = 0;
+            var passingTouchdowns = 0;
+            var rushingYards = 0;
+            var rushingTouchdowns = 0;
+
+            switch (athlete.Position)
+            {
+                case Position.QuarterBack:
+                    passingYards = _random.Next(150,450);
+                    passingTouchdowns = _random.Next(0, 5);
+                    rushingYards = _random.Next(0,50);
+                    rushingTouchdowns = _random.Next(0, 2);
+
+                    break;
+                case Position.RunningBack:
+                    receptions = _random.Next(0, 5);
+                    receivingYards =  receptions > 0 ? _random.Next(10,30) : 0;
+                    receivingTouchdowns = receptions > 0 ? _random.Next(0, receptions/2) : 0;
+                    rushingYards = _random.Next(40,200);
+                    rushingTouchdowns = _random.Next(0, 5);
+                    break;
+                case Position.WideReceiver:
+                    receptions = _random.Next(3, 10);
+                    receivingYards = _random.Next(60,160);
+                    receivingTouchdowns = _random.Next(0, (receptions/2)+1);
+                    break;
+                case Position.TightEnd:
+                    receptions = _random.Next(3, 7);
+                    receivingYards =  _random.Next(30,90);
+                    receivingTouchdowns = _random.Next(0, receptions/2);
+                    break;
+                case Position.Defense:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            aws.Add(new AthleteWeeklyStats(siteSettings.CurrentWeek, siteSettings.CurrentSeason, athlete.Id)
+            {
+                Receptions=receptions,
+                ReceivingYards = receivingYards, 
+                ReceivingTouchdowns = receivingTouchdowns,
+                PassingYards = passingYards, 
+                PassingTouchdowns = passingTouchdowns, 
+                RushingYards = rushingYards, 
+                RushingTouchdowns = rushingTouchdowns
+            });
+        }
+
+        await db.AthleteWeeklyStats.AddRangeAsync(aws);
         await db.SaveChangesAsync();
     }
 }
