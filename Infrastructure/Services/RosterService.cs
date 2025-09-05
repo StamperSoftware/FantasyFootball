@@ -18,9 +18,9 @@ public class RosterService:IRosterService
         _rosters = mongoDb.GetCollection<Roster>(dbSettings.Value.Rosters);
     }
     
-    public async Task<Roster?> GetRoster(string id)
+    public async Task<Roster> GetRoster(string id)
     {
-        return await _rosters.Find(r => r.Id == id).FirstOrDefaultAsync();
+        return await _rosters.Find(r => r.Id == id).FirstOrDefaultAsync() ?? throw new Exception("Could not get roster");
     }
 
     public async Task DeleteRoster(string id)

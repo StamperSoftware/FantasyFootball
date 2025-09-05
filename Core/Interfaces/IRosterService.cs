@@ -4,7 +4,7 @@ namespace Core.Interfaces;
 
 public interface IRosterService
 {
-    Task<Roster?> GetRoster(string id);
+    Task<Roster> GetRoster(string id);
     Task UpdateRoster(Roster roster);
     Task<Roster> CreateRoster();
     Task AddAthlete(Athlete athlete, string rosterId);
