@@ -12,16 +12,16 @@ export class GameService {
     private apiUrl = environment.apiUrl;
     private gameUrl = `${this.apiUrl}/games`;
 
-    getGame(gameId:number) {
+    getGame(gameId:string) {
         return this.http.get<Game>(`${this.gameUrl}/${gameId}`);
     }
-    finalizeGame(id:number){
+    finalizeGame(id:string){
         return this.http.put(`${this.gameUrl}/${id}/finalize`, {});
     }
     finalizeGames(){
         return this.http.put(`${this.gameUrl}/finalize`, {});
     }
-    updateScore(id:number){
+    updateScore(id:string){
         return this.http.put(`${this.gameUrl}/${id}/score`, {});
     }
 }

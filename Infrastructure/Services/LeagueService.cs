@@ -60,13 +60,13 @@ public class LeagueService(FantasyFootballContext db, IPlayerService playerServi
                     .OrderBy(t => _random.Next())
                     .First();
                 
-                league.Schedule.Add(GameFactory.CreateGame(team, matchup, week, _siteSettings.CurrentSeason));
+                league.Schedule.Add(GameFactory.CreateGame(team, matchup, week, _siteSettings.CurrentSeason, leagueId));
                 playedTeamIds.Add(team.Id);
                 playedTeamIds.Add(matchup.Id);
             }
         }
 
-        await db.SaveChangesAsync();
+        await gameService.AddGames(league.Schedule);
     }
 
     public async Task DeleteLeague(int leagueId)
@@ -86,15 +86,10 @@ public class LeagueService(FantasyFootballContext db, IPlayerService playerServi
             .Include(l => l.Teams.OrderBy(t => id))
                 .ThenInclude(t => t.Player)
                     .ThenInclude(p => p.User)
-            .Include(l => l.Schedule)
             .FirstOrDefaultAsync(l => l.Id == id) ?? throw new Exception("Could not get league");
 
         league.Settings = await leagueSettingsService.GetLeagueSettings(league.Id) ?? throw new Exception("Could not get settings");
-
-        for (int i = 0; i < league.Schedule.Count; i++)
-        {
-            league.Schedule[i] = await gameService.GetFullDetailAsync(league.Schedule[i].Id) ?? throw new Exception("Could not get game");
-        }
+        league.Schedule = await gameService.GetLeagueGames(league.Id) ?? throw new Exception("Could not get games");
         
         for (int i = 0; i < league.Teams.Count; i++)
         {

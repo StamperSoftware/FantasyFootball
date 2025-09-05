@@ -1,7 +1,7 @@
 ﻿import { UserTeam, WeeklyStats } from ".";
 
 export type Game = {
-    id : number
+    id : string
     home : UserTeam
     away : UserTeam
     week : number

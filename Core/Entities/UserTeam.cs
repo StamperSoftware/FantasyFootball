@@ -13,9 +13,11 @@ public class UserTeam : BaseEntity
     public int Losses { get; set; }
     public int Ties { get; set; }
     public required string RosterId { get; set; } = "";
-    [NotMapped] public Roster? Roster { get; set; }
+    [NotMapped] public Roster Roster { get; set; } = new();
     [NotMapped] public bool IsOnline { get; set; }
+    [NotMapped] public IList<Game?> Schedule { get; set; } = [];
     public int DraftOrder { get; set; }
+    
     public UserTeam(){}
 
     [SetsRequiredMembers]

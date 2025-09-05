@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Services;
 
-public class UserTeamService(FantasyFootballContext db, IRosterService rosterService) : IUserTeamService
+public class UserTeamService(FantasyFootballContext db, IRosterService rosterService, IGameService gameService) : IUserTeamService
 {
 
     private async Task _AddAthleteToTeamAsync(UserTeam team, int athleteId)
@@ -31,6 +31,19 @@ public class UserTeamService(FantasyFootballContext db, IRosterService rosterSer
         if (team is null) return null;
         
         team.Roster = await rosterService.GetRoster(team.RosterId);
+        return team;
+    }
+    public async Task<UserTeam?> GetUserTeamScheduleAsync(int id)
+    {
+        var team = await db.UserTeams
+            .Include(t => t.Player)
+                .ThenInclude(p => p.User)
+            .FirstOrDefaultAsync(t => t.Id == id);
+
+        if (team is null) return null;
+        
+        team.Roster = await rosterService.GetRoster(team.RosterId);
+        team.Schedule = await gameService.GetUserGames(id);
         return team;
     }
 

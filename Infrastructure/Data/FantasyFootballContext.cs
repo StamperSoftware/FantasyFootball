@@ -19,7 +19,5 @@ public class FantasyFootballContext(DbContextOptions<FantasyFootballContext> opt
     
     public DbSet<Athlete> Athletes { get; set; }
     
-    public DbSet<Game> Games { get; set; }
-    
     public DbSet<AthleteWeeklyStats> AthleteWeeklyStats { get; set; }
 }

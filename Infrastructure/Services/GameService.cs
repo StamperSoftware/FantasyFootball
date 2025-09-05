@@ -12,61 +12,54 @@ public class GameService:IGameService
 {
     private readonly IMongoCollection<Game> _games;
     private readonly FantasyFootballContext _db;
-    private readonly IRosterService _rosterService;
     private readonly ISiteSettingsService _siteSettingsService;
-    private readonly IUserTeamService _userTeamService;
+    private readonly ILeagueSettingsService _leagueSettingsService;
     
-    public GameService(IOptions<DbSettings> dbSettings,FantasyFootballContext db, IRosterService rosterService, ISiteSettingsService siteSettingsService, IUserTeamService userTeamService)
+    public GameService(IOptions<DbSettings> dbSettings, FantasyFootballContext db, ISiteSettingsService siteSettingsService, ILeagueSettingsService leagueSettingsService)
     {
         var mongoClient = new MongoClient(dbSettings.Value.ConnectionString);
         var mongoDb = mongoClient.GetDatabase(dbSettings.Value.DatabaseName);
         _games = mongoDb.GetCollection<Game>(dbSettings.Value.Games);
         _db = db;
-        _rosterService = rosterService;
         _siteSettingsService = siteSettingsService;
-        _userTeamService = userTeamService;
+        _leagueSettingsService = leagueSettingsService;
     }
-
     
-    public async Task<Game?> GetFullDetailAsync(int gameId)
+    public async Task<Game?> GetFullDetailAsync(string gameId)
     {
-        var game = await _db.Games
-            .FirstOrDefaultAsync(g => g.Id == gameId);
-
-        if (game == null) throw new Exception("Could not get game");
-        game.Home = await _userTeamService.GetUserTeamFullDetailAsync(game.HomeId) ?? throw new Exception("Could not get home team");
-        var homeRoster = await _rosterService.GetRoster(game.Home.RosterId) ?? throw new Exception("Could not get roster");
-        game.Home.Roster = homeRoster;
-        game.Away = await _userTeamService.GetUserTeamFullDetailAsync(game.AwayId) ??  throw new Exception("Could not get home team");
-        var awayRoster = await _rosterService.GetRoster(game.Away.RosterId) ?? throw new Exception("Could not get roster");
-        game.Away.Roster = awayRoster;
-        var athleteIds = homeRoster.Starters.Union(homeRoster.Bench).Union(awayRoster.Starters).Union(awayRoster.Bench)
+        var game = await _games.Find(g => g.Id == gameId).FirstOrDefaultAsync() ?? throw new Exception("Could not get game");
+        var leagueSettings = await _leagueSettingsService.GetLeagueSettings(game.LeagueId) ?? throw new Exception("Could not get league settings");
+        
+        var athleteIds = game.Home.Roster.Starters.Union(game.Home.Roster.Bench).Union(game.Away.Roster.Starters).Union(game.Away.Roster.Bench)
             .Select(a => a.Id);
 
         game.WeeklyStats = await _db.AthleteWeeklyStats.Where(aws => athleteIds.Contains(aws.AthleteId))
             .Where(aws => aws.Season == game.Season).Where(aws => aws.Week == game.Week).ToListAsync();
         
+        var homeStarterIds = game.Home.Roster.Starters.Select(a => a.Id);
+        var awayStarterIds = game.Away.Roster.Starters.Select(a => a.Id);
+
+        var homeStats = game.WeeklyStats.Where(aws => homeStarterIds.Contains(aws.AthleteId));
+        var awayStats = game.WeeklyStats.Where(aws => awayStarterIds.Contains(aws.AthleteId));
+        
+        game.HomeScore = _calculateScore(homeStats, leagueSettings);
+        game.AwayScore = _calculateScore(awayStats, leagueSettings);
+        
         return game;
     }
 
-
-    public async Task<Game?> GetGame(int gameId)
+    public async Task<Game?> GetGame(string gameId)
     {
-        if (await _db.Games.AnyAsync(g => g.Id == gameId && g.IsFinalized))
-        {
-            return await _games.Find(g => g.Id == gameId).FirstOrDefaultAsync();
-        }
-
-        return await GetFullDetailAsync(gameId) ?? throw new Exception("Could not get game");
+        return await GetFullDetailAsync(gameId);
     }
 
-
-    public async Task UpdateScoreAsync(int gameId)
+    public async Task UpdateScoreAsync(string gameId)
     {
         var game = await GetFullDetailAsync(gameId) ?? throw new Exception("Could not get game");
-
+        if (game.IsFinalized) throw new Exception("Game is final");
         if (game.Away.Roster is null || game.Home.Roster is null) throw new Exception("Could not get rosters");
         
+        var leagueSettings = await _leagueSettingsService.GetLeagueSettings(game.LeagueId) ?? throw new Exception("Could not get league settings");
         var homeStarterIds = game.Home.Roster.Starters.Select(a => a.Id);
         var awayStarterIds = game.Away.Roster.Starters.Select(a => a.Id);
 
@@ -77,91 +70,120 @@ public class GameService:IGameService
         
         var homeStats = weeklyStats.Where(aws => homeStarterIds.Contains(aws.AthleteId));
         var awayStats = weeklyStats.Where(aws => awayStarterIds.Contains(aws.AthleteId));
-        
-        game.HomeScore = _calculateScore(homeStats);
-        game.AwayScore = _calculateScore(awayStats);
-        
-        await _db.SaveChangesAsync();
+
+        game.HomeScore = _calculateScore(homeStats, leagueSettings);
+        game.AwayScore = _calculateScore(awayStats, leagueSettings);
     }
     
-    public async Task FinalizeGameAsync(int gameId)
+    public async Task FinalizeGameAsync(string gameId)
     {
         var game = await GetFullDetailAsync(gameId) ?? throw new Exception("Could not get Game");
-        _finalizeGameAsync(game);
-        await _games.InsertOneAsync(game);
-        await _db.SaveChangesAsync();
+        _finalizeGame(game);
+        await _games.ReplaceOneAsync(g=>g.Id == game.Id,game);
     }
 
     public async Task FinalizeGamesAsync()
     {
         var siteSettings = await _siteSettingsService.GetSettings();
         
-        var games = await _db.Games
-            .Where(g => g.Season == siteSettings.CurrentSeason)
-            .Where(g => g.Week == siteSettings.CurrentWeek)
-            .ToListAsync();
-
-        foreach (var _game in games)
+        var games = await _games.Find(g =>
+            g.Season == siteSettings.CurrentSeason && g.Week == siteSettings.CurrentWeek && !g.IsFinalized).ToListAsync();
+        
+        foreach (var game in games)
         {
-            var game = await GetFullDetailAsync(_game.Id) ?? throw new Exception("Could not get game");
-            var homeRoster = await _rosterService.GetRoster(game.Home.RosterId) ?? throw new Exception("Could not get roster");
-            game.Home.Roster = homeRoster;
-            var awayRoster = await _rosterService.GetRoster(game.Away.RosterId) ?? throw new Exception("Could not get roster");
-            game.Away.Roster = awayRoster;
-            var athleteIds = homeRoster.Starters.Union(homeRoster.Bench).Union(awayRoster.Starters).Union(awayRoster.Bench)
+            var leagueSettings = await _leagueSettingsService.GetLeagueSettings(game.LeagueId) ?? throw new Exception("Could not get league settings");
+            var athleteIds = game.Home.Roster.Starters.Union(game.Home.Roster.Bench).Union(game.Away.Roster.Starters).Union(game.Away.Roster.Bench)
                 .Select(a => a.Id);
-            var homeStarterIds = homeRoster.Starters.Select(a => a.Id);
-            var awayStarterIds = awayRoster.Starters.Select(a => a.Id);
+            var homeStarterIds = game.Home.Roster.Starters.Select(a => a.Id);
+            var awayStarterIds = game.Away.Roster.Starters.Select(a => a.Id);
+            
             game.WeeklyStats = await _db.AthleteWeeklyStats.Where(aws => athleteIds.Contains(aws.AthleteId))
                 .Where(aws => aws.Season == game.Season).Where(aws => aws.Week == game.Week).ToListAsync();
 
-            game.HomeScore = _calculateScore(game.WeeklyStats.Where(aws => homeStarterIds.Contains(aws.AthleteId)));
-            game.AwayScore = _calculateScore(game.WeeklyStats.Where(aws => awayStarterIds.Contains(aws.AthleteId)));
+            var homeStats = game.WeeklyStats.Where(aws => homeStarterIds.Contains(aws.AthleteId));
+            var awayStats = game.WeeklyStats.Where(aws => awayStarterIds.Contains(aws.AthleteId));
             
-            _finalizeGameAsync(game);
+            game.HomeScore = _calculateScore(homeStats, leagueSettings);
+            game.AwayScore = _calculateScore(awayStats, leagueSettings);
+            
+            _finalizeGame(game);
+            await _games.ReplaceOneAsync(g=>g.Id == game.Id, game);
         }
-
-        await _games.InsertManyAsync(games);
+        
         await _db.SaveChangesAsync();
     }
 
-    public async Task DeleteGames(IEnumerable<int> gameIds)
+    public async Task DeleteGames(IEnumerable<string> gameIds)
     {
         await _games.DeleteManyAsync(g => gameIds.Contains(g.Id));
     }
 
-    private void _finalizeGameAsync(Game game)
+    public async Task<List<Game>> GetUserGames(int userId)
+    {
+       return await _games.Find(g => g.HomeId == userId || g.AwayId == userId).ToListAsync();
+    } 
+    
+    public async Task<List<Game>> GetLeagueGames(int leagueId)
+    {
+       var games = await _games.Find(g => g.LeagueId == leagueId).ToListAsync();
+       foreach (var game in games)
+       {
+           var leagueSettings = await _leagueSettingsService.GetLeagueSettings(game.LeagueId) ?? throw new Exception("Could not get league settings");
+           var athleteIds = game.Home.Roster.Starters.Union(game.Home.Roster.Bench).Union(game.Away.Roster.Starters).Union(game.Away.Roster.Bench)
+               .Select(a => a.Id);
+           var homeStarterIds = game.Home.Roster.Starters.Select(a => a.Id);
+           var awayStarterIds = game.Away.Roster.Starters.Select(a => a.Id);
+            
+           game.WeeklyStats = await _db.AthleteWeeklyStats.Where(aws => athleteIds.Contains(aws.AthleteId))
+               .Where(aws => aws.Season == game.Season).Where(aws => aws.Week == game.Week).ToListAsync();
+
+           var homeStats = game.WeeklyStats.Where(aws => homeStarterIds.Contains(aws.AthleteId));
+           var awayStats = game.WeeklyStats.Where(aws => awayStarterIds.Contains(aws.AthleteId));
+            
+           game.HomeScore = _calculateScore(homeStats, leagueSettings);
+           game.AwayScore = _calculateScore(awayStats, leagueSettings);
+       }
+
+       return games;
+    }
+
+    public async Task AddGames(IList<Game> games)
+    {
+        await _games.InsertManyAsync(games);
+    }
+
+    private void _finalizeGame(Game game)
     {
         if (game.IsFinalized) throw new Exception("Game is already finalized");
         game.FinalizeGame();
-        
+        var home = _db.UserTeams.Find(game.HomeId) ?? throw new Exception("Could not get home team");
+        var away = _db.UserTeams.Find(game.AwayId) ?? throw new Exception("Could not get away team");
         if (game.HomeScore > game.AwayScore)
         {
-            game.Home.AddWin();
-            game.Away.AddLoss();
+            home.AddWin();
+            away.AddLoss();
         } else if (game.AwayScore > game.HomeScore)
         {
-            game.Home.AddLoss();
-            game.Away.AddWin();
+            home.AddLoss();
+            away.AddWin();
         }
         else
         {
-            game.Home.AddTie();
-            game.Away.AddTie();
+            home.AddTie();
+            away.AddTie();
         }
     }
 
-    private int _calculateScore(IEnumerable<AthleteWeeklyStats> stats)
+    private double _calculateScore(IEnumerable<AthleteWeeklyStats> stats, LeagueSettings settings)
     {
-        var score = 0;
+        var score = 0.0;
         foreach (var stat in stats)
         {
-            score += stat.Receptions;
-            score += (stat.ReceivingTouchdowns + stat.PassingTouchdowns + stat.RushingTouchdowns) * 6;
-            score += (stat.ReceivingYards + stat.PassingYards + stat.RushingYards) / 10;
+            score += (stat.Receptions * settings.ReceptionScore);
+            score += (stat.ReceivingTouchdowns * settings.ReceivingTouchdownsScore)+ (stat.PassingTouchdowns*settings.PassingTouchdownsScore) + (stat.RushingTouchdowns*settings.RushingTouchdownsScore);
+            score += (stat.ReceivingYards * settings.ReceivingYardsScore) + (stat.PassingYards*settings.PassingYardsScore) + (stat.RushingYards*settings.RushingYardsScore);
         }
-        return score;
+        return Math.Round(score,2);
 
     }
-    
 }

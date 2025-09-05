@@ -8,8 +8,8 @@ namespace API.Controllers;
 
 public class GamesController(IGameService gameService):BaseApiController
 {
-    [HttpGet("{gameId:int}")]
-    public async Task<ActionResult<GameDto>> GetGame(int gameId)
+    [HttpGet("{gameId}")]
+    public async Task<ActionResult<GameDto>> GetGame(string gameId)
     {
         var game = await gameService.GetGame(gameId);
         
@@ -18,8 +18,8 @@ public class GamesController(IGameService gameService):BaseApiController
     }
 
 
-    [HttpPut("{gameId:int}/finalize")]
-    public async Task FinalizeGame(int gameId)
+    [HttpPut("{gameId}/finalize")]
+    public async Task FinalizeGame(string gameId)
     {
         await gameService.FinalizeGameAsync(gameId);
     }
@@ -29,8 +29,8 @@ public class GamesController(IGameService gameService):BaseApiController
         await gameService.FinalizeGamesAsync();
     }
 
-    [HttpPut("{gameId:int}/score")]
-    public async Task UpdateScores(int gameId)
+    [HttpPut("{gameId}/score")]
+    public async Task UpdateScores(string gameId)
     {
         await gameService.UpdateScoreAsync(gameId);
     }
