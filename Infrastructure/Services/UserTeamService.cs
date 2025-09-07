@@ -21,6 +21,16 @@ public class UserTeamService(FantasyFootballContext db, IRosterService rosterSer
         return team;
     }
 
+    public async Task<IList<UserTeam>> GetTeams()
+    {
+        return await db.UserTeams.ToListAsync();
+    }
+    
+    public async Task<IList<UserTeam>> GetTeams(string userId)
+    {
+        return await db.UserTeams.Include(t => t.Player).Where(t => t.Player.UserId == userId).ToListAsync();
+    }
+    
     public async Task<UserTeam?> GetUserTeamFullDetailAsync(int id)
     {
         var team = await db.UserTeams

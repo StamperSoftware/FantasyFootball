@@ -1,25 +1,27 @@
 <header>
-    <nav class="nav">
-        <div id="start-links">
-            <a routerLink="leagues" class="nav-link">Leagues</a>
-            <a routerLink="athletes" class="nav-link">Athletes</a>
-        </div>
-        <div id="middle-links">
-            
-        </div>
-        <div id="end-links">
-            
-            <div ngbDropdown>
-                <button ngbDropdownToggle class="btn nav-link">Account</button>
-                <div ngbDropdownMenu>
-                    @if (this.accountService.currentUser() == null) {
-                        <button ngbDropdownItem class="btn nav-link" (click)="openLoginModal()">Login</button>
-                        <button ngbDropdownItem class="btn nav-link" (click)="openRegisterModal()">Register</button>
-                    } @else {
-                        <button ngbDropdownItem class="btn nav-link" (click)="handleLogout()">Logout</button>
-                    }
-                </div>
+    <nav class="navbar navbar-expand">
+        <div class="nav container-fluid">
+            <a routerLink="/"><img class="navbar-brand" width="50px" src="/images/small-logo.svg" alt="logo"></a>
+          
+            <div id="start-links">
+                <a routerLink="leagues" class="nav-link">Leagues</a>
+                <a routerLink="athletes" class="nav-link">Athletes</a>
+            </div>
+            <div id="middle-links">
                 
+            </div>
+            <div id="end-links">
+                <div ngbDropdown>
+                    <button ngbDropdownToggle class="btn nav-link">Account</button>
+                    <div ngbDropdownMenu>
+                        @if (this.accountService.currentUser() == null) {
+                            <button ngbDropdownItem class="btn nav-link" (click)="openLoginModal()">Login</button>
+                            <button ngbDropdownItem class="btn nav-link" (click)="openRegisterModal()">Register</button>
+                        } @else {
+                            <button ngbDropdownItem class="btn nav-link" (click)="handleLogout()">Logout</button>
+                        }
+                    </div>
+                </div>
             </div>
         </div>
     </nav>

@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
-import { Router, RouterLink } from "@angular/router";
-import { AccountService } from "../../core/services/account.service";
+import { RouterLink } from "@angular/router";
+import { AccountService } from "@services";
 import { NgbDropdown, NgbDropdownItem, NgbDropdownMenu, NgbDropdownToggle, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { LoginComponent } from "../../features/account/login/login.component";
 import { RegisterComponent } from "../../features/account/register/register.component";
@@ -13,7 +13,7 @@ import { RegisterComponent } from "../../features/account/register/register.comp
         NgbDropdown,
         NgbDropdownMenu,
         NgbDropdownItem,
-        NgbDropdownToggle
+        NgbDropdownToggle,
     ],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'

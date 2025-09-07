@@ -1,1 +1,31 @@
-<h1>Stamper Software Fantasy Football</h1>
+
+@let user = accountService.currentUser();
+@if (user != null) {
+    <div>
+        <h3>Hello {{user.userName}}</h3>
+        
+        <div>
+            <h5>Teams:</h5>
+            <div class="striped">
+                @for(team of userTeams(); track team.id){
+                    <div class="d-flex justify-content-between w-25 px-2">
+                        <a routerLink="leagues/{{team.leagueId}}/user-teams/{{team.id}}">{{team.name}}</a>
+                        <div>
+                            {{team.wins}} - {{team.losses}} - {{team.ties}}
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+} @else {
+    <div>
+        <h1>Stamper Software Fantasy Football</h1>
+        
+        <div class="card w-50 mx-auto">
+            <div class="card-body d-flex justify-content-center gap-3">
+                <button class="btn btn-primary" (click)="openLoginModal()">Login</button> <button class="btn btn-secondary" (click)="openRegisterModal()">Register</button>
+            </div>
+        </div>
+    </div>
+}

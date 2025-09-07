@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
 import { environment } from "@environments";
 import { UserTeam } from "@models";
 
@@ -15,7 +15,10 @@ export class UserTeamService {
     return this.http.get<UserTeam>(`${this.teamUrl}/${teamId}`)
   }
   
-  getTeams() {
+  getUserTeams(userId:string) {
+    return this.http.get<UserTeam[]>(`${this.teamUrl}/user/${userId}`);
+  }
+  getTeams(){
     return this.http.get<UserTeam[]>(this.teamUrl);
   }
   
@@ -26,13 +29,14 @@ export class UserTeamService {
   dropAthlete(athleteId:number, teamId:number){
     return this.http.delete(`${this.teamUrl}/${teamId}/athletes/${athleteId}`);
   }
+  
   moveToBench(athleteId:number, teamId:number){
     return this.http.put(`${this.teamUrl}/${teamId}/bench/${athleteId}`, {});
   }
+  
   moveToStarters(athleteId:number, teamId:number){
     return this.http.put(`${this.teamUrl}/${teamId}/starters/${athleteId}`, {});
   }
-  
   
   tradeAthletes(teamOneId:number, teamTwoId:number, teamOneAthleteIds:number[], teamTwoAthleteIds:number[]){
     return this.http.put(`${this.teamUrl}/trade-athletes`, {teamOneId, teamTwoId, teamOneAthleteIds, teamTwoAthleteIds})

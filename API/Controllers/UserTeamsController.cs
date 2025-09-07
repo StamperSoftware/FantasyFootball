@@ -12,7 +12,12 @@ public class UserTeamsController(IGenericRepository<UserTeam> repo, IUserTeamSer
     [HttpGet]
     public async Task<ActionResult<IReadOnlyList<UserTeamDto>>> GetTeams()
     {
-        return Ok(await repo.ListAllAsync());
+        return Ok(await userTeamService.GetTeams());
+    } 
+    [HttpGet("user/{userId}")]
+    public async Task<ActionResult<IReadOnlyList<UserTeamDto>>> GetUserTeams(string userId)
+    {
+        return Ok(await userTeamService.GetTeams(userId));
     }
 
     [HttpGet("{teamId:int}")]

@@ -1,7 +1,9 @@
-nav {
+.nav {
   display : grid;
-  grid-template-columns: 1fr 9fr 1fr;
+  grid-template-columns: auto 1fr 8fr 1fr;
   border-bottom:solid 1px;
+  align-items: center;
+  padding:0 0 0 10px;
 }
 
 #start-links {

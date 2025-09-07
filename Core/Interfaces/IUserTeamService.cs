@@ -5,6 +5,8 @@ namespace Core.Interfaces;
 public interface IUserTeamService
 {
     public Task<UserTeam?> GetUserTeamFullDetailAsync(int id);
+    public Task<IList<UserTeam>> GetTeams();
+    public Task<IList<UserTeam>> GetTeams(string userId);
     public Task<UserTeam?> GetUserTeamScheduleAsync(int id);
     public Task AddAthleteToTeamAsync(int teamId, int athleteId);
     public Task AddAthletesToTeamAsync(int teamId, IList<int> athleteId);
