@@ -1,0 +1,78 @@
+<div class="d-flex container-fluid justify-content-evenly">
+    <div>
+        <h4>Your Requests</h4>
+        <table class="table">
+            @if (receivedRequests.length) {
+                <thead>
+                    <th>My Athletes</th>        
+                    <th>Their Athletes</th>
+                    <th></th>
+                </thead>
+                <tbody>
+                    @for (request of receivedRequests;track request.id) {
+                        <tr>
+                            <td>
+                                <div class="d-flex flex-column">
+                                    @for (athlete of request.myPlayers; track athlete.id){
+                                        <div>{{athlete.firstName}} {{athlete.lastName}}</div>
+                                    }
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex flex-column">
+                                    @for(athlete of request.theirPlayers; track athlete.id){
+                                       <div>{{athlete.firstName}} {{athlete.lastName}}</div>
+                                    }
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex gap-2 align-items-center justify-content-center">
+                                    <fa-icon title="Accept Trade" class="text-success" [icon]="faThumbsUp" (click)="confirmTradeRequest(request.id)"/>
+                                    <fa-icon title="Deny Trade" class="text-danger" [icon]="faThumbsDown" (click)="declineTradeRequest(request.id)" />
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            } @else{
+                <tr>You have no requests</tr>
+            }
+        </table>
+    </div>
+    
+    <div>
+        <h4>Pending Requests</h4>    
+        <table class="table">
+            @if (initiatedRequests.length) {
+                <thead>
+                    <th>My Athletes</th>
+                    <th>Their Athletes</th>
+                </thead>
+                <tbody>
+                    @for (request of initiatedRequests;track request.id) {
+                        <tr>
+                            <td>
+                                <div class="d-flex flex-column">
+                                    @for (athlete of request.myPlayers; track athlete.id){
+                                        <div>{{athlete.firstName}} {{athlete.lastName}}</div>
+                                    }
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex flex-column">
+                                    @for(athlete of request.theirPlayers; track athlete.id){
+                                       <div>{{athlete.firstName}} {{athlete.lastName}}</div>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            } @else{
+                <tr>You have no requests</tr>
+            }
+            
+        </table>
+    </div>
+</div>
+

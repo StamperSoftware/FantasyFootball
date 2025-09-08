@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import { environment } from "@environments";
-import { UserTeam } from "@models";
+import { TradeRequestTeamDto, UserTeam } from "@models";
 
 @Injectable({
   providedIn: 'root'
@@ -41,4 +41,25 @@ export class UserTeamService {
   tradeAthletes(teamOneId:number, teamTwoId:number, teamOneAthleteIds:number[], teamTwoAthleteIds:number[]){
     return this.http.put(`${this.teamUrl}/trade-athletes`, {teamOneId, teamTwoId, teamOneAthleteIds, teamTwoAthleteIds})
   }
+  
+  createTradeRequest(teamOneId:number, teamTwoId:number, teamOneAthleteIds:number[], teamTwoAthleteIds:number[]){
+    return this.http.post(`${this.teamUrl}/trade-request`, {teamOneId, teamTwoId, teamOneAthleteIds, teamTwoAthleteIds})
+  }
+  
+  getReceivedTradeRequests(teamId:number){
+    return this.http.get<TradeRequestTeamDto[]>(`${this.teamUrl}/${teamId}/received-trade-requests`)
+  }
+  
+  getInitiatedTradeRequests(teamId:number){
+    return this.http.get<TradeRequestTeamDto[]>(`${this.teamUrl}/${teamId}/initiated-trade-requests`)
+  }
+  
+  confirmTradeRequest(requestId:string){
+    return this.http.put(`${this.teamUrl}/trade-requests/${requestId}/confirm`, {});
+  }
+  
+  declineTradeRequest(requestId:string){
+    return this.http.put(`${this.teamUrl}/trade-requests/${requestId}/decline`, {});
+  }
+  
 }

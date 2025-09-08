@@ -11,4 +11,5 @@ public interface ILeagueService
     public Task CreateSchedule(int leagueId);
     public Task<IList<Athlete>> GetAvailableAthletes(int leagueId);
     public Task DeleteLeague(int leagueId);
+    public Task<bool> IsUserInLeague(string userId, int leagueId);
 }

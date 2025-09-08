@@ -14,7 +14,7 @@ public class AthleteService(FantasyFootballContext db, ISiteSettingsService site
 
     public async Task<Athlete> GetAthlete(int athleteId)
     {
-        return await db.Athletes.FirstOrDefaultAsync(a => a.Id == athleteId) ?? throw new Exception("Could not get athlete");
+        return await db.Athletes.Include(a => a.Team).FirstOrDefaultAsync(a => a.Id == athleteId) ?? throw new Exception("Could not get athlete");
     }
 
     public async Task<Athlete> GetAthleteWithStatsAsync(int athleteId)

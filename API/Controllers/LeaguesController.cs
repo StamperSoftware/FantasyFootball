@@ -103,5 +103,9 @@ public class LeaguesController(IGenericRepository<League> repo, ILeagueService s
         return Ok(await service.GetAvailableAthletes(leagueId));
     }
 
-
+    [HttpGet("{leagueId:int}/user/{userId}")]
+    public async Task<bool> IsUserInLeague(string userId, int leagueId)
+    {
+        return await service.IsUserInLeague(userId, leagueId);
+    }
 } 

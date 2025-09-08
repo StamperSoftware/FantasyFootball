@@ -2,6 +2,7 @@
 using Core.Interfaces;
 using Infrastructure.Data;
 using Infrastructure.Factories;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Services;
@@ -109,7 +110,12 @@ public class LeagueService(FantasyFootballContext db, IPlayerService playerServi
     {
         return !league.Teams.Any(t => t.Roster is not null && t.Roster.Starters.Union(t.Roster.Bench).Any(a => athleteIds.Contains(a.Id)));
     }
-    
+
+    public async Task<bool> IsUserInLeague(string userId, int leagueId)
+    {
+        var league = await db.Leagues.Include(l => l.Teams).ThenInclude(t => t.Player).FirstOrDefaultAsync(l => l.Id == leagueId) ?? throw new Exception("Could not get league");
+        return league.Teams.Any(t => t.Player.UserId == userId);
+    }
     
 }
 

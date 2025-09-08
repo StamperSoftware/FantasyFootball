@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { UserTeamService } from "../../../core/services/user-team.service";
 import { ActivatedRoute, RouterLink } from "@angular/router";
 import { Athlete, Position, UserTeam } from "@models";
@@ -9,13 +9,14 @@ import {
     faChevronDown,
     faCircleLeft,
     faEdit,
-    faPlus,
+    faPlus, faShuffle,
     faTrashCan
 } from "@fortawesome/free-solid-svg-icons";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { EditUserTeamComponent } from "../edit/edit.component";
 import { SelectAthleteListComponent } from "../../athlete/select-list/select-list.component";
 import { LeagueService } from "../../../core/services/league.service";
+import { AccountService } from "@services";
 
 @Component({
   selector: 'app-user-team-detail',
@@ -30,13 +31,20 @@ import { LeagueService } from "../../../core/services/league.service";
 export class UserTeamDetailComponent implements OnInit {
     
     ngOnInit(): void {
-      this.getTeam();
+        this.getTeam();
+        if(this.accountService.currentUser()){
+            this.leagueService.checkIfUserIsInLeague(this.accountService.currentUser()!.id, this.leagueId).subscribe({
+                next:response => this.isUserInLeague.set(response),
+            });
+        }
     }
     
     private teamService = inject(UserTeamService);
     private leagueService = inject(LeagueService);
     private activatedRoute = inject(ActivatedRoute);
     private modalService = inject(NgbModal);
+    accountService = inject(AccountService);
+    isUserInLeague = signal(false); 
     
     protected readonly faEdit = faEdit;
     protected readonly faPlus = faPlus;
@@ -45,8 +53,7 @@ export class UserTeamDetailComponent implements OnInit {
     hasErrors = false;
     
     teamId = this.activatedRoute.snapshot.paramMap.get("user-team-id");
-    leagueId = this.activatedRoute.snapshot.paramMap.get("league-id");
-    
+    leagueId = +this.activatedRoute.snapshot.paramMap.get("league-id")!;
     getTeam(){
       if(!this.teamId) {
         this.hasErrors = true;
@@ -117,4 +124,9 @@ export class UserTeamDetailComponent implements OnInit {
     protected readonly faTrashCan = faTrashCan;
     protected readonly faArrowUp = faArrowUp;
     protected readonly faArrowDown = faArrowDown;
+    protected readonly faShuffle = faShuffle;
+
+    tradeForAthlete (id: number) {
+        
+    }
 }

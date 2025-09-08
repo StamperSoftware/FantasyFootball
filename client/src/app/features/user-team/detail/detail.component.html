@@ -1,12 +1,18 @@
 @if (team) {
+    @let currentUser = accountService.currentUser();
+    
     <section class="d-flex justify-content-between">
-        <div class="d-flex align-items-center">
-            <fa-icon class="btn" [icon]="faCircleLeft" routerLink="/leagues/{{leagueId}}" />
-            <h2>{{team.name}}</h2>
+        <div class="d-flex align-items-center gap-3">
+            <fa-icon class="m-0" [icon]="faCircleLeft" routerLink="/leagues/{{leagueId}}" />
+            <span id="team-name">{{team.name}}</span>
+            <span id="team-record">{{team.wins}} - {{team.losses}} - {{team.ties}}</span>
         </div>
         <div>
+            @if (currentUser?.id == team.player.userId) {
+                <button class="btn" routerLink="trade-requests">Requests</button>
+                <fa-icon [icon]="faEdit" class="btn" (click)="openEditModal()"/>
+            }
             <button class="btn" routerLink="/players/{{team.player.id}}">{{team.player.userName}}</button>
-            <fa-icon [icon]="faEdit" class="btn" (click)="openEditModal()"/>
         </div>
     </section>
     
@@ -16,8 +22,12 @@
                 <thead>
                     <tr>
                         <th></th>
-                        <th>Name</th>
-                        <th class="text-center"><fa-icon [icon]="faPlus" class="btn" (click)="openAddAthleteModal()"/></th>
+                        <th></th>
+                        <th class="text-center">
+                            @if (currentUser?.id == team.player.userId){
+                                <fa-icon [icon]="faPlus" class="btn" (click)="openAddAthleteModal()"/>
+                            }
+                        </th>
                     </tr>
                 </thead>
                 
@@ -29,9 +39,19 @@
                             <td>
                                 <a routerLink="/athletes/{{athlete.id}}" target="_blank">{{athlete.firstName}} {{athlete.lastName}}</a>
                             </td>
-                            <td class="text-center">
-                                <fa-icon (click)="dropAthlete(athlete.id)" [icon]="faTrashCan"/> 
-                                <fa-icon (click)="moveToBench(athlete.id)" [icon]="faArrowDown"/>
+                            <td>
+                                @if (currentUser != null) {
+                                    @if (currentUser.id != team.player.userId) {
+                                        @if (isUserInLeague()) {
+                                            <a target="_blank" routerLink="/leagues/{{leagueId}}/trade"><fa-icon [icon]="faShuffle"/></a>
+                                        }
+                                    } @else {
+                                        <div class="d-flex gap-2">
+                                            <fa-icon (click)="dropAthlete(athlete.id)" [icon]="faTrashCan"/>
+                                            <fa-icon (click)="moveToBench(athlete.id)" [icon]="faArrowDown"/>
+                                        </div>
+                                    }
+                                }
                             </td>
                         </tr>
                     }
@@ -42,9 +62,19 @@
                             <td>
                                 <a routerLink="/athletes/{{athlete.id}}" target="_blank">{{athlete.firstName}} {{athlete.lastName}}</a>
                             </td>
-                            <td class="text-center">
-                                <fa-icon (click)="dropAthlete(athlete.id)" [icon]="faTrashCan"/>
-                                <fa-icon (click)="moveToStarters(athlete.id)" [icon]="faArrowUp"/>
+                            <td>
+                                @if (currentUser != null) {
+                                    @if (currentUser.id != team.player.userId) {
+                                        @if (isUserInLeague()) {
+                                            <a target="_blank" routerLink="/leagues/{{leagueId}}/trade"><fa-icon [icon]="faShuffle"/></a>
+                                        }
+                                    } @else {
+                                        <div class="d-flex gap-2">
+                                            <fa-icon (click)="dropAthlete(athlete.id)" [icon]="faTrashCan"/>
+                                            <fa-icon (click)="moveToStarters(athlete.id)" [icon]="faArrowUp"/>
+                                        </div>
+                                    }
+                                }
                             </td>
                         </tr>
                     }

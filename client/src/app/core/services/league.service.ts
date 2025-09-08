@@ -50,5 +50,7 @@ export class LeagueService {
     return this.http.delete(`${this.leagueUrl}/${leagueId}`)
   }
   
-  
+  checkIfUserIsInLeague(userId:string, leagueId:number){
+    return this.http.get<boolean>(`${this.leagueUrl}/${leagueId}/user/${userId}`)
+  }
 }

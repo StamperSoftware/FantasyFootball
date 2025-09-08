@@ -86,9 +86,6 @@ public class RosterService:IRosterService
 
     public async Task HandleTradeAsync(UserTeam teamOne, UserTeam teamTwo, IList<Athlete> teamOneAthletes, IList<Athlete> teamTwoAthletes)
     {
-        teamOne.Roster ??= await GetRoster(teamOne.RosterId) ?? throw new Exception("Could not get roster");
-        teamTwo.Roster ??= await GetRoster(teamTwo.RosterId) ?? throw new Exception("Could not get roster");
-        
         foreach (var athlete in teamOneAthletes)
         {
             teamOne.Roster.Bench = teamOne.Roster.Bench.Where(a => a.Id != athlete.Id).ToList();

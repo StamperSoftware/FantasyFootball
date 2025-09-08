@@ -16,6 +16,7 @@ import { GameDetailComponent } from "./features/game/detail/detail.component";
 import { SiteSettingsComponent } from "./features/admin/site-settings/site-settings.component";
 import { LeagueSettingsComponent } from "./features/admin/league-settings/league-settings.component";
 import { LiveDraftComponent } from "./features/draft/live-draft/live-draft.component";
+import { TradeRequestsComponent } from "./features/user-team/trade-requests/trade-requests.component";
 
 export const routes: Routes = [
     {path:"", component:HomeComponent},
@@ -34,7 +35,13 @@ export const routes: Routes = [
                         path:"user-teams",
                         children:[
                             {path: "", component:UserTeamListComponent},
-                            {path:":user-team-id", component:UserTeamDetailComponent},
+                            {
+                                path: ":user-team-id",
+                                children: [
+                                    {path: "", component: UserTeamDetailComponent},
+                                    {path:"trade-requests", component:TradeRequestsComponent}
+                                ],
+                            }
                         ]
                     },
                     {path:"games/:game-id", component:GameDetailComponent},

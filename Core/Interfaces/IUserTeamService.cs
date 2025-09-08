@@ -16,4 +16,9 @@ public interface IUserTeamService
     public Task MoveAthleteToBench(int teamId, int athleteId);
     public Task MoveAthleteToStarters(int teamId, int athleteId);
     public Task<UserTeam> CreateUserTeam(int leagueId, Player player, int teamCount);
+    public Task CreateTradeRequestAsync(int initiatingTeamId, int receivingTeamId, IList<int> initiatingAthleteIds, IList<int> receivingAthleteIds);
+    public Task<IList<TradeRequest>> GetReceivedTradeRequests(int teamId);
+    public Task<IList<TradeRequest>> GetInitiatedTradeRequests(int teamId);
+    public Task ConfirmTradeRequest(string requestId);
+    public Task DeclineTradeRequest(string requestId);
 }

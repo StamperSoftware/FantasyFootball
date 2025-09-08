@@ -94,7 +94,7 @@ export class TradeComponent implements OnInit{
     
     if (!this.sendingTeam?.id || !this.sendingTeam?.offer.size) return;
     if (!this.receivingTeam?.id || !this.receivingTeam.offer.size) return;
-    this.userTeamService.tradeAthletes(this.sendingTeam.id, this.receivingTeam.id, Array.from(this.sendingTeam.offer).map(t => t.id), Array.from(this.receivingTeam.offer).map(t => t.id)).subscribe({
+    this.userTeamService.createTradeRequest(this.sendingTeam.id, this.receivingTeam.id, Array.from(this.sendingTeam.offer).map(t => t.id), Array.from(this.receivingTeam.offer).map(t => t.id)).subscribe({
       next: () => this.getLeague(),
       error: err => this.hasErrors = true,
     })

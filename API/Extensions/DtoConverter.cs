@@ -115,4 +115,25 @@ public static class DtoConverter
             Position = (PositionDto)athlete.Position,
         };
     }
+
+    public static TradeRequestTeamDto ConvertReceived(this TradeRequest request)
+    {
+        return new TradeRequestTeamDto
+        {
+            MyPlayers = request.ReceivingAthletes.Select(a => a.Convert()).ToList(),
+            TheirPlayers = request.InitiatingAthletes.Select(a => a.Convert()).ToList(),
+            Id = request.Id
+        };
+    }
+    
+    public static TradeRequestTeamDto ConvertInitiated(this TradeRequest request)
+    {
+        return new TradeRequestTeamDto
+        {
+            MyPlayers = request.InitiatingAthletes.Select(a => a.Convert()).ToList(),
+            TheirPlayers = request.ReceivingAthletes.Select(a => a.Convert()).ToList(),
+            Id = request.Id
+        };
+    }
+    
 }

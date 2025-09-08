@@ -47,6 +47,11 @@ public class UserTeamsController(IGenericRepository<UserTeam> repo, IUserTeamSer
     {
         await userTeamService.TradeAthletesAsync(request.TeamOneId, request.TeamTwoId, request.TeamOneAthleteIds, request.TeamTwoAthleteIds);
     }
+    [HttpPost("trade-request")]
+    public async Task CreateTradeRequest(TradeAthleteRequest request)
+    {
+        await userTeamService.CreateTradeRequestAsync(request.TeamOneId, request.TeamTwoId, request.TeamOneAthleteIds, request.TeamTwoAthleteIds);
+    }
 
     [HttpDelete("{teamId:int}/athletes/{athleteId:int}")]
     public async Task DropAthleteFromTeam(int teamId, int athleteId)
@@ -63,6 +68,31 @@ public class UserTeamsController(IGenericRepository<UserTeam> repo, IUserTeamSer
     {
         await userTeamService.MoveAthleteToStarters(teamId, athleteId);
     }
+
+    [HttpGet("{teamId:int}/received-trade-requests")]
+    public async Task<IList<TradeRequestTeamDto>> GetReceivingTradeRequests(int teamId)
+    {
+        var requests = await userTeamService.GetReceivedTradeRequests(teamId);
+        return requests.Select(tr => tr.ConvertReceived()).ToList();
+    }
     
+    [HttpGet("{teamId:int}/initiated-trade-requests")]
+    public async Task<IList<TradeRequestTeamDto>> GetInitiatedTradeRequests(int teamId)
+    {
+        var requests = await userTeamService.GetInitiatedTradeRequests(teamId);
+
+        return requests.Select(tr => tr.ConvertInitiated()).ToList();
+    }
+    
+    [HttpPut("trade-requests/{requestId}/confirm")]
+    public async Task ConfirmTradeRequest(string requestId)
+    {
+        await userTeamService.ConfirmTradeRequest(requestId);
+    }
+    [HttpPut("trade-requests/{requestId}/decline")]
+    public async Task DeclineTradeRequest(string requestId)
+    {
+        await userTeamService.DeclineTradeRequest(requestId);
+    }
     
 }

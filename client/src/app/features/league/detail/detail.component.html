@@ -90,11 +90,11 @@
                             <div></div>
                         }
                     </div>
-                    <div class="d-flex flex-column gap-2">
+                    <div class="d-flex flex-column gap-2 striped">
                         @for (game of this.weeklySchedule; track game.id) {
-                            <div class="game-container clickable" routerLink="games/{{game.id}}" target="_blank">
+                            <div class="game-container clickable px-2" routerLink="games/{{game.id}}" target="_blank">
                                 <span>{{game.home.name}} ({{game.homeScore}})</span>
-                                <span>vs</span>
+                                <span class="text-center">vs</span>
                                 <span>{{game.away.name}} ({{game.awayScore}})</span>
                             </div>
                         }
