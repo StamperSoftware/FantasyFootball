@@ -17,6 +17,7 @@ import { SiteSettingsComponent } from "./features/admin/site-settings/site-setti
 import { LeagueSettingsComponent } from "./features/admin/league-settings/league-settings.component";
 import { LiveDraftComponent } from "./features/draft/live-draft/live-draft.component";
 import { TradeRequestsComponent } from "./features/user-team/trade-requests/trade-requests.component";
+import { UploadStatsComponent } from "./features/admin/upload-stats/upload-stats.component";
 
 export const routes: Routes = [
     {path:"", component:HomeComponent},
@@ -80,8 +81,8 @@ export const routes: Routes = [
         children:[
             {path:"site-settings", component:SiteSettingsComponent},
             {path:"league-settings/:league-id", component:LeagueSettingsComponent},
+            {path:"upload-stats", component: UploadStatsComponent}
         ]
-        
     },
     
     

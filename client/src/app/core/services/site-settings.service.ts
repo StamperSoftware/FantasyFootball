@@ -9,31 +9,32 @@ import { map } from "rxjs";
 })
 export class SiteSettingsService implements OnInit {
   
-  ngOnInit(): void {
-    this.getSettings();
-  }
-  
-  private http = inject(HttpClient);
-  private url = `${environment.apiUrl}/site-settings`;
-  
-  currentSeason = signal<number|null>(null);
-  currentWeek = signal<number|null>(null);
-  
-  getSettings(){
-    return this.http.get<SiteSettings>(this.url).pipe(
-        map(siteSettings => {
-            this.currentSeason.set(siteSettings.currentSeason);  
-            this.currentWeek.set(siteSettings.currentWeek);
-            return siteSettings;
-        })
-    )
-  }
+    ngOnInit(): void {
+        this.getSettings();
+    }
+    
+    private http = inject(HttpClient);
+    private url = `${environment.apiUrl}/site-settings`;
+    
+    currentSeason = signal<number|null>(null);
+    currentWeek = signal<number|null>(null);
 
+    getSettings(){
+        return this.http.get<SiteSettings>(this.url).pipe(
+            map(siteSettings => {
+                this.currentSeason.set(siteSettings.currentSeason);  
+                this.currentWeek.set(siteSettings.currentWeek);
+                return siteSettings;
+            })
+        )
+    }
+    
     advanceWeek(){
         return this.http.put<SiteSettings>(`${this.url}/advance-week`, {})
             .pipe(map(siteSettings => this.currentWeek.set(siteSettings.currentWeek)));
     }
-  updateSettings(settingsDto :UpdateSiteSettingsDto){
-    return this.http.put(this.url, settingsDto);
-  }
+    
+    updateSettings(settingsDto :UpdateSiteSettingsDto){
+        return this.http.put(this.url, settingsDto);
+    }
 }

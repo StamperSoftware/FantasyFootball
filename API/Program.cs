@@ -34,6 +34,7 @@ builder.Services.AddScoped<IPlayerService, PlayerService>();
 builder.Services.AddScoped<IRosterService, RosterService>();
 builder.Services.AddScoped<ISiteSettingsService, SiteSettingsService>();
 builder.Services.AddScoped<ILeagueSettingsService, LeagueSettingsService>();
+builder.Services.AddScoped<IStatisticsService, StatisticsService>();
 
 builder.Services.AddTransient<IEmailSender, ConfirmEmailSender>();
 builder.Services.Configure<AuthMessageSenderOptions>(o =>

@@ -11,3 +11,4 @@ export {GameService} from './game.service';
 export {AthleteService} from './athlete.service';
 export {AccountService} from './account.service';
 export {LiveDraftService} from './live-draft.service';
+export {StatisticsService} from './statistics.service';

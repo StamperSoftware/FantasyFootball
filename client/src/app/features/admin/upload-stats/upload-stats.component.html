@@ -1,0 +1,18 @@
+<div>
+    <p>Upload a CSV for week <strong>{{siteSettingsService.currentWeek()}}</strong> of the <strong>{{siteSettingsService.currentSeason()}}</strong> season</p>
+    <p>Needs headers for </p>
+    <ul>
+        <li>Athlete Id</li>
+        <li>Receptions</li>
+        <li>Receiving Yards</li>
+        <li>Receiving Touchdowns</li>
+        <li>Passing Yards</li>
+        <li>Passing Touchdown</li>
+        <li>Rushing Yards</li>
+        <li>Rushing Touchdowns</li>
+    </ul>
+    <div class="form-floating">
+        <input #inputUploadStats (change)="handleFileUpload($event)" class="form-control d-none" id="input-upload-stats" type="file" accept="text/csv" placeholder="CSV File">
+        <button class="btn btn-primary" (click)="inputFileRef.nativeElement.click()">Upload</button>
+    </div>
+</div>
