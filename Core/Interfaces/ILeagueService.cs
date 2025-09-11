@@ -12,4 +12,5 @@ public interface ILeagueService
     public Task<IList<Athlete>> GetAvailableAthletes(int leagueId);
     public Task DeleteLeague(int leagueId);
     public Task<bool> IsUserInLeague(string userId, int leagueId);
+    public Task<IList<Player>> GetPlayersNotInLeague(int leagueId);
 }

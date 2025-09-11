@@ -19,7 +19,7 @@ public class LeagueService(FantasyFootballContext db, IPlayerService playerServi
         if (league.Teams.Count >= league.Settings.NumberOfTeams) throw new Exception("League is full.");
         if (league.Teams.Any(t => t.PlayerId == playerId)) throw new Exception("Player is in league already.");
         
-        var userTeam = await userTeamService.CreateUserTeam(leagueId, player, league.Teams.Count);
+        var userTeam = await userTeamService.CreateUserTeam(leagueId, player);
         
         league.Teams.Add(userTeam);
         league.Settings.DraftOrder.Add(userTeam.Id);
@@ -116,6 +116,14 @@ public class LeagueService(FantasyFootballContext db, IPlayerService playerServi
         var league = await db.Leagues.Include(l => l.Teams).ThenInclude(t => t.Player).FirstOrDefaultAsync(l => l.Id == leagueId) ?? throw new Exception("Could not get league");
         return league.Teams.Any(t => t.Player.UserId == userId);
     }
-    
+
+    public async Task<IList<Player>> GetPlayersNotInLeague(int leagueId)
+    {
+        var league = await db.Leagues.Include(l => l.Teams).FirstOrDefaultAsync(l => l.Id == leagueId) ?? throw new Exception("Could not get league");
+        var players = await playerService.GetPlayers();
+
+        return players.Where(p => league.Teams.All(t => t.PlayerId != p.Id)).ToList();
+
+    }
 }
 

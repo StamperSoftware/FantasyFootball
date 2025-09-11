@@ -7,7 +7,7 @@ public class UserTeam : BaseEntity
 {
     public int LeagueId { get; set; }
     public int PlayerId { get; set; }
-    public required Player Player { get; set; }
+    public Player Player { get; set; } = null!;
     public string? Name { get; set; }
     public int Wins { get; set; }
     public int Losses { get; set; }
@@ -17,20 +17,21 @@ public class UserTeam : BaseEntity
     [NotMapped] public Roster Roster { get; set; } = new();
     [NotMapped] public bool IsOnline { get; set; }
     [NotMapped] public IList<Game> Schedule { get; set; } = [];
-    
-    public UserTeam(){}
 
-    [SetsRequiredMembers]
-    public UserTeam(int leagueId, Player player, int wins, int losses, int ties, string name)
+    public static UserTeam CreateNewTeam(int leagueId, int playerId, string name)
     {
-        LeagueId = leagueId;
-        Player = player;
-        PlayerId = player.Id;
-        Name = name;
-        Wins = wins;
-        Losses = losses;
-        Ties = ties;
+        return new UserTeam
+        {
+            LeagueId = leagueId,
+            PlayerId = playerId,
+            RosterId = "",
+            Wins = 0,
+            Losses = 0,
+            Ties = 0,
+            Name = name
+        };
     }
+    
 
     public void AddWin()
     {

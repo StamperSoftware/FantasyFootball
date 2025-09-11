@@ -55,8 +55,9 @@ export class LeagueDetailComponent implements OnInit {
     const addPlayer = (playerId:number) => this.leagueService.addPlayer(this.id, playerId).subscribe({
       next: () => this.getLeague()
     });
-    
-    this.modalService.open(SelectPlayerComponent).result.then(addPlayer,() => {});
+    const modalRef = this.modalService.open(SelectPlayerComponent);
+    modalRef.componentInstance.leagueId = this.id;
+    modalRef.result.then(addPlayer,() => {});
   }
   
   startLeague() {

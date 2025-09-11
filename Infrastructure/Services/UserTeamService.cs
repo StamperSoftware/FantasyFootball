@@ -152,9 +152,9 @@ public class UserTeamService : IUserTeamService
         await RosterService.MoveAthleteToStarters(athlete, team.RosterId);
     }
 
-    public async Task<UserTeam> CreateUserTeam(int leagueId, Player player, int teamCount)
+    public async Task<UserTeam> CreateUserTeam(int leagueId, Player player)
     {
-        var userTeam = new UserTeam(leagueId, player, 0, 0, 0,$"(NEW) Team #{teamCount + 1}");
+        var userTeam = UserTeam.CreateNewTeam(leagueId, player.Id,$"Team {player.User.UserName}");
         var roster = await RosterService.CreateRoster();
         userTeam.RosterId = roster.Id;
         await Db.AddAsync(userTeam);

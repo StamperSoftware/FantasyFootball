@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { environment } from "@environments";
-import { AddPlayerToLeagueDto, League, Pagination, CreateLeagueDto, Athlete } from "@models";
+import { AddPlayerToLeagueDto, League, Pagination, CreateLeagueDto, Athlete, Player } from "@models";
 
 @Injectable({
   providedIn: 'root'
@@ -52,5 +52,8 @@ export class LeagueService {
   
   checkIfUserIsInLeague(userId:string, leagueId:number){
     return this.http.get<boolean>(`${this.leagueUrl}/${leagueId}/user/${userId}`)
+  }
+  getPlayersNotInLeague(leagueId:number){
+    return this.http.get<Player[]>(`${this.leagueUrl}/${leagueId}/players-not-in-league`)
   }
 }

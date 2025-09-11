@@ -48,6 +48,13 @@ public class LeaguesController(IGenericRepository<League> repo, ILeagueService s
         return BadRequest("Issue creating league");
     }
 
+    [HttpGet("{leagueId:int}/players-not-in-league")]
+    public async Task<IList<PlayerDto>> GetPlayersNotInLeague(int leagueId)
+    {
+        var players = await service.GetPlayersNotInLeague(leagueId);
+        return players.Select(p => p.Convert()).ToList();
+    }
+
     [HttpPost("{leagueId:int}/players/{playerId:int}")]
     public async Task<ActionResult> AddPlayerToLeague(int playerId, int leagueId)
     {
