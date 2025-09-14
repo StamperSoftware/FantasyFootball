@@ -1,4 +1,4 @@
-﻿using API.RequestHelpers;
+﻿using API.Helpers;
 using Core.Entities;
 using Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
