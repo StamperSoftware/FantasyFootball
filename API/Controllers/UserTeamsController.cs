@@ -17,7 +17,8 @@ public class UserTeamsController(IGenericRepository<UserTeam> repo, IUserTeamSer
     [HttpGet("user/{userId}")]
     public async Task<ActionResult<IReadOnlyList<UserTeamDto>>> GetUserTeams(string userId)
     {
-        return Ok(await userTeamService.GetTeams(userId));
+        var teams = await userTeamService.GetTeams(userId);
+        return Ok(teams.Select(t => t.Convert()));
     }
 
     [HttpGet("{teamId:int}")]

@@ -26,7 +26,6 @@ public class UserTeamService : IUserTeamService
         var mongoClient = new MongoClient(dbSettings.Value.ConnectionString);
         var mongoDb = mongoClient.GetDatabase(dbSettings.Value.DatabaseName);
         TradeRequests = mongoDb.GetCollection<TradeRequest>(dbSettings.Value.TradeRequests);
-        
     }
 
     private async Task _AddAthleteToTeamAsync(UserTeam team, int athleteId)
@@ -49,7 +48,7 @@ public class UserTeamService : IUserTeamService
     
     public async Task<IList<UserTeam>> GetTeams(string userId)
     {
-        return await Db.UserTeams.Include(t => t.Player).Where(t => t.Player.UserId == userId).ToListAsync();
+        return await Db.UserTeams.Include(t => t.Player).ThenInclude(p => p.User).Where(t => t.Player.UserId == userId).ToListAsync();
     }
     
     public async Task<UserTeam?> GetUserTeamFullDetailAsync(int id)

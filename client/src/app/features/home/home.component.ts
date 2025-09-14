@@ -22,14 +22,19 @@ export class HomeComponent  {
   accountService = inject(AccountService);
   userTeamService = inject(UserTeamService);
   userTeams=signal<UserTeam[]>([]);
+  userTeam = signal<UserTeam>({} as UserTeam);
   
   private modalService = inject(NgbModal);
 
   constructor () {
     effect(()=> {
+      this.getUserTeams();
+    });
+    effect(()=>{
       this.getUserTeam();
-    })
+    });
   }
+  
   openLoginModal(){
     this.modalService.open(LoginComponent).result.then();
   }
@@ -38,12 +43,25 @@ export class HomeComponent  {
     this.modalService.open(RegisterComponent).result.then();
   }
 
-  getUserTeam(){
+  getUserTeams(){
     let user = this.accountService.currentUser();
     if (user) {
       this.userTeamService.getUserTeams(user.id).subscribe({
-        next:teams=>this.userTeams.set(teams),
+        next:teams=> {
+            this.userTeams.set(teams);
+            if (teams[0]?.id){
+              this.userTeam.set(teams[0]);
+            }
+          }
       });    
+    }
+  }
+  
+  getUserTeam(){
+    const userTeam = this.userTeam();
+    
+    if (userTeam?.id){
+      this.userTeamService.getTeam(userTeam.id).subscribe();
     }
   }
 }
