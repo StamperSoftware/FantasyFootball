@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, effect, inject, OnInit, signal } from '@angular/core';
 import { HomeService } from "../../core/services/home.service";
 import { AccountService, UserTeamService } from "@services";
 import { UserTeam } from "@models";
@@ -17,7 +17,7 @@ import { map } from "rxjs";
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent  {
   
   accountService = inject(AccountService);
   userTeamService = inject(UserTeamService);
@@ -25,6 +25,11 @@ export class HomeComponent implements OnInit {
   
   private modalService = inject(NgbModal);
 
+  constructor () {
+    effect(()=> {
+      this.getUserTeam();
+    })
+  }
   openLoginModal(){
     this.modalService.open(LoginComponent).result.then();
   }
@@ -32,8 +37,8 @@ export class HomeComponent implements OnInit {
   openRegisterModal(){
     this.modalService.open(RegisterComponent).result.then();
   }
-  
-  ngOnInit(): void {
+
+  getUserTeam(){
     let user = this.accountService.currentUser();
     if (user) {
       this.userTeamService.getUserTeams(user.id).subscribe({
@@ -41,5 +46,4 @@ export class HomeComponent implements OnInit {
       });    
     }
   }
-  
 }
