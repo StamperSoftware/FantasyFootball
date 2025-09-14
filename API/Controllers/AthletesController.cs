@@ -1,17 +1,25 @@
 ﻿using API.DTOs;
 using API.Extensions;
+using Core.Entities;
 using Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
-public class AthleteController(IAthleteService service):BaseApiController
+public class AthletesController(IAthleteService service):BaseApiController
 {
     
     [HttpGet]
-    public async Task<ActionResult<IReadOnlyList<AthleteDto>>> GetAthletes()
+    public async Task<ActionResult<IReadOnlyList<AthleteDto>>> GetAthletes([FromQuery]int? teamId, Position? position, string? search)
     {
         var athletes = await service.GetAthletesWithTeamsAsync();
+        if (teamId is not null) athletes = athletes.Where(a => a.TeamId == teamId).ToList();
+        if (position is not null) athletes = athletes.Where(a => a.Position == position).ToList();
+        if (search is not null)
+        {
+            search = search.ToLower();
+            athletes = athletes.Where(a => (a.FirstName + " " + a.LastName).ToLower().Contains(search)).ToList();
+        }
         return Ok(athletes.OrderBy(a => a.Position).ThenBy(a => a.LastName).Select(athlete => athlete.Convert()));
     }
 

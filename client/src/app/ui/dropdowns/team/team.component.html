@@ -1,0 +1,6 @@
+<select name="select-team" id="select-team" class="form-select form-select-sm" [(ngModel)]="team">
+    <option value="all" selected>All Teams</option>
+    @for(team of teams(); track team.id){
+        <option [value]="team.id">{{team.location}} {{team.name}}</option>
+    }
+</select>

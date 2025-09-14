@@ -1,24 +1,33 @@
-<div class="d-flex justify-content-center">
+<div class="d-flex flex-column gap-3">
     @if (!hasErrors) {
-        @if (athletes.length){
-            <table class="table table-striped table-hover w-50 place-center">
-                <thead>
-                    <tr>
-                        <th>Position</th>
-                        <th>Team</th>
-                        <th>Name</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @for (athlete of athletes; track athlete.id) {
-                        <tr routerLink="/athletes/{{athlete.id}}" target="_blank" class="clickable">
-                            <td>{{Position[athlete.position]}}</td>
-                            <td>{{athlete.team.name}}</td>
-                            <td>{{athlete.firstName}} {{athlete.lastName}}</td>
+        <div class="d-flex align-items-center gap-2">
+            <input class="form-control form-control-sm w-25 input" autocomplete="off" placeholder="Search" [value]="search()" (change)="updateSearch($event)" id="athlete-search" name="athlete-search" />
+            <app-team-dropdown [(team)]="team"/>
+            <app-position-dropdown [(position)]="position"/>
+            @if (search() || team() != 'all' || position() != 'all'){<fa-icon [icon]="faX" class="text-danger" (click)="resetFilters()"/>}
+        </div>
+        
+        @if (athletes.length) {
+            <div id="athlete-table-container">
+                <table class="table table-striped table-hover w-50 mx-auto">
+                    <thead>
+                        <tr>
+                            <th>Position</th>
+                            <th>Team</th>
+                            <th>Name</th>
                         </tr>
-                    }
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @for (athlete of athletes; track athlete.id) {
+                            <tr routerLink="/athletes/{{athlete.id}}" target="_blank" class="clickable">
+                                <td>{{Position[athlete.position]}}</td>
+                                <td>{{athlete.team.name}}</td>
+                                <td>{{athlete.firstName}} {{athlete.lastName}}</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
         }
     } @else {
         <div>

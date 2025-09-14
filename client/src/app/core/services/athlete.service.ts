@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
 import { environment } from "@environments";
-import { Athlete } from "@models";
+import { Athlete, Position } from "@models";
 
 @Injectable({
   providedIn: 'root'
@@ -9,11 +9,18 @@ import { Athlete } from "@models";
 export class AthleteService {
   private http = inject(HttpClient);
   private baseUrl = environment.apiUrl;
-  private athleteUrl = `${this.baseUrl}/athlete`;
+  private athleteUrl = `${this.baseUrl}/athletes`;
   
   
-  getAthletes() {
-    return this.http.get<Athlete[]>(this.athleteUrl);
+  getAthletes(searchParams?:AthleteSearchParams) {
+    
+    let params = new HttpParams();
+    
+    if (searchParams?.position && searchParams.position != 'all') params = params.append("position", searchParams.position);
+    if (searchParams?.teamId && searchParams.teamId != 'all') params = params.append("teamId", searchParams.teamId);
+    if (searchParams?.search) params = params.append('search', searchParams.search);
+    
+    return this.http.get<Athlete[]>(this.athleteUrl, {params});
   }
   
   getAthlete(id:number){
@@ -32,4 +39,10 @@ export class AthleteService {
       return this.http.post(`${this.athleteUrl}/generate-weekly-stats`, {});
   }
   
+}
+
+type AthleteSearchParams = {
+  teamId?:number|'all'
+  position?:Position | "all"
+  search?:string
 }
