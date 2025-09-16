@@ -1,7 +1,10 @@
-﻿using Core.Entities;
+﻿using System.ComponentModel.DataAnnotations;
+using Core.Entities;
 using Core.Interfaces;
 using Infrastructure.Data;
 using Infrastructure.Data.MongoDb;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
@@ -28,10 +31,10 @@ public class UserTeamService : IUserTeamService
         TradeRequests = mongoDb.GetCollection<TradeRequest>(dbSettings.Value.TradeRequests);
     }
 
-    private async Task _AddAthleteToTeamAsync(UserTeam team, int athleteId)
+    private async Task<ValidationResult> _AddAthleteToTeamAsync(UserTeam team, int athleteId)
     {
         var athlete = await AthleteService.GetAthlete(athleteId) ?? throw new Exception("Could not get athlete");
-        await RosterService.AddAthlete(athlete, team.RosterId);
+        return await RosterService.AddAthlete(athlete, team.RosterId);
     }
 
     private async Task<UserTeam> _GetTeamAsync(int teamId)
@@ -77,11 +80,10 @@ public class UserTeamService : IUserTeamService
         return team;
     }
 
-    public async Task AddAthleteToTeamAsync(int teamId, int athleteId)
+    public async Task<ValidationResult> AddAthleteToTeamAsync(int teamId, int athleteId)
     {
         var team = await _GetTeamAsync(teamId);
-        await _AddAthleteToTeamAsync(team, athleteId);
-        await Db.SaveChangesAsync();
+        return await _AddAthleteToTeamAsync(team, athleteId);
     }
     
     public async Task AddAthletesToTeamAsync(int teamId, IList<int> athleteIds)
@@ -129,7 +131,7 @@ public class UserTeamService : IUserTeamService
         await RosterService.DropAthlete(athlete, team.RosterId);
     }
     
-    public async Task MoveAthleteToBench(int teamId, int athleteId)
+    public async Task<ValidationResult> MoveAthleteToBench(int teamId, int athleteId)
     {
         var athlete = await AthleteService.GetAthlete(athleteId);
         if (athlete == null) throw new Exception("Could not get athlete");
@@ -137,10 +139,10 @@ public class UserTeamService : IUserTeamService
         var team = await GetUserTeamFullDetailAsync(teamId);
         if (team == null) throw new Exception("Could not get team");
 
-        await RosterService.MoveAthleteToBench(athlete, team.RosterId);
+        return await RosterService.BenchAthlete(athlete, team.RosterId);
     }
     
-    public async Task MoveAthleteToStarters(int teamId, int athleteId)
+    public async Task<ValidationResult> MoveAthleteToStarters(int teamId, int athleteId)
     {
         var athlete = await AthleteService.GetAthlete(athleteId);
         if (athlete == null) throw new Exception("Could not get athlete");
@@ -148,7 +150,7 @@ public class UserTeamService : IUserTeamService
         var team = await GetUserTeamFullDetailAsync(teamId);
         if (team == null) throw new Exception("Could not get team");
 
-        await RosterService.MoveAthleteToStarters(athlete, team.RosterId);
+       return await RosterService.StartAthlete(athlete, team.RosterId);
     }
 
     public async Task<UserTeam> CreateUserTeam(int leagueId, Player player)

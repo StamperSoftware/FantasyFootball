@@ -86,7 +86,7 @@ export class UserTeamDetailComponent implements OnInit {
         
         this.leagueService.addAthleteToTeam(+this.leagueId,athleteId, +this.teamId).subscribe({
             next: () => this.getTeam(),
-            error : (err) => this.handleError("Invalid Roster Move"),
+            error : (err) => this.handleError(err.error),
         });
     }
     
@@ -95,7 +95,7 @@ export class UserTeamDetailComponent implements OnInit {
 
         this.teamService.dropAthlete(athleteId, +this.teamId).subscribe({
             next: () => this.getTeam(),
-            error : (err) => this.handleError("Invalid Roster Move"),
+            error : (err) => this.handleError(err.error),
         });
     }
     
@@ -104,7 +104,7 @@ export class UserTeamDetailComponent implements OnInit {
 
         this.teamService.moveToBench(athleteId, +this.teamId).subscribe({
             next: () => this.getTeam(),
-            error : (err) => this.handleError("Invalid Roster Move"),
+            error : (err) => this.handleError(err.error),
         });
     }
     
@@ -113,7 +113,7 @@ export class UserTeamDetailComponent implements OnInit {
 
         this.teamService.moveToStarters(athleteId, +this.teamId).subscribe({
             next: () => this.getTeam(),
-            error : (err) => this.handleError("Invalid Roster Move"),
+            error : (err) => this.handleError(err.error),
         });
     }
     

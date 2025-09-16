@@ -1,5 +1,7 @@
-﻿using Core.Entities;
+﻿using System.ComponentModel.DataAnnotations;
+using Core.Entities;
 using Core.Interfaces;
+using Core.Validators;
 using Infrastructure.Data.MongoDb;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
@@ -35,18 +37,19 @@ public class RosterService:IRosterService
         await _rosters.DeleteManyAsync(r => rosterIds.Contains(r.Id));
     }
     
-    public async Task UpdateRoster(Roster roster)
+    private async Task<ValidationResult> UpdateRoster(Roster roster)
     {
-        if (await ValidateRoster(roster))
+        
+        var leagueSettings = await _leagueSettingsService.GetLeagueSettings(roster.LeagueId) ?? throw new Exception("Could not get league settings");
+        var validation = roster.Validate(leagueSettings);
+        if (validation == ValidationResult.Success)
         {
             roster.Starters = roster.Starters.OrderBy(a => a.Position).ToList();
             roster.Bench = roster.Bench.OrderBy(a => a.Position).ToList();
             await _rosters.ReplaceOneAsync(r => r.Id == roster.Id, roster);
         }
-        else
-        {
-            throw new Exception("Invalid roster");
-        }
+
+        return validation;
     }
 
     public async Task<Roster> CreateRoster(int leagueId)
@@ -61,53 +64,66 @@ public class RosterService:IRosterService
         return roster;
     }
 
-    public async Task AddAthlete(Athlete athlete, string rosterId)
+    public async Task<ValidationResult> AddAthlete(Athlete athlete, string rosterId)
     {
         var roster = await GetRoster(rosterId) ?? throw new Exception("Could not get roster");
         roster.Bench.Add(athlete);
-        await UpdateRoster(roster);
+        return await UpdateRoster(roster);
     }
     
-    public async Task DropAthlete(Athlete athlete, string rosterId)
+    public async Task<ValidationResult> DropAthlete(Athlete athlete, string rosterId)
     {
         var roster = await GetRoster(rosterId) ?? throw new Exception("Could not get roster");
         roster.Starters = roster.Starters.Where(a => a.Id != athlete.Id).ToList();
         roster.Bench = roster.Bench.Where(a => a.Id != athlete.Id).ToList();
-        await UpdateRoster(roster);
+        return await UpdateRoster(roster);
     }
     
-    public async Task MoveAthleteToBench(Athlete athlete, string rosterId)
+    public async Task<ValidationResult> BenchAthlete(Athlete athlete, string rosterId)
     {
         var roster = await GetRoster(rosterId) ?? throw new Exception("Could not get roster");
         if (roster.Starters.All(a => a.Id != athlete.Id)) throw new Exception("Athlete is not on the starter");
         roster.Starters = roster.Starters.Where(a => a.Id != athlete.Id).ToList();
         roster.Bench.Add(athlete);
-        await UpdateRoster(roster);
+        return await UpdateRoster(roster);
     }
     
-    public async Task MoveAthleteToStarters(Athlete athlete, string rosterId)
+    public async Task<ValidationResult> StartAthlete(Athlete athlete, string rosterId)
     {
         var roster = await GetRoster(rosterId) ?? throw new Exception("Could not get roster");
         if (roster.Bench.All(a => a.Id != athlete.Id)) throw new Exception("Athlete is not on the bench");
         roster.Bench = roster.Bench.Where(a => a.Id != athlete.Id).ToList();
         roster.Starters.Add(athlete);
-        await UpdateRoster(roster);
+        return await UpdateRoster(roster);
     }
 
     public async Task HandleTradeAsync(UserTeam teamOne, UserTeam teamTwo, IList<Athlete> teamOneAthletes, IList<Athlete> teamTwoAthletes)
     {
         foreach (var athlete in teamOneAthletes)
         {
-            teamOne.Roster.Bench = teamOne.Roster.Bench.Where(a => a.Id != athlete.Id).ToList();
-            teamOne.Roster.Starters = teamOne.Roster.Starters.Where(a => a.Id != athlete.Id).ToList();
+            if (teamOne.Roster.Starters.Any(a => a.Id == athlete.Id))
+            {
+                teamOne.Roster.Starters = teamOne.Roster.Starters.Where(a => a.Id != athlete.Id).ToList();
+            }
+            else
+            {
+                teamOne.Roster.Bench = teamOne.Roster.Bench.Where(a => a.Id != athlete.Id).ToList();
+            }
+
             teamTwo.Roster.Bench.Add(athlete);
         }
         
         foreach (var athlete in teamTwoAthletes)
         {
-            
-            teamTwo.Roster.Bench = teamTwo.Roster.Bench.Where(a => a.Id != athlete.Id).ToList();
-            teamTwo.Roster.Starters = teamTwo.Roster.Starters.Where(a => a.Id != athlete.Id).ToList();
+            if (teamTwo.Roster.Starters.Any(a => a.Id == athlete.Id))
+            {
+                teamTwo.Roster.Starters = teamTwo.Roster.Starters.Where(a => a.Id != athlete.Id).ToList();
+            }
+            else
+            {
+                teamTwo.Roster.Bench = teamTwo.Roster.Bench.Where(a => a.Id != athlete.Id).ToList();
+            }
+
             teamOne.Roster.Bench.Add(athlete);
         }
 
@@ -115,18 +131,5 @@ public class RosterService:IRosterService
         await UpdateRoster(teamTwo.Roster);
     }
 
-    private async Task<bool> ValidateRoster(Roster roster)
-    {
-        var leagueSettings = await _leagueSettingsService.GetLeagueSettings(roster.LeagueId);
-        
-        if (leagueSettings is null) return false;
-        if (roster.Starters.Count + roster.Bench.Count > leagueSettings.RosterLimit) return false;
-        if (roster.Starters.Count(a => a.Position == Position.QuarterBack) > leagueSettings.StartingQuarterBackLimit) return false;
-        if (roster.Starters.Count(a => a.Position == Position.WideReceiver) > leagueSettings.StartingWideReceiverLimit) return false;
-        if (roster.Starters.Count(a => a.Position == Position.RunningBack) > leagueSettings.StartingRunningBackLimit) return false;
-        if (roster.Starters.Count(a => a.Position == Position.TightEnd) > leagueSettings.StartingTightEndLimit) return false;
-        
-        return true;
-    }
     
 }

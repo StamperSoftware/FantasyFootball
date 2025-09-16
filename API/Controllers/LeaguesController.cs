@@ -1,4 +1,5 @@
-﻿using API.DTOs;
+﻿using System.ComponentModel.DataAnnotations;
+using API.DTOs;
 using API.Extensions;
 using Core.Entities;
 using Core.Interfaces;
@@ -79,9 +80,11 @@ public class LeaguesController(IGenericRepository<League> repo, ILeagueService s
     
     
     [HttpPut("{leagueId:int}/team/{teamId:int}/athletes/{athleteId:int}")]
-    public async Task AddAthleteToTeamAsync([FromRoute]int leagueId, [FromRoute]int teamId, [FromRoute]int athleteId)
+    public async Task<IActionResult> AddAthleteToTeamAsync([FromRoute]int leagueId, [FromRoute]int teamId, [FromRoute]int athleteId)
     {
-        await service.AddAthleteToTeamAsync(leagueId, teamId, athleteId);
+        var result = await service.AddAthleteToTeamAsync(leagueId, teamId, athleteId);
+        if (result != ValidationResult.Success) return BadRequest(result.ErrorMessage);
+        return Ok();
     }
 
     [HttpPost("{leagueId:int}/draft")]

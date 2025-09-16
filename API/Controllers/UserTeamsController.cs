@@ -1,4 +1,5 @@
-﻿using API.DTOs;
+﻿using System.ComponentModel.DataAnnotations;
+using API.DTOs;
 using API.Extensions;
 using Core.Entities;
 using Core.Interfaces;
@@ -60,14 +61,18 @@ public class UserTeamsController(IGenericRepository<UserTeam> repo, IUserTeamSer
         await userTeamService.DropAthleteFromTeamAsync(teamId, athleteId);
     }
     [HttpPut("{teamId:int}/bench/{athleteId:int}")]
-    public async Task MoveAthleteToBench(int teamId, int athleteId)
+    public async Task<IActionResult> MoveAthleteToBench(int teamId, int athleteId)
     {
-        await userTeamService.MoveAthleteToBench(teamId, athleteId);
+        var result = await userTeamService.MoveAthleteToBench(teamId, athleteId);
+        if (result != ValidationResult.Success) return BadRequest(result.ErrorMessage);
+        return Ok();
     }
     [HttpPut("{teamId:int}/starters/{athleteId:int}")]
-    public async Task MoveAthleteToStarters(int teamId, int athleteId)
+    public async Task<IActionResult> MoveAthleteToStarters(int teamId, int athleteId)
     {
-        await userTeamService.MoveAthleteToStarters(teamId, athleteId);
+        var result = await userTeamService.MoveAthleteToStarters(teamId, athleteId);
+        if (result != ValidationResult.Success) return BadRequest(result.ErrorMessage);
+        return Ok();
     }
 
     [HttpGet("{teamId:int}/received-trade-requests")]

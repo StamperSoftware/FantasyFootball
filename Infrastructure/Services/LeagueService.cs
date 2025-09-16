@@ -1,4 +1,5 @@
-﻿using Core.Entities;
+﻿using System.ComponentModel.DataAnnotations;
+using Core.Entities;
 using Core.Interfaces;
 using Infrastructure.Data;
 using Infrastructure.Factories;
@@ -28,11 +29,11 @@ public class LeagueService(FantasyFootballContext db, IPlayerService playerServi
         await db.SaveChangesAsync();
     }
 
-    public async Task AddAthleteToTeamAsync(int leagueId, int teamId, int athleteId)
+    public async Task<ValidationResult> AddAthleteToTeamAsync(int leagueId, int teamId, int athleteId)
     {
         var league = await GetLeagueWithFullDetailsAsync(leagueId) ?? throw new Exception("Could not get league");
         if (!IsPlayerAvailable(league, [athleteId])) throw new Exception("Athlete is already on a team");
-        await userTeamService.AddAthleteToTeamAsync(teamId, athleteId);
+        return await userTeamService.AddAthleteToTeamAsync(teamId, athleteId);
     }
 
     public async Task SubmitDraft(int leagueId, IDictionary<int, IList<int>> request)
