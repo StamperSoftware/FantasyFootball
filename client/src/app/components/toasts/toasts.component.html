@@ -1,0 +1,5 @@
+<div id="toast-container" class="d-flex flex-column gap-2">
+    @for (toast of toastService.toasts(); track $index) {
+        <ngb-toast [header]="toast.header">{{toast.content}}</ngb-toast>
+    }
+</div>

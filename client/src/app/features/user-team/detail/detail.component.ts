@@ -1,12 +1,10 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { UserTeamService } from "../../../core/services/user-team.service";
 import { ActivatedRoute, RouterLink } from "@angular/router";
 import { Athlete, Position, UserTeam } from "@models";
 import { FaIconComponent } from "@fortawesome/angular-fontawesome";
 import {
     faArrowDown,
     faArrowUp,
-    faChevronDown,
     faCircleLeft,
     faEdit,
     faPlus, faShuffle,
@@ -15,8 +13,7 @@ import {
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { EditUserTeamComponent } from "../edit/edit.component";
 import { SelectAthleteListComponent } from "../../athlete/select-list/select-list.component";
-import { LeagueService } from "../../../core/services/league.service";
-import { AccountService } from "@services";
+import { AccountService, ToastService, LeagueService, UserTeamService } from "@services";
 
 @Component({
   selector: 'app-user-team-detail',
@@ -43,6 +40,7 @@ export class UserTeamDetailComponent implements OnInit {
     private leagueService = inject(LeagueService);
     private activatedRoute = inject(ActivatedRoute);
     private modalService = inject(NgbModal);
+    private toastService = inject(ToastService);
     accountService = inject(AccountService);
     isUserInLeague = signal(false); 
     
@@ -88,7 +86,7 @@ export class UserTeamDetailComponent implements OnInit {
         
         this.leagueService.addAthleteToTeam(+this.leagueId,athleteId, +this.teamId).subscribe({
             next: () => this.getTeam(),
-            error : () => this.hasErrors = true,
+            error : (err) => this.handleError("Invalid Roster Move"),
         });
     }
     
@@ -97,7 +95,7 @@ export class UserTeamDetailComponent implements OnInit {
 
         this.teamService.dropAthlete(athleteId, +this.teamId).subscribe({
             next: () => this.getTeam(),
-            error : () => this.hasErrors = true,
+            error : (err) => this.handleError("Invalid Roster Move"),
         });
     }
     
@@ -106,7 +104,7 @@ export class UserTeamDetailComponent implements OnInit {
 
         this.teamService.moveToBench(athleteId, +this.teamId).subscribe({
             next: () => this.getTeam(),
-            error : () => this.hasErrors = true,
+            error : (err) => this.handleError("Invalid Roster Move"),
         });
     }
     
@@ -115,9 +113,14 @@ export class UserTeamDetailComponent implements OnInit {
 
         this.teamService.moveToStarters(athleteId, +this.teamId).subscribe({
             next: () => this.getTeam(),
-            error : () => this.hasErrors = true,
+            error : (err) => this.handleError("Invalid Roster Move"),
         });
     }
+    
+    handleError(msg:string){
+        this.toastService.addToast({header:"Error", content:msg});
+    }
+    
     
     protected readonly faCircleLeft = faCircleLeft;
     protected readonly Position = Position;

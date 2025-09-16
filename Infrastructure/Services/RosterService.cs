@@ -10,12 +10,14 @@ public class RosterService:IRosterService
 {
 
     private readonly IMongoCollection<Roster> _rosters;
-
-    public RosterService(IOptions<DbSettings> dbSettings)
+    private readonly ILeagueSettingsService _leagueSettingsService;
+    
+    public RosterService(IOptions<DbSettings> dbSettings, ILeagueSettingsService leagueSettingsService)
     {
         var mongoClient = new MongoClient(dbSettings.Value.ConnectionString);
         var mongoDb = mongoClient.GetDatabase(dbSettings.Value.DatabaseName);
         _rosters = mongoDb.GetCollection<Roster>(dbSettings.Value.Rosters);
+        _leagueSettingsService = leagueSettingsService;
     }
     
     public async Task<Roster> GetRoster(string id)
@@ -35,17 +37,25 @@ public class RosterService:IRosterService
     
     public async Task UpdateRoster(Roster roster)
     {
-        roster.Starters = roster.Starters.OrderBy(a => a.Position).ToList();
-        roster.Bench = roster.Bench.OrderBy(a => a.Position).ToList();
-        await _rosters.ReplaceOneAsync(r => r.Id == roster.Id, roster);
+        if (await ValidateRoster(roster))
+        {
+            roster.Starters = roster.Starters.OrderBy(a => a.Position).ToList();
+            roster.Bench = roster.Bench.OrderBy(a => a.Position).ToList();
+            await _rosters.ReplaceOneAsync(r => r.Id == roster.Id, roster);
+        }
+        else
+        {
+            throw new Exception("Invalid roster");
+        }
     }
 
-    public async Task<Roster> CreateRoster()
+    public async Task<Roster> CreateRoster(int leagueId)
     {
         var roster = new Roster
         {
             Starters = [],
             Bench = [],
+            LeagueId = leagueId
         };
         await _rosters.InsertOneAsync(roster);
         return roster;
@@ -104,4 +114,19 @@ public class RosterService:IRosterService
         await UpdateRoster(teamOne.Roster);
         await UpdateRoster(teamTwo.Roster);
     }
+
+    private async Task<bool> ValidateRoster(Roster roster)
+    {
+        var leagueSettings = await _leagueSettingsService.GetLeagueSettings(roster.LeagueId);
+        
+        if (leagueSettings is null) return false;
+        if (roster.Starters.Count + roster.Bench.Count > leagueSettings.RosterLimit) return false;
+        if (roster.Starters.Count(a => a.Position == Position.QuarterBack) > leagueSettings.StartingQuarterBackLimit) return false;
+        if (roster.Starters.Count(a => a.Position == Position.WideReceiver) > leagueSettings.StartingWideReceiverLimit) return false;
+        if (roster.Starters.Count(a => a.Position == Position.RunningBack) > leagueSettings.StartingRunningBackLimit) return false;
+        if (roster.Starters.Count(a => a.Position == Position.TightEnd) > leagueSettings.StartingTightEndLimit) return false;
+        
+        return true;
+    }
+    
 }

@@ -154,7 +154,7 @@ public class UserTeamService : IUserTeamService
     public async Task<UserTeam> CreateUserTeam(int leagueId, Player player)
     {
         var userTeam = UserTeam.CreateNewTeam(leagueId, player.Id,$"Team {player.User.UserName}");
-        var roster = await RosterService.CreateRoster();
+        var roster = await RosterService.CreateRoster(leagueId);
         userTeam.RosterId = roster.Id;
         await Db.AddAsync(userTeam);
         if (await Db.SaveChangesAsync() == 0) throw new Exception("Could not create team.");

@@ -6,7 +6,7 @@ public interface IRosterService
 {
     Task<Roster> GetRoster(string id);
     Task UpdateRoster(Roster roster);
-    Task<Roster> CreateRoster();
+    Task<Roster> CreateRoster(int leagueId);
     Task AddAthlete(Athlete athlete, string rosterId);
     Task DropAthlete(Athlete athlete, string rosterId);
     Task MoveAthleteToBench(Athlete athlete, string rosterId);
