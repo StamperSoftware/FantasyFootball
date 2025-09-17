@@ -35,11 +35,12 @@ public class FantasyFootballContextSeed
         
         var user = new AppUser(adminEmail, adminUserName);
         
-        if (await userManager.Users.AnyAsync(u => u.Email == user.Email) == false)
+        if (!await userManager.Users.AnyAsync(u => u.Email == user.Email))
         {
             var password = Environment.GetEnvironmentVariable("SITE_ADMIN_PASSWORD") ?? throw new Exception("Could not create site admin");
             await userManager.CreateAsync(user, password);
             await userManager.AddToRoleAsync(user, "SiteAdmin");
+            user.EmailConfirmed = true;
             await db.SaveChangesAsync();
         }
     }

@@ -1,10 +1,11 @@
 ﻿using API.DTOs;
-using Core.Entities;
 using Core.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
+[Authorize(Roles = "SiteAdmin")]
 public class UsersController(IUserService service) : BaseApiController
 {
 

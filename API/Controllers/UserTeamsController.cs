@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
 using API.DTOs;
 using API.Extensions;
 using Core.Entities;
@@ -33,8 +34,12 @@ public class UserTeamsController(IGenericRepository<UserTeam> repo, IUserTeamSer
     [HttpPut]
     public async Task<ActionResult> UpdateTeamName(UpdateTeamNameRequest request)
     {
-        var team = await repo.GetByIdAsync(request.Id);
+        var team = await userTeamService.GetUserTeamFullDetailAsync(request.Id);
+        var contextUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        
         if (team == null) return BadRequest($"Could not get team with id {request.Id}");
+        if (team.Player.UserId != contextUserId) return BadRequest("Not Users team");
+        
         team.Name = request.Name;
         repo.Update(team);
         if (await repo.SaveAllAsync())

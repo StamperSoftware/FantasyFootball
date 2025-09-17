@@ -2,6 +2,7 @@
 using API.Extensions;
 using Core.Entities;
 using Core.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
@@ -35,6 +36,7 @@ public class AthletesController(IAthleteService service):BaseApiController
         return Ok(await service.GetAthleteWithStatsAsync(athleteId));
     }
 
+    [Authorize(Roles = "SiteAdmin")]
     [HttpPut("{athleteId:int}/stats")]
     public async Task<ActionResult> UpdateAthleteStats(int athleteId, UpdateAthleteStatsRequest request)
     {
@@ -52,6 +54,7 @@ public class AthletesController(IAthleteService service):BaseApiController
         }
     }
 
+    [Authorize(Roles = "SiteAdmin")]
     [HttpPost("generate-weekly-stats")]
     public async Task<ActionResult> GenerateWeeklyStats()
     {

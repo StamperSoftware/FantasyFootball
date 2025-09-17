@@ -1,5 +1,6 @@
 ﻿using Core.Entities;
 using Core.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
@@ -12,12 +13,15 @@ public class SiteSettingsController(ISiteSettingsService siteSettingsService):Ba
     {
         return await siteSettingsService.GetSettings();
     }   
+    
+    [Authorize(Roles = "SiteAdmin")]
     [HttpPut]
     public async Task UpdateSiteSettings(SiteSettings updateSiteSettingsDto)
     {
         await siteSettingsService.UpdateSettings(updateSiteSettingsDto);
     }
 
+    [Authorize(Roles = "SiteAdmin")]
     [HttpPut("advance-week")]
     public async Task<ActionResult<SiteSettings>> AdvanceWeek()
     {
