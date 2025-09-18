@@ -15,4 +15,19 @@ public class TradeRequest
     public IList<int> ReceivingAthleteIds { get; set; } = [];
     public IList<Athlete> ReceivingAthletes { get; set; } = [];
     public IList<Athlete> InitiatingAthletes { get; set; } = [];
+
+    public static TradeRequest Create(int leagueId, UserTeam initiatingTeam, UserTeam receivingTeam, IList<int> receivingAthleteIds, IList<int> initiatingAthleteIds)
+    {
+        return new TradeRequest
+        {
+            LeagueId = leagueId,
+            InitiatingTeamId = initiatingTeam.Id,
+            ReceivingTeamId = receivingTeam.Id,
+            ReceivingAthleteIds = receivingAthleteIds,
+            InitiatingAthleteIds = initiatingAthleteIds,
+            ReceivingAthletes = receivingTeam.Roster.Starters.Union(receivingTeam.Roster.Bench).Where(a => receivingAthleteIds.Contains(a.Id)).ToList(),
+            InitiatingAthletes = initiatingTeam.Roster.Starters.Union(initiatingTeam.Roster.Bench).Where(a => initiatingAthleteIds.Contains(a.Id)).ToList(),
+        };
+    }
+    
 }

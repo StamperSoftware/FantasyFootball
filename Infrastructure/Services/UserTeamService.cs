@@ -178,17 +178,7 @@ public class UserTeamService : IUserTeamService
         if (receivingAthleteIds.Any(id =>
                 !receivingTeam.Roster.Starters.Union(receivingTeam.Roster.Bench).Select(t => t.Id).Contains(id)))
             throw new Exception("Athlete is not on receiving team");
-        
-        var tradeRequest = new TradeRequest
-        {
-            LeagueId = initiatingTeam.LeagueId,
-            InitiatingTeamId = initiatingTeamId,
-            ReceivingTeamId = receivingTeamId,
-            ReceivingAthleteIds = receivingAthleteIds,
-            InitiatingAthleteIds = initiatingAthleteIds,
-            ReceivingAthletes = receivingTeam.Roster.Starters.Union(receivingTeam.Roster.Bench).Where(a => receivingAthleteIds.Contains(a.Id)).ToList(),
-            InitiatingAthletes = initiatingTeam.Roster.Starters.Union(initiatingTeam.Roster.Bench).Where(a => initiatingAthleteIds.Contains(a.Id)).ToList(),
-        };
+        var tradeRequest = TradeRequest.Create(initiatingTeam.LeagueId, initiatingTeam, receivingTeam, initiatingAthleteIds, receivingAthleteIds);
         
         await TradeRequests.InsertOneAsync(tradeRequest);
     }

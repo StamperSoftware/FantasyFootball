@@ -1,14 +1,16 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
 using API.DTOs;
 using API.Extensions;
 using Core.Entities;
 using Core.Interfaces;
 using Core.Specifications;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
-public class LeaguesController(IGenericRepository<League> repo, ILeagueService service, ISiteSettingsService siteSettingsService, ILeagueSettingsService leagueSettingsService) : BaseApiController
+public class LeaguesController(IGenericRepository<League> repo, IPlayerService playerService, ILeagueService service) : BaseApiController
 {
     [HttpGet]
     public async Task<ActionResult<IReadOnlyList<League?>>> GetLeagues([FromQuery] LeagueSpecParams specParams)
@@ -26,27 +28,14 @@ public class LeaguesController(IGenericRepository<League> repo, ILeagueService s
         return Ok(league.Convert());
     }
     
+    [Authorize]
     [HttpPost]
     public async Task<ActionResult<League>> CreateLeague(CreateLeagueDto leagueDto)
     {
         if (string.IsNullOrWhiteSpace(leagueDto.Name)) return BadRequest("Must have a name");
-        var siteSettings = await siteSettingsService.GetSettings();
-        
-        var league = new League
-        {
-            Name = leagueDto.Name,
-            Season = siteSettings.CurrentSeason,
-        };
-        
-        repo.Add(league);
-
-        if (await repo.SaveAllAsync())
-        {
-            league.Settings = await leagueSettingsService.CreateLeagueSettings(league.Id);
-            return CreatedAtAction("GetLeague", new { id = league.Id }, league);
-        }
-        
-        return BadRequest("Issue creating league");
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? throw new Exception("Could not get user");
+        var player = await playerService.GetPlayerByUserId(userId);
+        return await service.CreateLeague(leagueDto.Name, player.Id);
     }
 
     [HttpGet("{leagueId:int}/players-not-in-league")]

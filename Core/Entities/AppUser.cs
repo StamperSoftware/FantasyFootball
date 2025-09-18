@@ -1,16 +1,15 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 
 namespace Core.Entities;
 
-
 public sealed class AppUser : IdentityUser
 {
-    public AppUser(){}
-    
-    public AppUser(string email, string userName)
+    public static AppUser CreateAppUser(string email, string userName)
     {
-        Email = email;
-        UserName = userName;
+        return new AppUser
+        {
+            Email = email,
+            UserName = userName,
+        };
     }
 }

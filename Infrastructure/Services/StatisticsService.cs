@@ -23,15 +23,8 @@ public class StatisticsService(FantasyFootballContext dbContext, ISiteSettingsSe
         
         foreach (var record in csvRecords)
         {
-            var parsedRecord = await currentStats.FirstOrDefaultAsync(aws => aws.AthleteId == record.AthleteId) ?? new AthleteWeeklyStats(siteSettings.CurrentWeek, siteSettings.CurrentSeason, record.AthleteId);
-            
-            parsedRecord.Receptions = record.Receptions;
-            parsedRecord.ReceivingTouchdowns = record.ReceivingTouchdowns;
-            parsedRecord.ReceivingYards = record.ReceivingYards;
-            parsedRecord.PassingTouchdowns = record.PassingTouchdowns;
-            parsedRecord.PassingYards = record.PassingYards;
-            parsedRecord.RushingTouchdowns = record.RushingTouchdowns;
-            parsedRecord.RushingYards = record.RushingYards;
+            var parsedRecord = await currentStats.FirstOrDefaultAsync(aws => aws.AthleteId == record.AthleteId); 
+            parsedRecord ??= AthleteWeeklyStats.Create(siteSettings.CurrentWeek, siteSettings.CurrentSeason, record.AthleteId, record.Receptions, record.ReceivingYards,record.ReceivingTouchdowns,record.PassingYards,record.PassingTouchdowns,record.RushingYards,record.RushingTouchdowns);
 
             if (parsedRecord.Id == null)
             {

@@ -126,5 +126,16 @@ public class LeagueService(FantasyFootballContext db, IPlayerService playerServi
         return players.Where(p => league.Teams.All(t => t.PlayerId != p.Id)).ToList();
 
     }
+
+    public async Task<League> CreateLeague(string name, int adminId)
+    {
+        var siteSettings = await siteSettingService.GetSettings();
+        var league = League.CreateLeague(name, siteSettings.CurrentSeason, adminId);
+        await db.Leagues.AddAsync(league);
+        await db.SaveChangesAsync();
+        league.Settings = await leagueSettingsService.CreateLeagueSettings(league.Id);
+        return league;
+    }
+    
 }
 

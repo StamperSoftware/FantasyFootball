@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Data;
 
-public class FantasyFootballContextSeed
+public static class FantasyFootballContextSeed
 {
     public static async Task SeedAsync(FantasyFootballContext db, UserManager<AppUser> userManager,
         RoleManager<IdentityRole> roleManager)
@@ -33,7 +33,7 @@ public class FantasyFootballContextSeed
 
         if (adminEmail == null || adminUserName == null) throw new Exception("Could not create site admin");
         
-        var user = new AppUser(adminEmail, adminUserName);
+        var user = AppUser.CreateAppUser(adminEmail, adminUserName);
         
         if (!await userManager.Users.AnyAsync(u => u.Email == user.Email))
         {

@@ -9,37 +9,30 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
-public class AccountsController(SignInManager<AppUser> signInManager, UserManager<AppUser> userManager, IGenericRepository<Player> playerRepo, IEmailSender<AppUser> userEmailSender) : BaseApiController
+public class AccountsController(SignInManager<AppUser> signInManager, UserManager<AppUser> userManager, IPlayerService playerService, IEmailSender<AppUser> userEmailSender) : BaseApiController
 {
     [HttpPost("register")]
     public async Task<ActionResult> CreateUser(RegisterDto registerDto)
     {
-        
-        AppUser user = new(registerDto.Email, registerDto.UserName);
-
+        var user = AppUser.CreateAppUser(registerDto.Email, registerDto.UserName);
         var result = await userManager.CreateAsync(user, registerDto.Password);
 
-        if (result.Succeeded)
+        if (!result.Succeeded)
         {
-            Player newPlayer = new(registerDto.FirstName, registerDto.LastName, user);
-            playerRepo.Add(newPlayer);
-            
-            if (!await playerRepo.SaveAllAsync()) return BadRequest("App User was created but could not create Player");
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(error.Code, error.Description);
+            }
 
-            var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
-            var confirmLink = Url.Action("ConfirmEmail", "accounts", new { email = user.Email, token=WebUtility.UrlEncode(token) },
-                Request.Scheme) ?? throw new Exception("Could not create confirm link");
-            
-            await userEmailSender.SendConfirmationLinkAsync(user, registerDto.Email,confirmLink);
-            return Ok();
+            return ValidationProblem();
         }
 
-        foreach (var error in result.Errors)
-        {
-            ModelState.AddModelError(error.Code, error.Description);
-        }
-
-        return ValidationProblem();
+        await playerService.CreatePlayer(registerDto.FirstName, registerDto.LastName, user);
+        var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
+        var confirmLink = Url.Action("ConfirmEmail", "accounts", new { email = user.Email, token=WebUtility.UrlEncode(token) },Request.Scheme) ?? throw new Exception("Could not create confirm link");
+        
+        await userEmailSender.SendConfirmationLinkAsync(user, registerDto.Email,confirmLink);
+        return Ok();
     }
     
     [HttpGet("{email}/confirm/{token}")]

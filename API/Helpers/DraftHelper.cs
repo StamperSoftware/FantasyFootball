@@ -5,22 +5,23 @@ namespace API.Helpers;
 
 public class DraftHelper
 {
-    public DraftHelper(IList<UserTeam> teams, IList<Athlete> athletes, int rounds)
+    public static DraftHelper Create(IList<UserTeam> teams, IList<Athlete> athletes, int rounds)
     {
-        Teams = teams;
-        AvailableAthletes = athletes;
-        CurrentPick = Teams[0];
-        Index = 0;
-        Status = DraftStatus.InProgress;
-        Rounds = rounds;
-        CreateSnakeDraftOrder();
+        return new DraftHelper
+        {
+            Teams = teams,
+            AvailableAthletes = athletes,
+            CurrentPick = teams[0],
+            Index = 0,
+            Status = DraftStatus.PreDraft,
+            DraftOrder = CreateSnakeDraftOrder(teams, rounds),
+        };
     }
-
+    
     public int Index { get; set; }
     public IList<UserTeam> Teams { get; set; }
     public IList<Athlete> AvailableAthletes { get; set; }
     public UserTeam CurrentPick { get; set; }
-    public int Rounds { get; set; }
     public IList<DraftSlot> DraftOrder { get; set; } = [];
     public DraftStatus Status { get; set; }
     
@@ -64,18 +65,20 @@ public class DraftHelper
         Teams.First(t => t.Id == teamId).Roster?.Bench.Add(athlete);
     }
 
-    private void CreateSnakeDraftOrder()
+    private static IList<DraftSlot> CreateSnakeDraftOrder(IList<UserTeam> teams, int rounds)
     {
         var isIncreasing = true;
-        DraftOrder = [];
-        for (var i = 0; i < Teams.Count * Rounds; i++)
+        IList<DraftSlot> order = [];
+        for (var i = 0; i < teams.Count * rounds; i++)
         {
-            var teamIndex = i % Teams.Count;
+            var teamIndex = i % teams.Count;
             if (i > 0 && teamIndex == 0) isIncreasing = !isIncreasing;
-            var currentTeam = isIncreasing ? Teams[teamIndex] : Teams[^(teamIndex + 1)];
-            var displayOrder = isIncreasing ? i : (int)((Teams.Count + (Teams.Count * Math.Floor((double)i/Teams.Count))) - teamIndex)-1;
-            DraftOrder.Add(new DraftSlot(i,displayOrder, currentTeam.Id));
+            var currentTeam = isIncreasing ? teams[teamIndex] : teams[^(teamIndex + 1)];
+            var displayOrder = isIncreasing ? i : (int)((teams.Count + (teams.Count * Math.Floor((double)i/teams.Count))) - teamIndex)-1;
+            order.Add(new DraftSlot(i,displayOrder, currentTeam.Id));
         }
+
+        return order;
     }
 }
 

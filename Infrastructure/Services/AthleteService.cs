@@ -48,17 +48,8 @@ public class AthleteService(FantasyFootballContext db, ISiteSettingsService site
         }
         else
         {
-            stats = new AthleteWeeklyStats(week, season, athlete.Id)
-            {
-                Receptions = receptions,
-                ReceivingTouchdowns = receivingTouchdowns,
-                ReceivingYards = receivingYards,
-                RushingTouchdowns = rushingTouchdowns,
-                RushingYards = rushingYards,
-                PassingTouchdowns = passingTouchdowns,
-                PassingYards = passingYards
-
-            };
+            stats = AthleteWeeklyStats.Create(week, season, athlete.Id, receptions, receivingYards, receivingTouchdowns,
+                passingYards, passingTouchdowns, rushingYards, rushingTouchdowns);
                 
             await db.AthleteWeeklyStats.AddAsync(stats);
         }
@@ -115,16 +106,11 @@ public class AthleteService(FantasyFootballContext db, ISiteSettingsService site
                     throw new ArgumentOutOfRangeException();
             }
 
-            aws.Add(new AthleteWeeklyStats(siteSettings.CurrentWeek, siteSettings.CurrentSeason, athlete.Id)
-            {
-                Receptions=receptions,
-                ReceivingYards = receivingYards, 
-                ReceivingTouchdowns = receivingTouchdowns,
-                PassingYards = passingYards, 
-                PassingTouchdowns = passingTouchdowns, 
-                RushingYards = rushingYards, 
-                RushingTouchdowns = rushingTouchdowns
-            });
+            var newStats = AthleteWeeklyStats.Create(siteSettings.CurrentWeek, siteSettings.CurrentSeason, athlete.Id,
+                receptions, receivingYards, receivingTouchdowns, passingYards, passingTouchdowns, rushingYards,
+                rushingTouchdowns);
+
+            aws.Add(newStats);
         }
 
         await db.AthleteWeeklyStats.AddRangeAsync(aws);

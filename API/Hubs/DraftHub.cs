@@ -37,7 +37,7 @@ public class DraftHub:Hub
             var userTeam = league.Teams.FirstOrDefault(ut => ut.Player.User.Id == Context.UserIdentifier) ?? throw new Exception("Could not get team");
             var userTeams = league.Teams.OrderBy(t => league.Settings.DraftOrder.IndexOf(t.Id)).ToList();
             userTeam.SetOnline();
-            draftHelper = new DraftHelper(userTeams, Athletes.ToList(), league.Settings.RosterLimit);
+            draftHelper = DraftHelper.Create(userTeams, Athletes.ToList(), league.Settings.RosterLimit);
             ConnectedLeagues[leagueId] = draftHelper;
         }
         

@@ -29,8 +29,7 @@ public class LeagueSettingsService:ILeagueSettingsService
     
     public async Task<LeagueSettings> CreateLeagueSettings(int leagueId)
     {
-        var settings = new LeagueSettings(leagueId);
-        
+        var settings = LeagueSettings.CreateLeagueSettings(leagueId);
         await _leagueSettings.InsertOneAsync(settings);
         return settings;
     }
