@@ -10,5 +10,5 @@ public class LeagueDto
     public IList<GameDto>? Schedule { get; set; }
     public int Season { get; set; }
     public required LeagueSettings Settings { get; set; }
-
+    public PlayerDto Admin { get; set; }
 }

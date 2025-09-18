@@ -92,6 +92,7 @@ public class LeagueService(FantasyFootballContext db, IPlayerService playerServi
 
         league.Settings = await leagueSettingsService.GetLeagueSettings(league.Id) ?? throw new Exception("Could not get settings");
         league.Schedule = await gameService.GetLeagueGames(league.Id) ?? throw new Exception("Could not get games");
+        league.Admin = await playerService.GetPlayer(league.AdminId);
         
         for (int i = 0; i < league.Teams.Count; i++)
         {

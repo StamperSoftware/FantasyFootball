@@ -49,6 +49,7 @@ public static class DtoConverter
             Season = league.Season,
             Settings = league.Settings,
             Schedule = league.Schedule.Select(g => g.Convert()).ToList(),
+            Admin = league.Admin.Convert(),
         };
     }
 
