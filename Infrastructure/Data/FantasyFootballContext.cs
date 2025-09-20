@@ -11,8 +11,6 @@ public class FantasyFootballContext(DbContextOptions<FantasyFootballContext> opt
     
     public new DbSet<AppUser> Users { get; set; }
     
-    public DbSet<Player> Players { get; set; }
-    
     public DbSet<UserTeam> UserTeams { get; set; }
     
     public DbSet<Team> Teams { get; set; }

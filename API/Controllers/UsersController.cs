@@ -1,19 +1,18 @@
 ﻿using API.DTOs;
+using API.Extensions;
 using Core.Interfaces;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
-[Authorize(Roles = "SiteAdmin")]
 public class UsersController(IUserService service) : BaseApiController
 {
 
     [HttpGet]
     public async Task<ActionResult<IList<AppUserDto>>> GetUsers()
     {
-        var users = await service.GetUsers();
-        return Ok(users);
+        var users = await service.GetConfirmedAppUsers();
+        return Ok(users.Select(u => u.Convert()));
     }
     
     
@@ -23,7 +22,7 @@ public class UsersController(IUserService service) : BaseApiController
         try
         {
             var user = await service.GetUser(userId);
-            return Ok(user);
+            return Ok(user.Convert());
         }
         catch (Exception ex)
         {

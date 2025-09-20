@@ -6,7 +6,6 @@ export {InitializeService} from './initialize.service';
 export {LeagueService} from './league.service';
 export {LeagueSettingsService} from './league-settings.service';
 export {LiveDraftService} from './live-draft.service';
-export {PlayerService} from './player.service';
 export {RosterService} from './roster.service';
 export {SiteSettingsService} from './site-settings.service';
 export {StatisticsService} from './statistics.service';

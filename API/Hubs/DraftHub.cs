@@ -27,14 +27,14 @@ public class DraftHub:Hub
         
         if (ConnectedLeagues.TryGetValue(leagueId, out var draftHelper))
         {
-            var userTeam = draftHelper.Teams.FirstOrDefault(ut => ut.Player.User.Id == Context.UserIdentifier) ?? throw new Exception("Could not get team");
+            var userTeam = draftHelper.Teams.FirstOrDefault(ut => ut.UserId == Context.UserIdentifier) ?? throw new Exception("Could not get team");
             userTeam.SetOnline();
             await Clients.GroupExcept(leagueId.ToString(), [Context.ConnectionId]).SendAsync("JoinedGroup", draftHelper);
         }
         else
         {
             var league = await LeagueService.GetLeagueWithFullDetailsAsync(leagueId) ?? throw new Exception("Could not get league");
-            var userTeam = league.Teams.FirstOrDefault(ut => ut.Player.User.Id == Context.UserIdentifier) ?? throw new Exception("Could not get team");
+            var userTeam = league.Teams.FirstOrDefault(ut => ut.UserId == Context.UserIdentifier) ?? throw new Exception("Could not get team");
             var userTeams = league.Teams.OrderBy(t => league.Settings.DraftOrder.IndexOf(t.Id)).ToList();
             userTeam.SetOnline();
             draftHelper = DraftHelper.Create(userTeams, Athletes.ToList(), league.Settings.RosterLimit);
@@ -47,7 +47,7 @@ public class DraftHub:Hub
     public async Task<DraftHelper?> LeaveGroup(int leagueId)
     {
         await Groups.RemoveFromGroupAsync(Context.ConnectionId, leagueId.ToString());
-        var userTeam = ConnectedLeagues[leagueId].Teams.FirstOrDefault(ut => ut.Player.User.Id == Context.UserIdentifier) ?? throw new Exception("Could not get team");
+        var userTeam = ConnectedLeagues[leagueId].Teams.FirstOrDefault(ut => ut.UserId == Context.UserIdentifier) ?? throw new Exception("Could not get team");
         userTeam.SetOffline();
         if (!ConnectedLeagues[leagueId].Teams.Any(t => t.IsOnline))
         {
@@ -76,7 +76,7 @@ public class DraftHub:Hub
         var draftHelper = ConnectedLeagues[leagueId];
         do
         {
-            draftHelper = await DraftPlayer(leagueId, draftHelper.CurrentPick.Id, draftHelper.AvailableAthletes.OrderBy(a => _random.Next()).First().Id);
+            draftHelper = await DraftPlayer(leagueId, draftHelper.CurrentPick.Id, draftHelper.AvailableAthletes.OrderBy(_ => _random.Next()).First().Id);
         } while (draftHelper.Status == DraftStatus.InProgress);
 
         return draftHelper;

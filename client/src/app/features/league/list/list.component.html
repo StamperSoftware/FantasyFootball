@@ -21,7 +21,11 @@
                             <td routerLink="{{league.id}}" class="clickable">{{league.name}}</td>
                             <td>
                                 <div class="float-end">
-                                    <fa-icon [icon]="faTrash" (click)="deleteLeague(league.id)"/>
+                                    @let currentUser = accountService.currentUser();
+                                    @if (currentUser && currentUser.id == league.adminId) {
+                                        <fa-icon [icon]="faTrash" (click)="deleteLeague(league.id)"/>
+                                    }
+                                    
                                 </div>
                             </td>
                         </tr>

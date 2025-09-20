@@ -33,7 +33,7 @@ public static class FantasyFootballContextSeed
 
         if (adminEmail == null || adminUserName == null) throw new Exception("Could not create site admin");
         
-        var user = AppUser.CreateAppUser(adminEmail, adminUserName);
+        var user = AppUser.CreateAppUser(adminEmail, adminUserName, "admin", "user");
         
         if (!await userManager.Users.AnyAsync(u => u.Email == user.Email))
         {

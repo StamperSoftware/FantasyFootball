@@ -6,6 +6,7 @@ import { faAdd, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { RouterLink } from "@angular/router";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { CreateLeagueComponent } from "../create/create.component";
+import { AccountService } from "@services";
 
 @Component({
   selector: 'app-league-list',
@@ -22,7 +23,8 @@ export class LeagueListComponent implements OnInit{
   protected readonly faAdd = faAdd;
   private leagueService = inject(LeagueService);
   private modalService = inject(NgbModal);
-
+  accountService = inject(AccountService);
+  
   leagues?:League[];
   hasErrors:boolean = false;
 

@@ -29,7 +29,7 @@ public static class DtoConverter
         {
             Id = team.Id,
             LeagueId = team.LeagueId,
-            Player = team.Player.Convert(),
+            UserId = team.UserId,
             Name = team.Name,
             RosterId = team.RosterId,
             Roster = team.Roster,
@@ -49,7 +49,7 @@ public static class DtoConverter
             Season = league.Season,
             Settings = league.Settings,
             Schedule = league.Schedule.Select(g => g.Convert()).ToList(),
-            Admin = league.Admin.Convert(),
+            AdminId = league.AdminId,
         };
     }
 
@@ -63,17 +63,6 @@ public static class DtoConverter
         };
     }
 
-    public static PlayerDto Convert(this Player player)
-    {
-        return new PlayerDto
-        {
-            Id = player.Id,
-            FirstName = player.FirstName,
-            LastName = player.LastName,
-            UserId = player.UserId,
-            UserName = player.User.UserName!,
-        };
-    }
 
     public static AppUserDto Convert(this AppUser user)
     {

@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { environment } from "@environments";
-import { AddPlayerToLeagueDto, League, Pagination, CreateLeagueDto, Athlete, Player } from "@models";
+import { League, Pagination, CreateLeagueDto, Athlete, AppUser } from "@models";
 
 @Injectable({
   providedIn: 'root'
@@ -24,8 +24,8 @@ export class LeagueService {
     return this.http.get<League>(`${this.leagueUrl}/${id}`);
   }
   
-  addPlayer(leagueId:number, playerId:number){
-    return this.http.post(`${this.leagueUrl}/${leagueId}/players/${playerId}`, {});
+  addUser(leagueId:number, userId:string){
+    return this.http.post(`${this.leagueUrl}/${leagueId}/users/${userId}`, {});
   }
 
   addAthleteToTeam(leagueId:number, athleteId:number, teamId:number){
@@ -53,7 +53,7 @@ export class LeagueService {
   checkIfUserIsInLeague(userId:string, leagueId:number){
     return this.http.get<boolean>(`${this.leagueUrl}/${leagueId}/user/${userId}`)
   }
-  getPlayersNotInLeague(leagueId:number){
-    return this.http.get<Player[]>(`${this.leagueUrl}/${leagueId}/players-not-in-league`)
+  getUsersNotInLeague(leagueId:number){
+    return this.http.get<AppUser[]>(`${this.leagueUrl}/${leagueId}/users-not-in-league`)
   }
 }

@@ -9,7 +9,7 @@ public class UserTeamDto
     
     public int LeagueId { get; set; }
     
-    public required PlayerDto Player { get; set; }
+    public required string UserId { get; set; }
     
     public string? Name { get; set; }
 

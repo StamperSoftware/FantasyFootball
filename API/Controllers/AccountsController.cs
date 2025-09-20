@@ -9,12 +9,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
-public class AccountsController(SignInManager<AppUser> signInManager, UserManager<AppUser> userManager, IPlayerService playerService, IEmailSender<AppUser> userEmailSender) : BaseApiController
+public class AccountsController(SignInManager<AppUser> signInManager, UserManager<AppUser> userManager, IEmailSender<AppUser> userEmailSender) : BaseApiController
 {
     [HttpPost("register")]
     public async Task<ActionResult> CreateUser(RegisterDto registerDto)
     {
-        var user = AppUser.CreateAppUser(registerDto.Email, registerDto.UserName);
+        var user = AppUser.CreateAppUser(registerDto.Email, registerDto.UserName, registerDto.FirstName, registerDto.LastName);
         var result = await userManager.CreateAsync(user, registerDto.Password);
 
         if (!result.Succeeded)
@@ -27,7 +27,6 @@ public class AccountsController(SignInManager<AppUser> signInManager, UserManage
             return ValidationProblem();
         }
 
-        await playerService.CreatePlayer(registerDto.FirstName, registerDto.LastName, user);
         var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
         var confirmLink = Url.Action("ConfirmEmail", "accounts", new { email = user.Email, token=WebUtility.UrlEncode(token) },Request.Scheme) ?? throw new Exception("Could not create confirm link");
         
@@ -61,6 +60,6 @@ public class AccountsController(SignInManager<AppUser> signInManager, UserManage
     [HttpGet("auth-status")]
     public ActionResult GetAuthStatus()
     {
-        return Ok(new {isAuthenticated = User?.Identity?.IsAuthenticated ?? false});
+        return Ok(new {isAuthenticated = User.Identity?.IsAuthenticated ?? false});
     }
 }

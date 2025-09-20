@@ -24,4 +24,4 @@ export class FloatingInputComponent {
   }
 }
 
-type Type = "number" | "text"
+type Type = "number" | "text" | "password"

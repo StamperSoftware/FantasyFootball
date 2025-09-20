@@ -1,0 +1,11 @@
+@if (hasErrors){
+    <p class="text-danger">There were errors</p>
+} @else if (users) {
+    @if (users.length) {
+        @for(user of users; track user.id) {
+            <p (click)="handleSelectUser(user.id)">{{user.userName}}</p>
+        }
+    } @else {
+        <p>There are no users</p>
+    }
+}

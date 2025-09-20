@@ -1,7 +1,7 @@
-﻿import { Player, Roster } from ".";
+﻿import { Roster } from ".";
 
 export type UserTeam = {
-    player : Player
+    userId : string
     id:number
     name?:string
     roster:Roster

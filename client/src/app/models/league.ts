@@ -7,13 +7,9 @@ export type League = {
     schedule : Game[]
     season : number
     settings:LeagueSettings
+    adminId : string
 }
 
 export type CreateLeagueDto = {
     name : string
-}
-
-export type AddPlayerToLeagueDto = {
-    playerId:number
-    leagueId:number
 }

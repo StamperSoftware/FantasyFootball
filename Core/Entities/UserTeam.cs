@@ -6,8 +6,7 @@ namespace Core.Entities;
 public class UserTeam : BaseEntity
 {
     public int LeagueId { get; set; }
-    public int PlayerId { get; set; }
-    public Player Player { get; set; } = null!;
+    public required string UserId { get; set; }
     public string? Name { get; set; }
     public int Wins { get; set; }
     public int Losses { get; set; }
@@ -18,12 +17,12 @@ public class UserTeam : BaseEntity
     [NotMapped] public bool IsOnline { get; set; }
     [NotMapped] public IList<Game> Schedule { get; set; } = [];
 
-    public static UserTeam CreateNewTeam(int leagueId, int playerId, string name)
+    public static UserTeam CreateNewTeam(int leagueId, string userId, string name)
     {
         return new UserTeam
         {
             LeagueId = leagueId,
-            PlayerId = playerId,
+            UserId = userId,
             RosterId = "",
             Wins = 0,
             Losses = 0,
@@ -52,6 +51,7 @@ public class UserTeam : BaseEntity
     {
         IsOnline = true;
     }
+    
     public void SetOffline()
     {
         IsOnline = false;

@@ -38,7 +38,7 @@ public class UserTeamsController(IGenericRepository<UserTeam> repo, IUserTeamSer
         var contextUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         
         if (team == null) return BadRequest($"Could not get team with id {request.Id}");
-        if (team.Player.UserId != contextUserId) return BadRequest("Not Users team");
+        if (team.UserId != contextUserId) return BadRequest("Not Users team");
         
         team.Name = request.Name;
         repo.Update(team);

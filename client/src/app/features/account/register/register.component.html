@@ -2,26 +2,11 @@
     <form (ngSubmit)="handleRegister()">
             
         <div class="d-flex flex-column align-items-center gap-3">
-            <div class="form-floating">
-                <input class="form-control" id="first-name" [(ngModel)]="firstName" name="first-name" placeholder="First Name"/>
-                <label class="form-label" for="first-name">First Name</label>
-            </div>
-            <div class="form-floating">
-                <input class="form-control" id="last-name" [(ngModel)]="lastName" name="last-name" placeholder="Last Name"/>
-                <label class="form-label" for="last-name">Last Name</label>
-            </div>
-            <div class="form-floating">
-                <input class="form-control" id="email" [(ngModel)]="email" name="email" placeholder="Email"/>
-                <label class="form-label" for="email">Email</label>
-            </div>
-            <div class="form-floating">
-                <input class="form-control" id="username" [(ngModel)]="userName" name="username" placeholder="Username"/>
-                <label class="form-label" for="username">Username</label>
-            </div>
-            <div class="form-floating">
-                <input class="form-control" id="password" type="password" [(ngModel)]="password" name="password" placeholder="Password"/>
-                <label class="form-label" for="password">Password</label>
-            </div>
+            <app-floating-input placeholder="Email" name="email" id="email" [(value)]="email"/>
+            <app-floating-input placeholder="First Name" name="firstName" id="first-name" [(value)]="firstName"/>
+            <app-floating-input placeholder="Last Name" name="lastName" id="last-name" [(value)]="lastName"/>
+            <app-floating-input placeholder="User Name" name="userName" id="user-name" [(value)]="userName"/>
+            <app-floating-input placeholder="Password" name="password" id="password" [(value)]="password" type="password"/>
         </div>
         
         <button type="submit" class="btn">Register</button>

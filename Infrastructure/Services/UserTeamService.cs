@@ -3,8 +3,6 @@ using Core.Entities;
 using Core.Interfaces;
 using Infrastructure.Data;
 using Infrastructure.Data.MongoDb;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
@@ -51,14 +49,12 @@ public class UserTeamService : IUserTeamService
     
     public async Task<IList<UserTeam>> GetTeams(string userId)
     {
-        return await Db.UserTeams.Include(t => t.Player).ThenInclude(p => p.User).Where(t => t.Player.UserId == userId).ToListAsync();
+        return await Db.UserTeams.Where(t => t.UserId == userId).ToListAsync();
     }
     
     public async Task<UserTeam?> GetUserTeamFullDetailAsync(int id)
     {
         var team = await Db.UserTeams
-            .Include(t => t.Player)
-                .ThenInclude(p => p.User)
             .FirstOrDefaultAsync(t => t.Id == id);
 
         if (team is null) return null;
@@ -69,8 +65,6 @@ public class UserTeamService : IUserTeamService
     public async Task<UserTeam?> GetUserTeamScheduleAsync(int id)
     {
         var team = await Db.UserTeams
-            .Include(t => t.Player)
-                .ThenInclude(p => p.User)
             .FirstOrDefaultAsync(t => t.Id == id);
 
         if (team is null) return null;
@@ -153,9 +147,9 @@ public class UserTeamService : IUserTeamService
        return await RosterService.StartAthlete(athlete, team.RosterId);
     }
 
-    public async Task<UserTeam> CreateUserTeam(int leagueId, Player player)
+    public async Task<UserTeam> CreateUserTeam(int leagueId, AppUser user)
     {
-        var userTeam = UserTeam.CreateNewTeam(leagueId, player.Id,$"Team {player.User.UserName}");
+        var userTeam = UserTeam.CreateNewTeam(leagueId, user.Id,$"Team {user.UserName}");
         var roster = await RosterService.CreateRoster(leagueId);
         userTeam.RosterId = roster.Id;
         await Db.AddAsync(userTeam);

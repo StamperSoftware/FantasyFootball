@@ -1,3 +1,4 @@
+@let user = this.accountService.currentUser(); 
 <header>
     <nav class="navbar navbar-expand">
         <div class="nav container-fluid">
@@ -14,11 +15,12 @@
                 <div ngbDropdown>
                     <button ngbDropdownToggle class="btn nav-link">Account</button>
                     <div ngbDropdownMenu>
-                        @if (this.accountService.currentUser() == null) {
+                        @if (user) {
+                            <a routerLink="/users/{{user.id}}" ngbDropdownItem class="btn nav-link">Profile</a>
+                            <button ngbDropdownItem class="btn nav-link" (click)="handleLogout()">Logout</button>
+                        } @else {
                             <button ngbDropdownItem class="btn nav-link" (click)="openLoginModal()">Login</button>
                             <button ngbDropdownItem class="btn nav-link" (click)="openRegisterModal()">Register</button>
-                        } @else {
-                            <button ngbDropdownItem class="btn nav-link" (click)="handleLogout()">Logout</button>
                         }
                     </div>
                 </div>

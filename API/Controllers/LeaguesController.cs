@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
-public class LeaguesController(IGenericRepository<League> repo, IPlayerService playerService, ILeagueService service) : BaseApiController
+public class LeaguesController(IGenericRepository<League> repo, ILeagueService service) : BaseApiController
 {
     [HttpGet]
     public async Task<ActionResult<IReadOnlyList<League?>>> GetLeagues([FromQuery] LeagueSpecParams specParams)
@@ -34,28 +34,26 @@ public class LeaguesController(IGenericRepository<League> repo, IPlayerService p
     {
         if (string.IsNullOrWhiteSpace(leagueDto.Name)) return BadRequest("Must have a name");
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? throw new Exception("Could not get user");
-        var player = await playerService.GetPlayerByUserId(userId);
-        return await service.CreateLeague(leagueDto.Name, player.Id);
+        return await service.CreateLeague(leagueDto.Name, userId);
     }
 
-    [HttpGet("{leagueId:int}/players-not-in-league")]
-    public async Task<IList<PlayerDto>> GetPlayersNotInLeague(int leagueId)
+    [HttpGet("{leagueId:int}/users-not-in-league")]
+    public async Task<IList<AppUserDto>> GetUsersNotInLeague(int leagueId)
     {
-        var players = await service.GetPlayersNotInLeague(leagueId);
-        return players.Select(p => p.Convert()).ToList();
+        var users = await service.GetUsersNotInLeague(leagueId);
+        return users.Select(u => u.Convert()).ToList();
     }
 
-    [HttpPost("{leagueId:int}/players/{playerId:int}")]
-    public async Task<ActionResult> AddPlayerToLeague(int playerId, int leagueId)
+    [HttpPost("{leagueId:int}/users/{userId}")]
+    public async Task<ActionResult> AddUserToLeague(string userId, int leagueId)
     {
         try
         {
-            await service.AddPlayerToLeagueAsync(playerId, leagueId);
-            
+            await service.AddUserToLeagueAsync(userId, leagueId);
         }
         catch (Exception ex)
         {
-            return BadRequest($"Could not add player, {ex.Message}");
+            return BadRequest($"Could not add user, {ex.Message}");
         }
 
         return Ok();

@@ -6,7 +6,6 @@ export * from './league';
 export * from './league-settings';
 export * from "./login";
 export * from './pagination';
-export * from "./player";
 export * from "./position";
 export * from "./register";
 export * from "./role";

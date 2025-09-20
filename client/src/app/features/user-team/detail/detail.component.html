@@ -8,11 +8,11 @@
             <span id="team-record">{{team.wins}} - {{team.losses}} - {{team.ties}}</span>
         </div>
         <div>
-            @if (currentUser?.id == team.player.userId) {
+            @if (currentUser?.id == team.userId) {
                 <button class="btn" routerLink="trade-requests">Requests</button>
                 <fa-icon [icon]="faEdit" class="btn" (click)="openEditModal()"/>
             }
-            <button class="btn" routerLink="/players/{{team.player.id}}">{{team.player.userName}}</button>
+            <button class="btn" routerLink="/users/{{team.userId}}">User Detail</button>
         </div>
     </section>
     
@@ -24,7 +24,7 @@
                         <th></th>
                         <th></th>
                         <th class="text-center">
-                            @if (currentUser?.id == team.player.userId){
+                            @if (currentUser?.id == team.userId){
                                 <fa-icon [icon]="faPlus" class="btn" (click)="openAddAthleteModal()"/>
                             }
                         </th>
@@ -41,7 +41,7 @@
                             </td>
                             <td>
                                 @if (currentUser != null) {
-                                    @if (currentUser.id != team.player.userId) {
+                                    @if (currentUser.id != team.userId) {
                                         @if (isUserInLeague()) {
                                             <a target="_blank" routerLink="/leagues/{{leagueId}}/trade"><fa-icon [icon]="faShuffle"/></a>
                                         }
@@ -64,7 +64,7 @@
                             </td>
                             <td>
                                 @if (currentUser != null) {
-                                    @if (currentUser.id != team.player.userId) {
+                                    @if (currentUser.id != team.userId) {
                                         @if (isUserInLeague()) {
                                             <a target="_blank" routerLink="/leagues/{{leagueId}}/trade"><fa-icon [icon]="faShuffle"/></a>
                                         }

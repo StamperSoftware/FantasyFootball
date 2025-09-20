@@ -3,8 +3,6 @@ import { HomeComponent } from "./features/home/home.component";
 import { LeagueDetailComponent } from "./features/league/detail/detail.component";
 import { UserListComponent } from "./features/user/list/list.component";
 import { UserDetailComponent } from "./features/user/detail/detail.component";
-import { PlayerListComponent } from "./features/player/list/list.component";
-import { PlayerDetailComponent } from "./features/player/detail/detail.component";
 import { LeagueListComponent } from "./features/league/list/list.component";
 import { UserTeamListComponent } from "./features/user-team/list/list.component";
 import { UserTeamDetailComponent } from "./features/user-team/detail/detail.component";
@@ -57,14 +55,6 @@ export const routes: Routes = [
         children:[
             {path:"", component:UserListComponent},
             {path:":id", component:UserDetailComponent},
-        ]
-    },
-
-    {
-        path:"players",
-        children:[
-            {path:"", component:PlayerListComponent},
-            {path:":id", component:PlayerDetailComponent},
         ]
     },
 

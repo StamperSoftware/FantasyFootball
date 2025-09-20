@@ -7,20 +7,20 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Services;
-public class LeagueService(FantasyFootballContext db, IPlayerService playerService, IUserTeamService userTeamService, ISiteSettingsService siteSettingService, ILeagueSettingsService leagueSettingsService, IRosterService rosterService, IGameService gameService) : ILeagueService
+public class LeagueService(FantasyFootballContext db, IUserService userService, IUserTeamService userTeamService, ISiteSettingsService siteSettingService, ILeagueSettingsService leagueSettingsService, IRosterService rosterService, IGameService gameService) : ILeagueService
 {
     
     private readonly Random _random = new();
     private readonly SiteSettings _siteSettings = siteSettingService.GetSettings().Result;
-    public async Task AddPlayerToLeagueAsync(int playerId, int leagueId)
+    public async Task AddUserToLeagueAsync(string userId, int leagueId)
     {
-        var player = await playerService.GetPlayer(playerId) ?? throw new Exception("Could not find player");
+        var user = await userService.GetUser(userId) ?? throw new Exception("Could not find user");
         var league = await GetLeagueWithFullDetailsAsync(leagueId) ?? throw new Exception("Could not find league");
         
         if (league.Teams.Count >= league.Settings.NumberOfTeams) throw new Exception("League is full.");
-        if (league.Teams.Any(t => t.PlayerId == playerId)) throw new Exception("Player is in league already.");
+        if (league.Teams.Any(t => t.UserId == userId)) throw new Exception("User is in league already.");
         
-        var userTeam = await userTeamService.CreateUserTeam(leagueId, player);
+        var userTeam = await userTeamService.CreateUserTeam(leagueId, user);
         
         league.Teams.Add(userTeam);
         league.Settings.DraftOrder.Add(userTeam.Id);
@@ -86,13 +86,10 @@ public class LeagueService(FantasyFootballContext db, IPlayerService playerServi
     {
         var league =  await db.Leagues
             .Include(l => l.Teams.OrderBy(t => id))
-                .ThenInclude(t => t.Player)
-                    .ThenInclude(p => p.User)
             .FirstOrDefaultAsync(l => l.Id == id) ?? throw new Exception("Could not get league");
 
         league.Settings = await leagueSettingsService.GetLeagueSettings(league.Id) ?? throw new Exception("Could not get settings");
         league.Schedule = await gameService.GetLeagueGames(league.Id) ?? throw new Exception("Could not get games");
-        league.Admin = await playerService.GetPlayer(league.AdminId);
         
         for (int i = 0; i < league.Teams.Count; i++)
         {
@@ -115,20 +112,21 @@ public class LeagueService(FantasyFootballContext db, IPlayerService playerServi
 
     public async Task<bool> IsUserInLeague(string userId, int leagueId)
     {
-        var league = await db.Leagues.Include(l => l.Teams).ThenInclude(t => t.Player).FirstOrDefaultAsync(l => l.Id == leagueId) ?? throw new Exception("Could not get league");
-        return league.Teams.Any(t => t.Player.UserId == userId);
+        var league = await db.Leagues
+            .Include(l => l.Teams)
+            .FirstOrDefaultAsync(l => l.Id == leagueId) ?? throw new Exception("Could not get league");
+        
+        return league.Teams.Any(t => t.UserId == userId);
     }
 
-    public async Task<IList<Player>> GetPlayersNotInLeague(int leagueId)
+    public async Task<IList<AppUser>> GetUsersNotInLeague(int leagueId)
     {
         var league = await db.Leagues.Include(l => l.Teams).FirstOrDefaultAsync(l => l.Id == leagueId) ?? throw new Exception("Could not get league");
-        var players = await playerService.GetPlayers();
-
-        return players.Where(p => league.Teams.All(t => t.PlayerId != p.Id)).ToList();
-
+        var users = await userService.GetConfirmedAppUsers();
+        return users.Where(p => league.Teams.All(t => t.UserId != p.Id)).ToList();
     }
 
-    public async Task<League> CreateLeague(string name, int adminId)
+    public async Task<League> CreateLeague(string name, string adminId)
     {
         var siteSettings = await siteSettingService.GetSettings();
         var league = League.CreateLeague(name, siteSettings.CurrentSeason, adminId);

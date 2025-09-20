@@ -1,9 +1,8 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
-import { LeagueService } from "../../../core/services/league.service";
-import { Athlete, Game, League, Position, UserTeam } from "@models";
-import { ActivatedRoute, Router, RouterLink } from "@angular/router";
+import { Component, inject, OnInit } from '@angular/core';
+import { LeagueService, SiteSettingsService, AccountService, ToastService } from "@services";
+import { Game, League, Position, UserTeam } from "@models";
+import { ActivatedRoute, RouterLink } from "@angular/router";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { SelectPlayerComponent } from "../../player/select-player/select-player.component";
 import {
   faAdd,
   faPlay,
@@ -12,8 +11,7 @@ import {
   faCalendarAlt, faChevronCircleRight, faChevronCircleLeft, faGear
 } from "@fortawesome/free-solid-svg-icons";
 import { FaIconComponent } from "@fortawesome/angular-fontawesome";
-import { SiteSettingsService } from "../../../core/services/site-settings.service";
-import { AccountService } from "@services";
+import { SelectUserComponent } from "../../../ui/modals/select-user/select-user.component";
 
 @Component({
   selector: 'app-league-detail',
@@ -33,8 +31,10 @@ export class LeagueDetailComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private modalService = inject(NgbModal);
   private id = +this.route.snapshot.paramMap.get("league-id")!;
-  private accountService = inject(AccountService);
+  accountService = inject(AccountService);
+  private toastService = inject(ToastService);
   siteSettings = inject(SiteSettingsService);
+  
   currentWeek = this.siteSettings.currentWeek() ?? 1;
   weeklySchedule:Game[] = [];
   league?:League; 
@@ -44,7 +44,7 @@ export class LeagueDetailComponent implements OnInit {
     return this.leagueService.getLeague(this.id).subscribe({
       next:response => {
         this.league = response;
-        this.currentTeam = this.league?.teams.find(t => t.player.userId == this.accountService.currentUser()?.id) ?? this.league?.teams[0];
+        this.currentTeam = this.league?.teams.find(t => t.userId == this.accountService.currentUser()?.id) ?? this.league?.teams[0];
         this.getWeeklySchedule();
       },
     });
@@ -52,12 +52,13 @@ export class LeagueDetailComponent implements OnInit {
   
   addTeam(){
     
-    const addPlayer = (playerId:number) => this.leagueService.addPlayer(this.id, playerId).subscribe({
-      next: () => this.getLeague()
+    const addUser = (userId:string) => this.leagueService.addUser(this.id, userId).subscribe({
+      next: () => this.getLeague(),
+      error: (err) => this.toastService.addToast({header:"Error", content:err.error}),
     });
-    const modalRef = this.modalService.open(SelectPlayerComponent);
+    const modalRef = this.modalService.open(SelectUserComponent);
     modalRef.componentInstance.leagueId = this.id;
-    modalRef.result.then(addPlayer,() => {});
+    modalRef.result.then(addUser,() => {});
   }
   
   startLeague() {
